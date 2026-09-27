@@ -59,6 +59,16 @@
   .card__flavor { font-size: 13px; color: var(--muted); line-height: 1.65; }
   .card__stars { font-size: 12px; letter-spacing: .12em; color: var(--accent); }
 
+  /* ---------- 入场动画 ---------- */
+  @keyframes riseIn { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  .atlas__head > * { animation: riseIn .7s cubic-bezier(.2,.8,.2,1) backwards; }
+  .atlas__head > *:nth-child(1) { animation-delay: .08s; }
+  .atlas__head > *:nth-child(2) { animation-delay: .18s; }
+  .atlas__head > *:nth-child(3) { animation-delay: .28s; }
+  .region-block { opacity: 0; transform: translateY(24px); transition: opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1); }
+  .region-block.is-visible { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .atlas__head > *, .region-block { animation: none; transition: none; opacity: 1; transform: none; } }
+
   @media (max-width: 860px) { .atlas { padding: 108px 20px 60px; } .region__grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 560px) { .region__grid { grid-template-columns: 1fr; } .region-block__count { margin-left: 0; } .nav { flex-wrap: wrap; gap: 10px; } }
 </style>
@@ -121,6 +131,11 @@
       '<div class="region__grid">' + cards + '</div>' +
       '</section>';
   }).join("");
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); } });
+  }, { threshold: 0.08, rootMargin: "0px 0px -40px 0px" });
+  document.querySelectorAll(".region-block").forEach(el => io.observe(el));
 
   const select = document.getElementById("regionSelect");
   select.innerHTML = '<option value="all" selected>全图鉴</option>' + REGIONS.map(r => '<option value="' + r.key + '">' + r.name + '</option>').join("");

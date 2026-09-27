@@ -183,6 +183,26 @@
   .region-chip--all .region-chip__name { color: #F8EBBD; }
   .region-chip--all:hover { background: #6B9136; border-color: #6B9136; }
 
+  /* ---------- 水果横向滑动预览 ---------- */
+  .fruit-strip { max-width: 1280px; margin: 0 auto; padding: 0 5vw 10vh; }
+  .fruit-strip__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+  .fruit-strip__title { font-family: var(--display); font-weight: 700; font-size: clamp(24px, 3.4vw, 40px); line-height: 1.1; color: var(--ink); margin-top: 8px; }
+  .fruit-strip__nav { display: flex; gap: 10px; flex-shrink: 0; }
+  .strip-arrow { width: 44px; height: 44px; border-radius: 50%; cursor: pointer; border: 1px solid rgba(69,118,53,.35); background: rgba(255,255,255,.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: var(--ink); font-size: 18px; display: flex; align-items: center; justify-content: center; transition: transform .25s, background .25s, border-color .25s, color .25s; }
+  .strip-arrow:hover { background: var(--accent); color: #fff; border-color: var(--accent); transform: translateY(-2px); }
+  .fruit-strip__stage { position: relative; height: 272px; touch-action: pan-y; }
+  .fruit-strip__deck { position: relative; height: 100%; }
+  .strip-card { --cw: 200px; position: absolute; left: 50%; top: 0; width: var(--cw); margin-left: calc(var(--cw) / -2); display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 20px; background: #fff; border: 1px solid var(--hairline); box-shadow: 0 14px 36px rgba(0,0,0,.14); transform-origin: center bottom; transition: box-shadow .4s ease; will-change: transform; cursor: grab; touch-action: pan-y; }
+  .strip-card:hover { box-shadow: 0 22px 48px rgba(0,0,0,.18); }
+  .fruit-strip__stage.dragging .strip-card { transition: none; cursor: grabbing; }
+  .strip-card__swatch { width: 100%; height: 110px; border-radius: 14px; background: var(--c); position: relative; overflow: hidden; }
+  .strip-card__swatch::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(0,0,0,.16)); }
+  .strip-card__num { position: absolute; top: 10px; right: 12px; font-family: var(--latin); font-style: italic; font-size: 14px; color: rgba(255,255,255,.85); }
+  .strip-card__name { font-family: var(--display); font-weight: 600; font-size: 20px; line-height: 1.2; color: var(--ink); }
+  .strip-card__latin { font-family: var(--latin); font-style: italic; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .strip-card__region { font-size: 11px; letter-spacing: .08em; color: var(--accent); }
+  @media (max-width: 860px) { .fruit-strip { padding: 0 20px 9vh; } .strip-card { --cw: 176px; } .fruit-strip__stage { height: 252px; } }
+
   /* 悬浮提示 */
   .tooltip { position: fixed; z-index: 70; max-width: 280px; padding: 15px 17px; border-radius: 16px; background: linear-gradient(135deg, rgba(255,255,255,.68), rgba(255,255,255,.36)); backdrop-filter: blur(22px) saturate(150%); -webkit-backdrop-filter: blur(22px) saturate(150%); border: 1px solid rgba(255,255,255,.85); box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 14px 34px rgba(120,110,140,.2); opacity: 0; pointer-events: none; transition: opacity .18s; }
   .tooltip.show { opacity: 1; }
@@ -286,6 +306,22 @@
         <div class="markers" id="markers"></div>
         <div class="map-focus-label" id="mapFocusLabel"></div>
       </div>
+    </div>
+  </section>
+
+  <section class="fruit-strip" id="fruitStrip">
+    <div class="fruit-strip__head reveal">
+      <div>
+        <span class="kicker">All Fruits · 全部水果</span>
+        <h2 class="fruit-strip__title">水果预览</h2>
+      </div>
+      <div class="fruit-strip__nav">
+        <button class="strip-arrow" id="stripPrev" aria-label="向左滑动">←</button>
+        <button class="strip-arrow" id="stripNext" aria-label="向右滑动">→</button>
+      </div>
+    </div>
+    <div class="fruit-strip__stage">
+      <div class="fruit-strip__deck" id="fruitStripDeck"></div>
     </div>
   </section>
 
@@ -415,6 +451,108 @@
       chip.addEventListener("mouseenter", () => focusRegion(chip.dataset.key));
       chip.addEventListener("mouseleave", () => focusRegion(null));
     });
+  }
+
+  function initFruitStrip() {
+    const deck = document.getElementById("fruitStripDeck");
+    if (!deck) return;
+    const stage = deck.parentElement;
+
+    const cards = FRUITS.map((f, i) => {
+      const el = document.createElement("a");
+      el.className = "strip-card";
+      el.href = "fruit.html?id=" + f.id;
+      el.style.setProperty("--c", f.color);
+      const n = String(i + 1).padStart(2, "0");
+      el.innerHTML =
+        '<div class="strip-card__swatch"><span class="strip-card__num">' + n + '</span></div>' +
+        '<div class="strip-card__name">' + f.name + '</div>' +
+        '<div class="strip-card__latin">' + f.latin + '</div>' +
+        '<div class="strip-card__region">' + f.regionName + '</div>';
+      deck.appendChild(el);
+      return el;
+    });
+
+    const N = cards.length;
+    let offset = 0, velocity = 0, dragging = false, moved = false;
+    let startX = 0, startOffset = 0, lastX = 0, lastT = 0, rafId = 0;
+
+    function render() {
+      const cw = cards[0].offsetWidth || 200;
+      cards.forEach((el, i) => {
+        let off = ((i - offset) % N + N) % N;
+        if (off > N / 2) off -= N;
+        const x = off * cw * 0.5;
+        const scale = Math.max(0.66, 1 - Math.min(Math.abs(off), 4) * 0.11);
+        const rot = off * 5;
+        const y = Math.abs(off) * 6;
+        el.style.transform = "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px) rotate(" + rot.toFixed(1) + "deg) scale(" + scale.toFixed(3) + ")";
+        el.style.zIndex = 100 - Math.abs(off);
+        el.style.opacity = Math.abs(off) > 4 ? 0 : (Math.abs(off) > 3 ? 0.35 : 1);
+        el.style.pointerEvents = Math.abs(off) > 1 ? "none" : "auto";
+      });
+    }
+
+    function settle(target, dur) {
+      cancelAnimationFrame(rafId);
+      dur = dur || 520;
+      const start = offset, diff = target - offset, t0 = performance.now();
+      const step = now => {
+        const p = Math.min(1, (now - t0) / dur);
+        offset = start + diff * (1 - Math.pow(1 - p, 3));
+        render();
+        rafId = p < 1 ? requestAnimationFrame(step) : 0;
+      };
+      rafId = requestAnimationFrame(step);
+    }
+
+    function glide() {
+      offset += velocity * 16;
+      velocity *= 0.94;
+      render();
+      if (Math.abs(velocity) > 0.0007) {
+        rafId = requestAnimationFrame(glide);
+      } else {
+        settle(Math.round(offset), 200);
+      }
+    }
+
+    document.getElementById("stripPrev").addEventListener("click", () => settle(Math.round(offset) - 1));
+    document.getElementById("stripNext").addEventListener("click", () => settle(Math.round(offset) + 1));
+
+    stage.addEventListener("pointerdown", e => {
+      cancelAnimationFrame(rafId);
+      dragging = true; moved = false;
+      startX = lastX = e.clientX; lastT = performance.now();
+      startOffset = offset; velocity = 0;
+      stage.classList.add("dragging");
+      try { stage.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+    stage.addEventListener("dragstart", e => e.preventDefault());
+    stage.addEventListener("pointermove", e => {
+      if (!dragging) return;
+      const now = performance.now();
+      const unit = (cards[0].offsetWidth || 200) * 0.5;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 6) moved = true;
+      const dt = now - lastT;
+      if (dt > 0) { const v = (lastX - e.clientX) / dt / unit; velocity = velocity * 0.4 + v * 0.6; }
+      lastX = e.clientX; lastT = now;
+      offset = startOffset - dx / unit;
+      render();
+    });
+    const end = () => {
+      if (!dragging) return;
+      dragging = false;
+      stage.classList.remove("dragging");
+      if (Math.abs(velocity) > 0.0009) rafId = requestAnimationFrame(glide);
+      else settle(Math.round(offset), 200);
+    };
+    window.addEventListener("pointerup", end);
+    window.addEventListener("pointercancel", end);
+    stage.addEventListener("click", e => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, { capture: true });
+
+    render();
   }
 
   function initMenu() {
@@ -716,6 +854,7 @@
   renderWorldMap();
   renderMap();
   renderRegionNav();
+  initFruitStrip();
   renderMarquee();
   initTooltip();
   initMenu();

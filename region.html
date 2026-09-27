@@ -47,6 +47,16 @@
   .card__stars { font-size: 12px; letter-spacing: .12em; color: var(--accent); }
   .empty { font-family: var(--serif); font-size: 18px; color: var(--muted); padding: 30px 0; }
 
+  /* ---------- 入场动画 ---------- */
+  @keyframes riseIn { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+  .region__head > * { animation: riseIn .7s cubic-bezier(.2,.8,.2,1) backwards; }
+  .region__head > *:nth-child(1) { animation-delay: .08s; }
+  .region__head > *:nth-child(2) { animation-delay: .18s; }
+  .region__head > *:nth-child(3) { animation-delay: .28s; }
+  .region__head > *:nth-child(4) { animation-delay: .38s; }
+  .card { animation: riseIn .6s cubic-bezier(.2,.8,.2,1) backwards; }
+  @media (prefers-reduced-motion: reduce) { .region__head > *, .card { animation: none; } }
+
   @media (max-width: 860px) { .region { padding: 108px 20px 60px; } .region__grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 560px) { .region__grid { grid-template-columns: 1fr; } .nav { flex-wrap: wrap; gap: 10px; } }
 </style>
@@ -102,9 +112,9 @@
 
   const grid = document.getElementById("r-grid");
   if (list.length) {
-    grid.innerHTML = list.map(f => {
+    grid.innerHTML = list.map((f, i) => {
       const n = String(FRUITS.indexOf(f) + 1).padStart(2, "0");
-      return '<a class="card" href="fruit.html?id=' + f.id + '" style="--c:' + f.color + '">' +
+      return '<a class="card" href="fruit.html?id=' + f.id + '" style="--c:' + f.color + ';animation-delay:' + (i * 0.06).toFixed(2) + 's">' +
         '<div class="card__swatch"><span class="card__num">' + n + '</span></div>' +
         '<div class="card__name">' + f.name + '</div>' +
         '<div class="card__latin">' + f.latin + '</div>' +
