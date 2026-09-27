@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>果物奇观 · 全球小众奇异水果图鉴</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F8EBBD; --bg-2: #DFC5BF; --ink: #457635; --text: #3E3A2E; --muted: #8A7F6B;
+    --hairline: rgba(69,118,53,.18); --accent: #6B9136; --sage: #97B365; --butter: #DFD352; --sky: #B1C5C9; --blush: #DFC5BF;
+    --display: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
+    --serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
+    --sans: "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    --latin: "Newsreader", "Libre Bodoni", Georgia, "Times New Roman", serif;
+    --script: "Great Vibes", "Snell Roundhand", "Segoe Script", cursive;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: var(--sans); font-weight: 400; line-height: 1.75;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+    padding-bottom: 42px;
+  }
+  body::after {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 999;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: .03; mix-blend-mode: multiply;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* 极简底色（白 + 极淡灰晕） */
+  .bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; background:
+    radial-gradient(60% 46% at 12% -4%, #DFC5BF 0%, transparent 55%),
+    radial-gradient(52% 44% at 100% 104%, #B1C5C9 0%, transparent 60%),
+    #F8EBBD; }
+
+  /* ---------- 真实 frosted glass（浅色玻璃） ---------- */
+  .glass {
+    position: relative;
+    background: linear-gradient(135deg, rgba(255,255,255,.62), rgba(255,255,255,.26) 45%, rgba(255,255,255,.5));
+    border: 1px solid rgba(0,0,0,.07);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    border-radius: 28px;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.9),
+      inset 0 -1px 0 rgba(0,0,0,.03),
+      0 12px 36px rgba(0,0,0,.07),
+      0 3px 10px rgba(0,0,0,.04);
+  }
+  .glass::before {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background: linear-gradient(115deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.16) 26%, transparent 44%, transparent 72%, rgba(255,255,255,.2) 100%);
+  }
+  .glass::after {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background:
+      radial-gradient(58% 46% at 10% 6%, rgba(255,255,255,.6), transparent 62%),
+      radial-gradient(44% 38% at 90% 94%, rgba(255,255,255,.5), transparent 62%);
+  }
+  .kicker { display: inline-block; font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
+  .script { font-family: var(--script); text-transform: none; letter-spacing: .01em; font-size: 2.05em; line-height: 1; margin-right: .2em; color: var(--ink); }
+
+  /* ---------- 导航 ---------- */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+    display: flex; align-items: center; justify-content: space-between; padding: 15px 28px;
+    background: rgba(255,255,255,.5); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%);
+    border-bottom: 1px solid rgba(40,50,70,.10);
+  }
+  .nav__brand { font-family: var(--display); font-weight: 600; font-size: 20px; letter-spacing: .06em; color: var(--ink); }
+  .nav__toggle { position: relative; width: 40px; height: 40px; cursor: pointer; background: none; border: none; outline: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+  .nav__toggle span { display: block; width: 24px; height: 2px; background: var(--ink); transition: transform .4s cubic-bezier(.65,.05,.36,1), opacity .3s; }
+  body.menu-open .nav__toggle span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  body.menu-open .nav__toggle span:nth-child(2) { opacity: 0; }
+  body.menu-open .nav__toggle span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+  /* 右上角下拉菜单（玻璃质感 + 弹出动画） */
+  .menu-backdrop { position: fixed; inset: 0; z-index: 54; background: rgba(20,20,20,.24); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity .3s ease; }
+  body.menu-open .menu-backdrop { opacity: 1; pointer-events: auto; }
+  .menu {
+    position: fixed; top: 72px; right: 24px; z-index: 55;
+    width: min(340px, calc(100vw - 40px));
+    max-height: calc(100vh - 96px); overflow-y: auto;
+    padding: 18px 20px 16px; border-radius: 22px;
+    background: rgba(255,255,255,.82);
+    backdrop-filter: blur(26px) saturate(140%); -webkit-backdrop-filter: blur(26px) saturate(140%);
+    border: 1px solid rgba(255,255,255,.9);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.95), 0 30px 80px rgba(0,0,0,.2);
+    opacity: 0; transform: translateY(-10px) scale(.96); transform-origin: top right; pointer-events: none;
+    transition: opacity .28s ease, transform .38s cubic-bezier(.2,.8,.2,1);
+  }
+  body.menu-open .menu { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+  .menu__links { display: flex; flex-direction: column; }
+  .menu__links a { font-family: var(--serif); font-size: 18px; padding: 12px 4px; border-bottom: 1px solid rgba(0,0,0,.07); display: flex; align-items: baseline; gap: 14px; transition: color .25s; color: var(--ink); }
+  .menu__links a:last-child { border-bottom: none; }
+  .menu__links a:hover { color: var(--accent); }
+  .menu__links a i { font-family: var(--latin); font-style: normal; font-size: 10px; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+
+  /* ---------- Hero（主题 2/3 · 地球 1/3，占满首屏） ---------- */
+  .hero { max-width: 1400px; margin: 0 auto; min-height: 100vh; display: grid; grid-template-columns: 1.35fr 1fr; gap: 20px; align-items: center; padding: 104px 4vw 48px; }
+  .hero__content { padding-right: 8px; }
+  .hero__title {
+    font-family: var(--display); font-weight: 700; font-size: clamp(56px, 9vw, 144px);
+    line-height: 1.06; letter-spacing: .02em; white-space: nowrap; margin: 20px 0 12px;
+    color: var(--ink);
+  }
+  .char { display: inline-block; opacity: 0; transform: translateY(.55em) rotateX(-45deg); transform-origin: bottom; animation: charIn .9s cubic-bezier(.2,.7,.2,1) forwards; }
+  @keyframes charIn { to { opacity: 1; transform: none; } }
+  .hero__sub { font-size: 15px; letter-spacing: .16em; color: var(--muted); margin-bottom: 18px; }
+  .hero__dek { font-size: 16px; color: var(--text); white-space: nowrap; margin-bottom: 34px; opacity: .92; }
+  .fade { opacity: 0; transform: translateY(16px); animation: fadeIn .9s ease forwards; }
+  @keyframes fadeIn { to { opacity: 1; transform: none; } }
+  .cta {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-size: 13px; letter-spacing: .18em; text-transform: uppercase; font-weight: 500;
+    padding: 17px 38px; border-radius: 40px; color: #F8EBBD;
+    background: #457635; border: 1px solid #457635;
+    box-shadow: 0 8px 22px rgba(69,118,53,.22);
+    transition: transform .25s, background .25s, box-shadow .25s;
+  }
+  .cta:hover {
+    transform: translateY(-2px); background: #6B9136;
+    box-shadow: 0 12px 28px rgba(69,118,53,.3);
+  }
+
+  /* 右侧：悬浮倾斜地球 + 台座 */
+  .hero__globe-wrap { position: relative; width: 100%; justify-self: center; animation: float 7s ease-in-out infinite; }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-13px); } }
+  .hero__globe { position: relative; aspect-ratio: 1 / 1; }
+  .globe-stage { position: absolute; inset: 0; z-index: 1; }
+  #globe { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+  #globe:active { cursor: grabbing; }
+  .beam { position: absolute; left: 0; bottom: 6%; width: 100%; height: 28%; background: linear-gradient(to top, rgba(150,150,150,.38) 0%, rgba(150,150,150,.12) 50%, rgba(150,150,150,0) 100%); clip-path: polygon(22% 0, 78% 0, 56% 100%, 44% 100%); filter: blur(2px); opacity: .5; pointer-events: none; z-index: 0; }
+  .projector { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 32%; height: 13%; z-index: 2; pointer-events: none; filter: drop-shadow(0 10px 18px rgba(110,120,150,.26)); }
+  .projector__glass { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,.6), rgba(232,232,232,.3) 38%, rgba(206,206,206,.26) 62%, rgba(246,246,246,.5)); backdrop-filter: blur(12px) saturate(120%); -webkit-backdrop-filter: blur(12px) saturate(120%); clip-path: polygon(9% 0%, 91% 0%, 95% 18%, 87% 40%, 87% 60%, 95% 82%, 91% 100%, 9% 100%, 5% 82%, 13% 60%, 13% 40%, 5% 18%); }
+  .projector__glass::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, rgba(255,255,255,.5) 0%, rgba(255,255,255,.08) 30%, transparent 48%, rgba(255,255,255,.16) 78%, rgba(255,255,255,.42) 100%); opacity: .6; }
+  .projector__lens { position: absolute; top: -6px; left: 50%; transform: translateX(-50%); width: 42%; height: 13px; border-radius: 50%; background: radial-gradient(ellipse at 50% 42%, #ffffff 0%, #c9c9c9 35%, #4a4a4a 82%, #1a1a1a 100%); box-shadow: 0 0 14px rgba(120,120,120,.5), 0 0 30px rgba(120,120,120,.28); }
+  .globe-hud { margin-top: 8px; text-align: center; }
+  .globe-hud__chip { display: inline-block; padding: 9px 20px 10px; border-radius: 14px; background: linear-gradient(135deg, rgba(255,255,255,.62), rgba(255,255,255,.3)); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); border: 1px solid rgba(255,255,255,.85); box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 8px 24px rgba(120,110,140,.16); cursor: pointer; }
+  .globe-hud__region { font-family: var(--display); font-weight: 600; font-size: 19px; letter-spacing: .02em; color: var(--ink); }
+  .globe-hud__fruits { font-size: 12px; color: var(--muted); margin-top: 2px; white-space: nowrap; }
+
+  /* ---------- 世界地图 ---------- */
+  .map-section { max-width: 1280px; margin: 0 auto; padding: 10vh 5vw 12vh; }
+  .map-section__head { margin-bottom: 34px; max-width: 720px; }
+  .map-section__title { font-family: var(--display); font-weight: 700; font-size: clamp(32px, 4.6vw, 50px); line-height: 1.1; margin: 10px 0 8px; color: var(--ink); }
+  .map-section__sub { color: var(--muted); font-size: 14px; }
+  .map-card { padding: 20px; }
+  .map-inner { position: relative; aspect-ratio: 8 / 3; }
+  .map { display: block; width: 100%; height: 100%; }
+  .markers { position: absolute; inset: 0; }
+  .marker { position: absolute; transform: translate(-50%, -50%); width: 24px; height: 24px; z-index: 3; transition: opacity .35s; }
+  .marker .dot { position: absolute; inset: 8px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 2px rgba(255,255,255,.92), 0 1px 3px rgba(0,0,0,.28); transition: transform .3s cubic-bezier(.2,.7,.2,1); }
+  .marker::before { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 1px solid var(--c); opacity: .55; animation: ping 2.8s ease-out infinite; }
+  @keyframes ping { 0% { transform: scale(.6); opacity: .6; } 70%, 100% { transform: scale(2.3); opacity: 0; } }
+  .marker:hover .dot { transform: scale(1.5); }
+  .marker.dim { opacity: .12; }
+
+  .map-focus-label { position: absolute; z-index: 5; font-family: var(--display); font-size: 21px; color: var(--ink); pointer-events: none; white-space: nowrap; transform: translate(-50%, -140%); opacity: 0; transition: opacity .3s; text-shadow: 0 1px 0 #fff, 0 0 12px rgba(255,255,255,.85); }
+  .map-focus-label.show { opacity: 1; }
+
+  /* ---------- 大洲导航按钮 ---------- */
+  .region-nav { display: flex; flex-wrap: wrap; gap: 9px; padding: 6px 6px 20px; }
+  .region-chip {
+    display: inline-flex; align-items: center; gap: 9px;
+    padding: 9px 16px 9px 13px; border-radius: 40px;
+    background: rgba(255,255,255,.38);
+    border: 1px solid rgba(255,255,255,.6);
+    backdrop-filter: blur(16px) saturate(150%); -webkit-backdrop-filter: blur(16px) saturate(150%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 5px 18px rgba(90,100,120,.08);
+    transition: transform .25s cubic-bezier(.2,.7,.2,1), border-color .25s, box-shadow .25s;
+  }
+  .region-chip:hover { transform: translateY(-2px); border-color: rgba(107,145,54,.55); box-shadow: 0 10px 24px rgba(0,0,0,.1); }
+  .region-chip__num { font-family: var(--latin); font-style: italic; font-size: 11px; letter-spacing: .06em; color: var(--muted); }
+  .region-chip__name { font-family: var(--display); font-weight: 600; font-size: 15px; letter-spacing: .02em; color: var(--ink); }
+  .region-chip--all { background: #457635; border-color: #457635; box-shadow: 0 8px 20px rgba(69,118,53,.28); }
+  .region-chip--all .region-chip__num { color: #DFD352; }
+  .region-chip--all .region-chip__name { color: #F8EBBD; }
+  .region-chip--all:hover { background: #6B9136; border-color: #6B9136; }
+
+  /* 悬浮提示 */
+  .tooltip { position: fixed; z-index: 70; max-width: 280px; padding: 15px 17px; border-radius: 16px; background: linear-gradient(135deg, rgba(255,255,255,.68), rgba(255,255,255,.36)); backdrop-filter: blur(22px) saturate(150%); -webkit-backdrop-filter: blur(22px) saturate(150%); border: 1px solid rgba(255,255,255,.85); box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 14px 34px rgba(120,110,140,.2); opacity: 0; pointer-events: none; transition: opacity .18s; }
+  .tooltip.show { opacity: 1; }
+  .tooltip__latin { display: block; font-family: var(--latin); font-style: italic; font-size: 13px; color: var(--muted); }
+  .tooltip__name { font-family: var(--display); font-size: 22px; line-height: 1.3; margin: 2px 0 6px; color: var(--ink); }
+  .tooltip__flavor { font-size: 13px; line-height: 1.65; color: var(--text); }
+
+  /* ---------- 固定跑马灯（冷知识，150s） ---------- */
+  .marquee { position: fixed; left: 0; right: 0; bottom: 0; z-index: 45; border-top: 1px solid rgba(40,50,70,.10); background: rgba(255,255,255,.55); backdrop-filter: blur(16px) saturate(150%); -webkit-backdrop-filter: blur(16px) saturate(150%); padding: 7px 0; overflow: hidden; }
+  .marquee__track { display: flex; width: max-content; animation: marquee 150s linear infinite; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .marquee__track span { font-size: 12px; white-space: nowrap; padding: 0 24px; color: var(--muted); }
+  .marquee__track b { color: var(--ink); font-weight: 500; margin-right: 8px; }
+  .marquee__track .sep { color: var(--accent); padding: 0; }
+
+  /* ---------- 页脚 ---------- */
+  .footer { max-width: 1280px; margin: 0 auto; border-top: 1px solid rgba(40,50,70,.10); padding: 44px 5vw 52px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px; font-size: 13px; color: var(--muted); }
+  .footer .big { font-family: var(--display); font-size: clamp(44px, 7vw, 84px); line-height: 1; color: var(--ink); opacity: .12; }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1); }
+  .reveal.is-visible { opacity: 1; transform: none; }
+
+  @media (max-width: 860px) {
+    .nav { padding: 13px 20px; }
+    .hero { grid-template-columns: 1fr; gap: 24px; min-height: auto; padding: 108px 20px 44px; }
+    .hero__globe-wrap { max-width: 460px; }
+    .hero__dek { font-size: 13px; letter-spacing: 0; }
+    .map-section { padding: 8vh 20px 11vh; }
+    .map-card { padding: 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+    .char, .fade, .reveal { opacity: 1 !important; transform: none !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a class="nav__brand" href="#top">果物奇观</a>
+    <button class="nav__toggle" id="menuToggle" aria-label="打开菜单" aria-expanded="false"><span></span><span></span><span></span></button>
+  </header>
+
+  <div class="menu-backdrop" id="menuBackdrop"></div>
+
+  <div class="menu" id="menu">
+    <nav class="menu__links">
+      <a href="index.html#atlas"><i>00</i> 图鉴总览</a>
+      <a href="atlas.html"><i>✦</i> 全图鉴</a>
+      <a href="region.html?key=asia-se"><i>01</i> 东南亚</a>
+      <a href="region.html?key=asia-east"><i>02</i> 东亚</a>
+      <a href="region.html?key=africa"><i>03</i> 非洲</a>
+      <a href="region.html?key=south-america"><i>04</i> 南美洲</a>
+      <a href="region.html?key=central-america"><i>05</i> 中美洲</a>
+      <a href="region.html?key=oceania"><i>06</i> 大洋洲</a>
+      <a href="region.html?key=north-america"><i>07</i> 北美洲</a>
+    </nav>
+  </div>
+
+  <section class="hero" id="top">
+    <div class="hero__content">
+      <span class="kicker fade" style="animation-delay:.1s"><span class="script">Exotic Fruit Atlas</span> · 全球奇异水果图鉴</span>
+      <h1 class="hero__title" id="heroTitle">果物奇观</h1>
+      <p class="hero__dek fade" style="animation-delay:.7s">把散落在地球每个角落的奇异果实，收进一颗会转动的地球。</p>
+      <a class="cta fade" style="animation-delay:.85s" href="#atlas">探索世界图鉴 ↓</a>
+    </div>
+
+    <div class="hero__globe-wrap">
+      <div class="hero__globe" id="heroGlobe">
+        <div class="beam"></div>
+        <div class="globe-stage"><canvas id="globe"></canvas></div>
+        <div class="projector">
+          <span class="projector__lens"></span>
+          <span class="projector__glass"></span>
+        </div>
+      </div>
+      <div class="globe-hud" id="globeHud" data-region="">
+        <div class="globe-hud__chip">
+          <div class="globe-hud__region" id="globeHudRegion">果物奇观</div>
+          <div class="globe-hud__fruits" id="globeHudFruits">25 种小众奇异水果</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="map-section" id="atlas">
+    <div class="map-section__head reveal">
+      <span class="kicker">World Atlas · 世界图鉴</span>
+      <h2 class="map-section__title">世界奇异水果分布</h2>
+      <p class="map-section__sub">鼠标靠近标记，浮现名字与一句话介绍；点击进入完整图鉴页。</p>
+    </div>
+    <div class="map-card glass reveal">
+      <div class="region-nav" id="regionNav"></div>
+      <div class="map-inner">
+        <svg class="map" viewBox="0 0 1000 375" preserveAspectRatio="xMidYMid meet" aria-label="世界地图">
+          <rect width="1000" height="375" fill="#B1C5C9"/>
+          <g id="landLayer" fill="#F8EBBD" fill-rule="evenodd" stroke="#DFC5BF" stroke-width="1.6" stroke-linejoin="round"></g>
+          <line x1="0" y1="208" x2="1000" y2="208" stroke="rgba(69,118,53,.4)" stroke-width="1" stroke-dasharray="3 7"/>
+        </svg>
+        <div class="markers" id="markers"></div>
+        <div class="map-focus-label" id="mapFocusLabel"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>© 2026 果物奇观 · 资料整理自公开文献，仅供科普 · 大陆轮廓源自 Natural Earth 公开数据</span>
+    <span class="big">FRUITS</span>
+  </footer>
+
+  <div class="tooltip" id="tooltip">
+    <span class="tooltip__latin"></span>
+    <div class="tooltip__name"></div>
+    <p class="tooltip__flavor"></p>
+  </div>
+
+  <div class="marquee" aria-hidden="true"><div class="marquee__track" id="marqueeTrack"></div></div>
+
+<script src="data/world.js"></script>
+<script src="data/fruits.js"></script>
+<script>
+  const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function splitTitle() {
+    const el = document.getElementById("heroTitle");
+    const text = el.textContent;
+    el.textContent = "";
+    [...text].forEach((ch, i) => {
+      const s = document.createElement("span");
+      s.className = "char"; s.textContent = ch;
+      s.style.animationDelay = (0.15 + i * 0.09) + "s";
+      el.appendChild(s);
+    });
+  }
+
+  // 等距圆柱投影（矩形铺满、无左右留白）：裁掉南极洲（-60°S 以下）与北极极地（75°N 以上）。viewBox 0 0 1000 375
+  const MAP_W = 1000, MAP_H = 375, MAP_LAT_TOP = 75, MAP_LAT_BOT = -60;
+  function geoPath(rings) {
+    return rings.map(ring =>
+      ring.map((pt, i) => (i ? "L" : "M") + ((pt[0] + 180) / 360 * MAP_W).toFixed(2) + " " + ((MAP_LAT_TOP - pt[1]) / (MAP_LAT_TOP - MAP_LAT_BOT) * MAP_H).toFixed(2)).join(" ") + "Z"
+    ).join(" ");
+  }
+  function renderWorldMap() {
+    const layer = document.getElementById("landLayer");
+    if (!layer || !window.LAND) return;
+    layer.innerHTML = window.LAND.map(poly => '<path d="' + geoPath(poly) + '"/>').join("");
+  }
+  function renderMap() {
+    const wrap = document.getElementById("markers");
+    let html = "";
+    FRUITS.forEach(f => {
+      // f.x = 经度百分比；f.y = 全幅纬度百分比 → 换算到裁剪后的纬度范围
+      const lat = 90 - (f.y / 100) * 180;
+      const top = (MAP_LAT_TOP - lat) / (MAP_LAT_TOP - MAP_LAT_BOT) * 100;
+      html += '<a class="marker" href="fruit.html?id=' + f.id + '" data-id="' + f.id + '" data-region="' + f.region + '" style="left:' + f.x + '%; top:' + top + '%; --c:' + f.color + ';" aria-label="' + f.name + '"><span class="dot"></span></a>';
+    });
+    wrap.innerHTML = html;
+  }
+
+  function renderMarquee() {
+    const track = document.getElementById("marqueeTrack");
+    const items = FRUITS.map(f => '<span><b>' + f.name + '</b>' + f.fact + '</span><span class="sep">✦</span>');
+    track.innerHTML = items.join("") + items.join("");
+  }
+
+  function initTooltip() {
+    const tip = document.getElementById("tooltip");
+    const latin = tip.querySelector(".tooltip__latin");
+    const name = tip.querySelector(".tooltip__name");
+    const flavor = tip.querySelector(".tooltip__flavor");
+    document.querySelectorAll(".marker").forEach(m => {
+      m.addEventListener("mouseenter", () => {
+        const f = FRUITS.find(x => x.id === m.dataset.id);
+        if (!f) return;
+        latin.textContent = f.latin;
+        name.textContent = f.name;
+        flavor.textContent = f.flavor;
+        tip.classList.add("show");
+      });
+      m.addEventListener("mousemove", e => {
+        const pad = 18;
+        let x = e.clientX + pad, y = e.clientY + pad;
+        const r = tip.getBoundingClientRect();
+        if (x + r.width > innerWidth) x = e.clientX - r.width - pad;
+        if (y + r.height > innerHeight) y = e.clientY - r.height - pad;
+        tip.style.left = x + "px"; tip.style.top = y + "px";
+      });
+      m.addEventListener("mouseleave", () => tip.classList.remove("show"));
+    });
+  }
+
+  function focusRegion(key) {
+    document.querySelectorAll(".marker").forEach(m => m.classList.toggle("dim", !!key && m.dataset.region !== key));
+    const label = document.getElementById("mapFocusLabel");
+    if (key) {
+      const r = REGIONS.find(x => x.key === key);
+      label.innerHTML = r ? r.name : "";
+      const list = FRUITS.filter(f => f.region === key);
+      if (list.length) {
+        let sx = 0, sy = 0;
+        list.forEach(f => {
+          const lat = 90 - (f.y / 100) * 180;
+          sx += f.x;
+          sy += (MAP_LAT_TOP - lat) / (MAP_LAT_TOP - MAP_LAT_BOT) * 100;
+        });
+        label.style.left = (sx / list.length) + "%";
+        label.style.top = (sy / list.length) + "%";
+      }
+      label.classList.add("show");
+    } else {
+      label.classList.remove("show");
+    }
+  }
+
+  function renderRegionNav() {
+    const nav = document.getElementById("regionNav");
+    const allChip =
+      '<a class="region-chip region-chip--all" href="atlas.html" aria-label="进入全图鉴">' +
+      '<span class="region-chip__num">✦</span>' +
+      '<span class="region-chip__name">全图鉴</span>' +
+      '</a>';
+    nav.innerHTML = allChip + REGIONS.map(r =>
+      '<a class="region-chip" href="region.html?key=' + r.key + '" data-key="' + r.key + '" aria-label="进入' + r.name + '图鉴">' +
+      '<span class="region-chip__num">' + r.num + '</span>' +
+      '<span class="region-chip__name">' + r.name + '</span>' +
+      '</a>'
+    ).join("");
+    nav.querySelectorAll(".region-chip").forEach(chip => {
+      chip.addEventListener("mouseenter", () => focusRegion(chip.dataset.key));
+      chip.addEventListener("mouseleave", () => focusRegion(null));
+    });
+  }
+
+  function initMenu() {
+    const toggle = document.getElementById("menuToggle");
+    const backdrop = document.getElementById("menuBackdrop");
+    const links = document.querySelectorAll(".menu__links a");
+    const setOpen = open => {
+      document.body.classList.toggle("menu-open", open);
+      toggle.setAttribute("aria-expanded", open);
+    };
+    toggle.addEventListener("click", () => setOpen(!document.body.classList.contains("menu-open")));
+    backdrop.addEventListener("click", () => setOpen(false));
+    links.forEach(a => a.addEventListener("click", () => setOpen(false)));
+  }
+
+  function initReveal() {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+  }
+
+  /* ---------- 倾斜地球（黄赤交角 23.44°，Canvas 2D） ---------- */
+  function initGlobe() {
+    const canvas = document.getElementById("globe");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const stage = canvas.parentElement;
+    const hud = document.getElementById("globeHud");
+    const hudRegion = document.getElementById("globeHudRegion");
+    const hudFruits = document.getElementById("globeHudFruits");
+    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+    const ROLL = 0;                        // 屏幕内不旋转，地球保持竖直
+    const LX = -0.45, LY = -0.55, LZ = 0.70; // 光源方向（左上·前）
+    let W = 0, H = 0, R = 0;
+    let rotY = Math.PI * 0.3;              // 自转（水平拖动，360° 自由）
+    let rotX = 23.44 * Math.PI / 180;      // 俯仰（垂直拖动，初始为黄赤交角）
+    let auto = REDUCED ? 0 : 0.13;
+    let dragging = false, lastX = 0, lastY = 0, idle = 0, lastRegionKey = "";
+
+    const fruits = FRUITS.map(f => {
+      const lon = (f.x / 100) * 360 - 180;
+      const lat = 90 - (f.y / 100) * 180;
+      const lr = lon * Math.PI / 180, fr = lat * Math.PI / 180;
+      return Object.assign({}, f, {
+        x: Math.cos(fr) * Math.sin(lr),
+        y: -Math.sin(fr),
+        z: Math.cos(fr) * Math.cos(lr)
+      });
+    });
+
+    // 真实大陆轮廓（Natural Earth 110m）：经纬度顶点 → 单位球面三维坐标
+    const land3d = (window.LAND || []).map(poly => {
+      const rings = poly.map(ring => ring.map(pt => {
+        const lr = pt[0] * Math.PI / 180, fr = pt[1] * Math.PI / 180;
+        return { x: Math.cos(fr) * Math.sin(lr), y: -Math.sin(fr), z: Math.cos(fr) * Math.cos(lr) };
+      }));
+      return { rings };
+    });
+
+    const centroids = {};
+    REGIONS.forEach(r => {
+      const list = fruits.filter(f => f.region === r.key);
+      const c = { x: 0, y: 0, z: 0 };
+      list.forEach(p => { c.x += p.x; c.y += p.y; c.z += p.z; });
+      const n = list.length || 1;
+      c.x /= n; c.y /= n; c.z /= n;
+      const m = Math.sqrt(c.x*c.x + c.y*c.y + c.z*c.z) || 1;
+      centroids[r.key] = { key: r.key, name: r.name, num: r.num, x: c.x/m, y: c.y/m, z: c.z/m };
+    });
+
+    // 绕 Y（自转）→ 绕 X（俯仰）；rotY/rotX 每帧变化，缓存三角值避免逐点重复计算
+    let _c = Math.cos(rotY), _s = Math.sin(rotY);
+    let _cx = Math.cos(rotX), _sx = Math.sin(rotX);
+    function project(p) {
+      const x1 = p.x * _c + p.z * _s;
+      const z1 = -p.x * _s + p.z * _c;
+      const y2 = p.y * _cx - z1 * _sx;
+      const z2 = p.y * _sx + z1 * _cx;
+      return { x: x1, y: y2, z: z2 };
+    }
+
+    function lum(p) { return Math.max(0, p.x * LX + p.y * LY + p.z * LZ); }
+
+    function resize() {
+      const rect = stage.getBoundingClientRect();
+      W = canvas.width = Math.max(1, Math.round(rect.width * DPR));
+      H = canvas.height = Math.max(1, Math.round(rect.height * DPR));
+      R = Math.min(W, H) * 0.40;
+    }
+
+    function rr(x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      const cx = W / 2, cy = H * 0.44;
+      const cosR = Math.cos(ROLL), sinR = Math.sin(ROLL);
+      const X = (p, len) => cx + (p.x * cosR + p.y * sinR) * len;
+      const Y = (p, len) => cy + (-p.x * sinR + p.y * cosR) * len;
+      let g;
+      _c = Math.cos(rotY); _s = Math.sin(rotY);
+      _cx = Math.cos(rotX); _sx = Math.sin(rotX);
+
+      // 外围柔光
+      g = ctx.createRadialGradient(cx, cy, R * 0.2, cx, cy, R * 1.1);
+      g.addColorStop(0, "rgba(120,120,120,0.18)");
+      g.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(cx, cy, R * 1.5, 0, Math.PI * 2); ctx.fill();
+
+      // 球体基底（海洋·受光·左上亮）
+      g = ctx.createRadialGradient(cx - R*0.4, cy - R*0.45, R*0.08, cx, cy, R*1.05);
+      g.addColorStop(0, "rgba(177,197,201,0.97)");
+      g.addColorStop(0.35, "rgba(143,169,175,0.98)");
+      g.addColorStop(0.78, "rgba(95,126,133,0.99)");
+      g.addColorStop(1, "rgba(58,82,88,1)");
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+
+      ctx.save();
+      ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.clip();
+
+      // 真实大陆轮廓（正射投影 + 前半球裁剪），构建成单一路径
+      const landPath = new Path2D();
+      land3d.forEach(land => {
+        land.rings.forEach(ring => {
+          if (ring.length < 3) return;
+          const pts = ring.map(project);
+          const clip = [];
+          for (let i = 0; i < pts.length; i++) {
+            const a = pts[i], b = pts[(i + 1) % pts.length];
+            const aIn = a.z >= 0, bIn = b.z >= 0;
+            if (aIn) clip.push(a);
+            if (aIn !== bIn) {
+              const t = a.z / (a.z - b.z);             // 与 z=0 视线的交点
+              clip.push({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t, z: 0 });
+            }
+          }
+          if (clip.length < 3) return;
+          clip.forEach((p, i) => {
+            const sx = X(p, R), sy = Y(p, R);
+            if (i === 0) landPath.moveTo(sx, sy); else landPath.lineTo(sx, sy);
+          });
+          landPath.closePath();
+        });
+      });
+      // 用球面渐变整体着色陆地（受光面亮、边缘暗），消除整块平涂色块
+      ctx.save();
+      ctx.clip(landPath, "evenodd");
+      g = ctx.createRadialGradient(cx - R*0.4, cy - R*0.45, R*0.08, cx, cy, R*1.05);
+      g.addColorStop(0, "rgb(250,240,202)");
+      g.addColorStop(0.42, "rgb(244,228,190)");
+      g.addColorStop(0.78, "rgb(223,197,191)");
+      g.addColorStop(1, "rgb(196,158,150)");
+      ctx.fillStyle = g;
+      ctx.fillRect(cx - R, cy - R, R * 2, R * 2);
+      ctx.restore();
+      // 海岸线
+      ctx.strokeStyle = "rgba(255,252,244,0.28)";
+      ctx.lineWidth = 0.6 * DPR;
+      ctx.stroke(landPath);
+
+      // 判定当前朝向的大洲
+      let best = null, bestZ = 0.04;
+      Object.values(centroids).forEach(c => {
+        const p = project(c);
+        if (p.z > bestZ) { bestZ = p.z; best = c; }
+      });
+
+      // 水果标记 + 名称（受光）
+      const placed = [];
+      fruits.map(f => ({ f, p: project(f) }))
+        .sort((a, b) => a.p.z - b.p.z)
+        .forEach(({ f, p }) => {
+          if (p.z <= -0.05) return;
+          const sx = X(p, R), sy = Y(p, R);
+          const facing = Math.min(1, Math.max(0, (p.z + 0.15) / 1.15));
+          const l = 0.3 + 0.7 * lum(p);
+          const rad = (2.2 + 2.8 * facing) * DPR;
+
+          g = ctx.createRadialGradient(sx, sy, 0, sx, sy, rad*3);
+          g.addColorStop(0, f.color);
+          g.addColorStop(1, "rgba(0,0,0,0)");
+          ctx.globalAlpha = 0.5 * facing * l;
+          ctx.fillStyle = g;
+          ctx.beginPath(); ctx.arc(sx, sy, rad*3, 0, Math.PI*2); ctx.fill();
+
+          ctx.globalAlpha = (0.3 + 0.7 * facing) * (0.4 + 0.6 * l);
+          ctx.fillStyle = "#fff";
+          ctx.beginPath(); ctx.arc(sx, sy, rad*0.42, 0, Math.PI*2); ctx.fill();
+          ctx.fillStyle = f.color;
+          ctx.beginPath(); ctx.arc(sx, sy, rad, 0, Math.PI*2); ctx.fill();
+
+          if (facing > 0.55) {
+            ctx.globalAlpha = (facing - 0.55) / 0.45;
+            const fs = 12 * DPR;
+            ctx.font = "500 " + fs + 'px "Noto Sans SC", sans-serif';
+            const tw = ctx.measureText(f.name).width;
+            let lx = sx + rad + 9*DPR;
+            const lw = tw + 14*DPR, lh = 22*DPR;
+            let ly = sy - lh/2;
+            if (lx + lw > cx + R - 4*DPR) lx = sx - rad - 9*DPR - lw;
+            // 碰撞避让：下移直至不与其他标签重叠（缓解南半球拥挤）
+            let guard = 0;
+            while (guard++ < 12) {
+              const hit = placed.some(b => lx < b.x + b.w && lx + lw > b.x && ly < b.y + b.h && ly + lh > b.y);
+              if (!hit) break;
+              ly += lh + 2*DPR;
+            }
+            if (ly + lh > cy + R - 2*DPR) ly = sy - lh/2;
+            placed.push({ x: lx, y: ly, w: lw, h: lh });
+            ctx.fillStyle = "rgba(255,255,255,0.86)";
+            rr(lx, ly, lw, lh, 11*DPR); ctx.fill();
+            ctx.strokeStyle = "rgba(0,0,0,0.08)";
+            ctx.lineWidth = 1*DPR; ctx.stroke();
+            ctx.fillStyle = "#457635";
+            ctx.textBaseline = "middle";
+            ctx.fillText(f.name, lx + 7*DPR, ly + lh/2 + 1*DPR);
+          }
+          ctx.globalAlpha = 1;
+        });
+
+      ctx.restore();
+
+      // 高光（镜面反射感）
+      g = ctx.createRadialGradient(cx - R*0.42, cy - R*0.48, 0, cx - R*0.42, cy - R*0.48, R*0.55);
+      g.addColorStop(0, "rgba(255,255,255,0.18)");
+      g.addColorStop(1, "rgba(255,255,255,0)");
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(cx - R*0.42, cy - R*0.48, R*0.55, 0, Math.PI*2); ctx.fill();
+
+      // 全息辉光边缘（四周可见的光环）
+      g = ctx.createRadialGradient(cx, cy, R - 2*DPR, cx, cy, R + 5*DPR);
+      g.addColorStop(0, "rgba(150,150,150,0)");
+      g.addColorStop(0.45, "rgba(150,150,150,0.65)");
+      g.addColorStop(0.75, "rgba(150,150,150,0.2)");
+      g.addColorStop(1, "rgba(150,150,150,0)");
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(cx, cy, R + 5*DPR, 0, Math.PI*2); ctx.fill();
+
+      // 更新 HUD
+      const key = best ? best.key : "";
+      if (key !== lastRegionKey) {
+        lastRegionKey = key;
+        if (best) {
+          hudRegion.textContent = best.num + " · " + best.name;
+          hudFruits.textContent = fruits.filter(f => f.region === best.key).map(f => f.name).join(" / ");
+          hud.setAttribute("data-region", best.key);
+        } else {
+          hudRegion.textContent = "果物奇观";
+          hudFruits.textContent = "25 种小众奇异水果";
+          hud.setAttribute("data-region", "");
+        }
+      }
+    }
+
+    let last = performance.now();
+    function loop(now) {
+      const dt = Math.min(0.05, (now - last) / 1000); last = now;
+      if (dragging) { idle = 0; } else { idle += dt; if (auto && idle > 0.15) rotY += auto * dt; }
+      draw();
+      requestAnimationFrame(loop);
+    }
+
+    canvas.addEventListener("pointerdown", e => { dragging = true; lastX = e.clientX; lastY = e.clientY; canvas.setPointerCapture(e.pointerId); });
+    canvas.addEventListener("pointermove", e => {
+      if (!dragging) return;
+      rotY += (e.clientX - lastX) * 0.006;   // 水平拖动：自转（可 360°）
+      rotX -= (e.clientY - lastY) * 0.006;   // 垂直拖动：俯仰（上下看极地）
+      rotX = Math.max(-1.45, Math.min(1.45, rotX)); // 限制俯仰范围，避免完全倒置
+      lastX = e.clientX; lastY = e.clientY;
+    });
+    canvas.addEventListener("pointerup", () => { dragging = false; });
+    canvas.addEventListener("pointercancel", () => { dragging = false; });
+
+    hud.addEventListener("click", () => {
+      const key = hud.getAttribute("data-region");
+      if (key) {
+        focusRegion(key);
+        document.getElementById("atlas").scrollIntoView({ behavior: "smooth" });
+      }
+    });
+
+    window.addEventListener("resize", resize);
+    resize();
+    if (REDUCED) { draw(); } else { requestAnimationFrame(loop); }
+  }
+
+  if (!REDUCED) splitTitle();
+  renderWorldMap();
+  renderMap();
+  renderRegionNav();
+  renderMarquee();
+  initTooltip();
+  initMenu();
+  initReveal();
+  initGlobe();
+</script>
+</body>
+</html>

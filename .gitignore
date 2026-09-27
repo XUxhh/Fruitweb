@@ -1,0 +1,6 @@
+# Claude 本地项目数据（不发布）
+.claude/
+
+# 系统文件
+.DS_Store
+Thumbs.db

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>果物奇观 · 地区图鉴</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&family=Great+Vibes&family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&family=ZCOOL+QingKe+HuangYou&family=ZCOOL+XiaoWei&family=Long+Cang&family=Liu+Jian+Mao+Cao&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F8EBBD; --ink: #457635; --text: #3E3A2E; --muted: #8A7F6B; --hairline: rgba(69,118,53,.18); --accent: #6B9136;
+    --display: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
+    --serif: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+    --sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    --latin: "Newsreader", "Libre Bodoni", Georgia, serif;
+    --script: "Great Vibes", "Snell Roundhand", "Segoe Script", cursive;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.75; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+
+  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 60; display: flex; justify-content: space-between; align-items: center; padding: 15px 28px; background: rgba(255,255,255,.72); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--hairline); }
+  .nav__brand { font-family: var(--display); font-weight: 600; font-size: 20px; letter-spacing: .06em; color: var(--ink); }
+  .nav__back { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; border: 1px solid rgba(69,118,53,.35); border-radius: 40px; padding: 8px 18px; transition: border-color .3s, color .3s; }
+  .nav__back:hover { border-color: var(--accent); color: var(--accent); }
+  .nav__right { display: flex; align-items: center; gap: 12px; }
+  .nav__select { font-family: var(--sans); font-size: 14px; color: var(--ink); background: rgba(255,255,255,.68); backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%); border: 1px solid rgba(255,255,255,.85); border-radius: 40px; padding: 8px 16px; cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 4px 14px rgba(90,100,120,.12); transition: border-color .3s, box-shadow .3s; }
+  .nav__select:hover { border-color: var(--accent); }
+
+  .region { max-width: 1120px; margin: 0 auto; padding: 128px 5vw 90px; }
+  .region__head { max-width: 720px; margin-bottom: 44px; }
+  .kicker { display: inline-block; font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
+  .region__name { font-family: var(--display); font-weight: 700; font-size: clamp(48px, 8vw, 96px); line-height: 1; margin: 14px 0 6px; letter-spacing: .02em; color: var(--ink); }
+  .region__en { font-family: var(--script); font-size: 34px; color: var(--muted); margin-bottom: 16px; }
+  .region__desc { font-size: 16px; color: var(--muted); max-width: 46ch; }
+
+  .region__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; }
+  .card { position: relative; display: flex; flex-direction: column; gap: 11px; padding: 20px; border-radius: 20px; background: #fff; border: 1px solid var(--hairline); box-shadow: 0 8px 24px rgba(0,0,0,.05); transition: transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s; }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(0,0,0,.1); }
+  .card__swatch { width: 100%; height: 96px; border-radius: 14px; background: var(--c); position: relative; overflow: hidden; }
+  .card__swatch::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(0,0,0,.16)); }
+  .card__num { position: absolute; top: 12px; right: 14px; font-family: var(--latin); font-style: italic; font-size: 14px; color: rgba(255,255,255,.85); }
+  .card__name { font-family: var(--display); font-weight: 600; font-size: 24px; line-height: 1.2; color: var(--ink); }
+  .card__latin { font-family: var(--latin); font-style: italic; font-size: 13px; color: var(--muted); }
+  .card__flavor { font-size: 13px; color: var(--muted); line-height: 1.65; }
+  .card__stars { font-size: 12px; letter-spacing: .12em; color: var(--accent); }
+  .empty { font-family: var(--serif); font-size: 18px; color: var(--muted); padding: 30px 0; }
+
+  @media (max-width: 860px) { .region { padding: 108px 20px 60px; } .region__grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .region__grid { grid-template-columns: 1fr; } .nav { flex-wrap: wrap; gap: 10px; } }
+</style>
+</head>
+<body>
+  <header class="nav">
+    <a class="nav__brand" href="index.html">果物奇观</a>
+    <div class="nav__right">
+      <select class="nav__select" id="regionSelect" aria-label="切换大洲"></select>
+      <a class="nav__back" href="index.html#atlas">← 返回图鉴</a>
+    </div>
+  </header>
+
+  <main class="region" id="region">
+    <div class="region__head">
+      <span class="kicker" id="r-kicker">Region 01</span>
+      <h1 class="region__name" id="r-name">东南亚</h1>
+      <div class="region__en" id="r-en">Southeast Asia</div>
+      <p class="region__desc" id="r-desc"></p>
+    </div>
+    <div class="region__grid" id="r-grid"></div>
+  </main>
+
+<script src="data/fruits.js"></script>
+<script>
+  function stars(n){ return "★★★★★".slice(0,n) + "☆☆☆☆☆".slice(0,5-n); }
+  const params = new URLSearchParams(location.search);
+  const key = params.get("key") || "asia-se";
+  const r = REGIONS.find(x => x.key === key) || REGIONS[0];
+  const list = FRUITS.filter(f => f.region === r.key);
+
+  document.title = r.name + " · 果物奇观";
+  document.getElementById("r-kicker").textContent = "Region " + r.num;
+  const REGION_FONTS = {
+    "asia-se": ['"ZCOOL KuaiLe", "Noto Sans SC", sans-serif', "400"],
+    "asia-east": ['"Ma Shan Zheng", "Noto Serif SC", serif', "400"],
+    "africa": ['"ZCOOL QingKe HuangYou", "Noto Sans SC", sans-serif', "400"],
+    "south-america": ['"ZCOOL XiaoWei", "Noto Serif SC", serif', "400"],
+    "central-america": ['"Long Cang", "Noto Serif SC", serif', "400"],
+    "oceania": ['"Liu Jian Mao Cao", "Noto Serif SC", serif', "400"],
+    "north-america": ['"Noto Sans SC", "PingFang SC", sans-serif', "700"]
+  };
+  const nameEl = document.getElementById("r-name");
+  nameEl.textContent = r.name;
+  const font = REGION_FONTS[r.key] || ['var(--display)', "700"];
+  nameEl.style.fontFamily = font[0];
+  nameEl.style.fontWeight = font[1];
+  document.getElementById("r-en").textContent = r.en;
+  const select = document.getElementById("regionSelect");
+  select.innerHTML = '<option value="all">全图鉴</option>' + REGIONS.map(rr => '<option value="' + rr.key + '"' + (rr.key === r.key ? " selected" : "") + '>' + rr.name + '</option>').join("");
+  select.addEventListener("change", () => { location.href = select.value === "all" ? "atlas.html" : "region.html?key=" + select.value; });
+  document.getElementById("r-desc").textContent = "本地区收录 " + list.length + " 种小众奇异水果，点击任意卡片进入完整图鉴页。";
+
+  const grid = document.getElementById("r-grid");
+  if (list.length) {
+    grid.innerHTML = list.map(f => {
+      const n = String(FRUITS.indexOf(f) + 1).padStart(2, "0");
+      return '<a class="card" href="fruit.html?id=' + f.id + '" style="--c:' + f.color + '">' +
+        '<div class="card__swatch"><span class="card__num">' + n + '</span></div>' +
+        '<div class="card__name">' + f.name + '</div>' +
+        '<div class="card__latin">' + f.latin + '</div>' +
+        '<div class="card__flavor">' + f.flavor + '</div>' +
+        '<div class="card__stars">' + stars(f.rarity) + '</div>' +
+        '</a>';
+    }).join("");
+  } else {
+    grid.innerHTML = '<p class="empty">该地区暂无收录。</p>';
+  }
+</script>
+</body>
+</html>

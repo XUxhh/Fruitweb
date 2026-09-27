@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>果物奇观 · 水果图鉴</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F8EBBD; --bg-2: #DFC5BF; --ink: #457635; --text: #3E3A2E; --muted: #8A7F6B;
+    --hairline: rgba(69,118,53,.18); --accent: #6B9136;
+    --display: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
+    --serif: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+    --sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    --latin: "Newsreader", "Libre Bodoni", Georgia, "Times New Roman", serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.8; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 999; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity: .03; mix-blend-mode: multiply; }
+  a { color: inherit; text-decoration: none; }
+
+  .bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; background:
+    radial-gradient(60% 46% at 12% -4%, #DFC5BF 0%, transparent 55%),
+    radial-gradient(52% 44% at 100% 104%, #B1C5C9 0%, transparent 60%),
+    #F8EBBD; }
+
+  .glass { position: relative; background: linear-gradient(135deg, rgba(255,255,255,.62), rgba(255,255,255,.26) 45%, rgba(255,255,255,.5)); border: 1px solid rgba(0,0,0,.07); backdrop-filter: blur(24px) saturate(140%); -webkit-backdrop-filter: blur(24px) saturate(140%); border-radius: 26px; box-shadow: inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(0,0,0,.03), 0 12px 36px rgba(0,0,0,.07), 0 3px 10px rgba(0,0,0,.04); }
+  .kicker { display: inline-block; font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
+
+  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 60; display: flex; justify-content: space-between; align-items: center; padding: 15px 28px; background: rgba(255,255,255,.5); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); border-bottom: 1px solid rgba(0,0,0,.10); }
+  .nav__brand { font-family: var(--display); font-size: 20px; letter-spacing: .06em; color: var(--ink); }
+  .nav__back { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; border: 1px solid rgba(69,118,53,.35); border-radius: 40px; padding: 8px 18px; transition: border-color .3s, color .3s; }
+  .nav__back:hover { border-color: var(--accent); color: var(--accent); }
+
+  .detail { max-width: 1120px; margin: 0 auto; padding: 128px 5vw 90px; }
+  .detail__grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; }
+  .detail__info .kicker { margin-bottom: 14px; }
+  .detail__name { font-family: var(--display); font-weight: 700; font-size: clamp(50px, 8vw, 96px); line-height: 1; letter-spacing: .04em; color: var(--ink); }
+  .detail__latin { font-family: var(--latin); font-style: italic; font-size: 19px; color: var(--muted); margin: 12px 0 24px; }
+  .detail__flavor { font-size: 17px; max-width: 46ch; margin-bottom: 32px; }
+  .detail__fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid rgba(0,0,0,.10); }
+  .detail__field { padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,.10); }
+  .detail__field .label { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+  .detail__field .value { font-size: 16px; margin-top: 4px; }
+
+  .detail__media { position: relative; aspect-ratio: 3 / 4; overflow: hidden; background: var(--c); }
+  .detail__media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.55)); }
+  .detail__media .frame { position: absolute; inset: 18px; border: 1px solid rgba(242,239,231,.35); z-index: 1; }
+  .detail__media .num { position: absolute; top: 30px; right: 34px; z-index: 2; font-family: var(--display); font-size: 110px; line-height: 1; color: rgba(255,255,255,.3); }
+  .detail__media .tag { position: absolute; left: 34px; bottom: 34px; z-index: 2; color: #F4F7FB; }
+  .detail__media .tag .en { font-size: 15px; letter-spacing: .16em; text-transform: uppercase; }
+
+  .fact { margin-top: 54px; padding: 32px 36px; }
+  .fact .kicker { margin-bottom: 12px; }
+  .fact__text { font-family: var(--display); font-weight: 600; font-size: clamp(21px, 3vw, 30px); line-height: 1.5; color: var(--ink); }
+
+  .pager { margin-top: 54px; display: flex; justify-content: space-between; gap: 20px; border-top: 1px solid rgba(0,0,0,.10); padding-top: 24px; }
+  .pager a { font-family: var(--display); font-size: 20px; color: var(--ink); }
+  .pager a .dir { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 4px; }
+  .pager a:hover { color: var(--accent); }
+  .pager .next { text-align: right; }
+
+  @media (max-width: 860px) {
+    .detail { padding: 108px 20px 60px; }
+    .detail__grid { grid-template-columns: 1fr; gap: 36px; }
+    .detail__media { order: -1; aspect-ratio: 4 / 5; }
+  }
+</style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a class="nav__brand" href="index.html">果物奇观</a>
+    <a class="nav__back" href="index.html">← 返回图鉴</a>
+  </header>
+
+  <main class="detail" id="detail">
+    <div class="detail__grid">
+      <div class="detail__info">
+        <span class="kicker" id="d-kicker">FRUIT 01 · 东南亚</span>
+        <h1 class="detail__name" id="d-name">尖蜜拉</h1>
+        <p class="detail__latin" id="d-latin">Artocarpus integer</p>
+        <p class="detail__flavor" id="d-flavor"></p>
+        <div class="detail__fields">
+          <div class="detail__field"><div class="label">产地 Origin</div><div class="value" id="d-origin"></div></div>
+          <div class="detail__field"><div class="label">地区 Region</div><div class="value" id="d-region"></div></div>
+          <div class="detail__field"><div class="label">稀有度 Rarity</div><div class="value" id="d-rarity"></div></div>
+          <div class="detail__field"><div class="label">英文名 English</div><div class="value" id="d-english"></div></div>
+        </div>
+      </div>
+      <div class="detail__media glass" id="d-media" style="--c:#C89B3C;">
+        <span class="frame"></span>
+        <span class="num" id="d-num">01</span>
+        <div class="tag"><span class="en" id="d-en">Cempedak</span></div>
+      </div>
+    </div>
+
+    <div class="fact glass">
+      <span class="kicker">冷知识 · Fun Fact</span>
+      <p class="fact__text" id="d-fact"></p>
+    </div>
+
+    <div class="pager">
+      <a href="#" class="prev" id="d-prev"><span class="dir">← 上一颗</span><span id="d-prev-name"></span></a>
+      <a href="#" class="next" id="d-next"><span class="dir">下一颗 →</span><span id="d-next-name"></span></a>
+    </div>
+  </main>
+
+<script src="data/fruits.js"></script>
+<script>
+  function stars(n){ return "★★★★★".slice(0,n) + "☆☆☆☆☆".slice(0,5-n); }
+  const params = new URLSearchParams(location.search);
+  const id = params.get("id") || FRUITS[0].id;
+  const idx = FRUITS.findIndex(f => f.id === id);
+  const f = FRUITS[idx] || FRUITS[0];
+  const gi = FRUITS.indexOf(f) + 1;
+  const num = String(gi).padStart(2, "0");
+
+  document.title = f.name + " · 果物奇观";
+  document.getElementById("d-kicker").textContent = "FRUIT " + num + " · " + f.regionName;
+  document.getElementById("d-name").textContent = f.name;
+  document.getElementById("d-latin").textContent = f.latin;
+  document.getElementById("d-flavor").textContent = f.flavor + "。";
+  document.getElementById("d-origin").textContent = f.origin;
+  document.getElementById("d-region").textContent = f.regionName;
+  document.getElementById("d-rarity").textContent = stars(f.rarity) + "  (" + f.rarity + "/5)";
+  document.getElementById("d-english").textContent = f.english;
+  document.getElementById("d-fact").textContent = f.fact;
+  document.getElementById("d-num").textContent = num;
+  document.getElementById("d-en").textContent = f.english;
+  document.getElementById("d-media").style.setProperty("--c", f.color);
+
+  const prev = FRUITS[(idx - 1 + FRUITS.length) % FRUITS.length];
+  const next = FRUITS[(idx + 1) % FRUITS.length];
+  document.getElementById("d-prev").href = "fruit.html?id=" + prev.id;
+  document.getElementById("d-prev-name").textContent = prev.name;
+  document.getElementById("d-next").href = "fruit.html?id=" + next.id;
+  document.getElementById("d-next-name").textContent = next.name;
+</script>
+</body>
+</html>

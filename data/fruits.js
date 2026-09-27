@@ -1,0 +1,38 @@
+// 果物奇观 · 水果数据（与 fruits.json 同步）
+// 页面通过 <script src="data/fruits.js"> 引入，file:// 直开也能用（避免 fetch 的跨域限制）
+window.FRUITS = [
+  { id:"cempedak", name:"尖蜜拉", english:"Cempedak", latin:"Artocarpus integer", region:"asia-se", regionName:"东南亚", origin:"菲律宾 / 马来 / 印尼", flavor:"菠萝蜜的近亲，气味仅次于榴莲，果肉如焦糖与芒果交融", rarity:4, color:"#C89B3C", x:83.9, y:42.8, fact:"尖蜜拉的气味在水果界排名第二，仅次于榴莲。" },
+  { id:"marang", name:"面包果王", english:"Marang / Tarap", latin:"Artocarpus odoratissimus", region:"asia-se", regionName:"东南亚", origin:"婆罗洲（特有）", flavor:"婆罗洲特有，IUCN 近危，白肉多汁、糖度高达 27.7°Brix", rarity:5, color:"#A9B87A", x:81.7, y:48.9, fact:"面包果王是婆罗洲特有，已被列入 IUCN 近危物种名录。" },
+  { id:"salak", name:"蛇皮果", english:"Salak / Snake Fruit", latin:"Salacca zalacca", region:"asia-se", regionName:"东南亚", origin:"印尼", flavor:"果皮覆满蛇鳞般的鳞片，脆爽多汁，苹果与菠萝的香气", rarity:3, color:"#7A5230", x:80.6, y:53.9, fact:"蛇皮果的果皮像蛇鳞，常被当作「胆量测试」水果。" },
+  { id:"rambutan", name:"红毛丹", english:"Rambutan", latin:"Nephelium lappaceum", region:"asia-se", regionName:"东南亚", origin:"马来西亚", flavor:"身披柔软红刺的「毛荔枝」，果肉比荔枝更似葡萄", rarity:3, color:"#B03A2E", x:78.3, y:47.8, fact:"红毛丹的名字来自马来语「rambut」，意思是「头发」。" },
+  { id:"langsat", name:"龙贡", english:"Langsat / Longkong", latin:"Lansium parasiticum", region:"asia-se", regionName:"东南亚", origin:"马来 / 印尼", flavor:"成串而生的小果，半透明果肉如蒜瓣，柚子混葡萄的酸甜", rarity:3, color:"#C7A45C", x:77.8, y:50, fact:"龙贡的果肉像一瓣瓣蒜，却甜得像柚子加葡萄。" },
+  { id:"buddhas-hand", name:"佛手柑", english:"Buddha's Hand", latin:"Citrus medica var. sarcodactylis", region:"asia-east", regionName:"东亚", origin:"中国 / 印度", flavor:"状如佛手的柑橘，没有果肉，只取它浓烈的果皮香气", rarity:4, color:"#E8C547", x:79.2, y:33.3, fact:"佛手柑没有果肉也没有果汁，人们只为它的果皮香气而种植它。" },
+  { id:"akebi", name:"木通果", english:"Akebi", latin:"Akebia quinata", region:"asia-east", regionName:"东亚", origin:"日本", flavor:"只在秋季前两周现身的紫色豆荚，藏着半透明甘甜的果肉", rarity:5, color:"#7B5EA7", x:88.3, y:30, fact:"木通果一年只有秋季前两周能吃到，是转瞬即逝的时令。" },
+  { id:"baobab", name:"猴面包果", english:"Baobab", latin:"Adansonia digitata", region:"africa", regionName:"非洲", origin:"撒哈拉以南非洲", flavor:"「生命之树」的果实，果肉粉带姜饼味，坚果似杏仁", rarity:4, color:"#B89A6E", x:55.6, y:46.7, fact:"猴面包树能活数千年，果肉粉晒干后能保存好几年。" },
+  { id:"marula", name:"马鲁拉果", english:"Marula", latin:"Sclerocarya birrea", region:"africa", regionName:"非洲", origin:"南非 / 纳米比亚", flavor:"酿出 Amarula 利口酒的果实，果油是高端护肤原料", rarity:3, color:"#C79A3E", x:57.2, y:62.2, fact:"马鲁拉果是大象的心头好，传说大象会为发酵的果实「醉倒」。" },
+  { id:"kiwano", name:"刺角瓜", english:"Kiwano / Horned Melon", latin:"Cucumis metuliferus", region:"africa", regionName:"非洲", origin:"南非", flavor:"橙色尖角的「外星水果」，果肉是绿色果冻，黄瓜混猕猴桃", rarity:4, color:"#E8762C", x:56.4, y:65, fact:"刺角瓜的绿色果肉像果冻，味道介于黄瓜和猕猴桃之间。" },
+  { id:"miracle-fruit", name:"神秘果", english:"Miracle Fruit", latin:"Synsepalum dulcificum", region:"africa", regionName:"非洲", origin:"西非", flavor:"含神秘果蛋白，吃下一颗，酸柠檬也变甜", rarity:5, color:"#D94F4F", x:50, y:46.7, fact:"吃一颗神秘果后，再吃柠檬也会变成甜的。" },
+  { id:"safou", name:"非洲梨", english:"Safou / African Pear", latin:"Dacryodes edulis", region:"africa", regionName:"非洲", origin:"中非", flavor:"深蓝紫色果实，煮熟后如奶油，是中非的「森林黄油」", rarity:4, color:"#4A3B6B", x:53.1, y:48.3, fact:"非洲梨煮熟后质地像奶油，被称为「森林黄油」。" },
+  { id:"cupuacu", name:"古布阿苏", english:"Cupuaçu", latin:"Theobroma grandiflorum", region:"south-america", regionName:"南美洲", origin:"巴西", flavor:"可可的近亲，果肉做成「cupulate」，香蕉混菠萝的香气", rarity:4, color:"#A97C50", x:34.7, y:53.3, fact:"古布阿苏是可可的近亲，能做出「cupulate」——一种巧克力。" },
+  { id:"jabuticaba", name:"嘉宝果", english:"Jabuticaba", latin:"Plinia cauliflora", region:"south-america", regionName:"南美洲", origin:"巴西", flavor:"果实直接长在树干上，几天即腐，因此几乎走不出巴西", rarity:5, color:"#3B2B4A", x:37.2, y:62.2, fact:"嘉宝果的果实直接长在树干上，几天内就会腐坏。" },
+  { id:"camu-camu", name:"卡姆果", english:"Camu Camu", latin:"Myrciaria dubia", region:"south-america", regionName:"南美洲", origin:"亚马逊流域", flavor:"「维C之王」，维C含量是橙子的数十倍，酸得惊人", rarity:4, color:"#C9554F", x:29.7, y:52.8, fact:"卡姆果的维C含量是橙子的几十倍，酸到无法直接入口。" },
+  { id:"ice-cream-bean", name:"冰淇淋豆", english:"Ice Cream Bean", latin:"Inga edulis", region:"south-america", regionName:"南美洲", origin:"南美洲", flavor:"豆荚长达一米，果肉松软如香草冰淇淋", rarity:4, color:"#D6C7A0", x:32.8, y:51.7, fact:"冰淇淋豆的豆荚能长到一米长，果肉像香草冰淇淋。" },
+  { id:"cherimoya", name:"番荔枝", english:"Cherimoya", latin:"Annona cherimola", region:"south-america", regionName:"南美洲", origin:"南美洲安第斯", flavor:"马克·吐温口中「人类所知最美味的水果」", rarity:3, color:"#9FB56A", x:28.6, y:55.6, fact:"马克·吐温称番荔枝是「人类所知最美味的水果」。" },
+  { id:"ackee", name:"阿基果", english:"Ackee", latin:"Blighia sapida", region:"central-america", regionName:"中美洲", origin:"牙买加", flavor:"牙买加国果，未熟有毒，成熟后配咸鱼便是国菜", rarity:5, color:"#E05C3B", x:28.6, y:40, fact:"未熟的阿基果有毒，只有自然裂开才安全，是牙买加的国果。" },
+  { id:"black-sapote", name:"黑柿", english:"Black Sapote", latin:"Diospyros nigra", region:"central-america", regionName:"中美洲", origin:"墨西哥", flavor:"「巧克力布丁果」，熟透的果肉如无糖巧克力布丁", rarity:4, color:"#3E5A3A", x:22.8, y:38.9, fact:"黑柿熟透后果肉像巧克力布丁，甜而不腻。" },
+  { id:"finger-lime", name:"手指柠檬", english:"Finger Lime", latin:"Citrus australasica", region:"oceania", regionName:"大洋洲", origin:"澳大利亚", flavor:"「柑橘界的鱼子酱」，果肉是一颗颗爆汁的晶珠", rarity:4, color:"#7A9E4E", x:92.5, y:65.6, fact:"手指柠檬的果肉是一颗颗晶珠，被称为「柑橘界的鱼子酱」。" },
+  { id:"quandong", name:"昆东果", english:"Quandong", latin:"Santalum acuminatum", region:"oceania", regionName:"大洋洲", origin:"澳大利亚", flavor:"澳洲「野生桃」，维C是橙子两倍，微咸回甘", rarity:4, color:"#C94F4F", x:87.5, y:66.7, fact:"昆东果是澳洲「野生桃」，维C是橙子的两倍。" },
+  { id:"davidson-plum", name:"戴维森李", english:"Davidson Plum", latin:"Davidsonia pruriens", region:"oceania", regionName:"大洋洲", origin:"澳大利亚", flavor:"深紫红、极酸的雨林果实，花青素比蓝莓高数倍", rarity:4, color:"#5A1E3E", x:90.6, y:59.4, fact:"戴维森李的花青素含量比蓝莓还高数倍。" },
+  { id:"pawpaw", name:"泡泡果", english:"Pawpaw", latin:"Asimina triloba", region:"north-america", regionName:"北美洲", origin:"美国东部", flavor:"北美最大的本土水果，香蕉混芒果，保质期仅三五天", rarity:5, color:"#B8A65A", x:26.7, y:28.9, fact:"泡泡果是北美最大的本土水果，但保质期只有三五天。" },
+  { id:"american-persimmon", name:"美洲柿", english:"American Persimmon", latin:"Diospyros virginiana", region:"north-america", regionName:"北美洲", origin:"美国东南部", flavor:"蜂蜜般的甜，未熟时极涩，可耐 -25°F 严寒", rarity:4, color:"#E08A3C", x:25.6, y:31.7, fact:"美洲柿未熟时极涩，却能耐零下 25 度的严寒。" },
+  { id:"aronia", name:"野樱莓", english:"Aronia", latin:"Aronia melanocarpa", region:"north-america", regionName:"北美洲", origin:"北美", flavor:"以「涩」闻名的莓果，抗氧化能力却极强", rarity:3, color:"#4A2B5A", x:26.4, y:26.7, fact:"野樱莓因「涩」而得名，抗氧化能力却极强。" },
+];
+window.REGIONS = [
+  { key:"asia-se", num:"01", name:"东南亚", en:"Southeast Asia" },
+  { key:"asia-east", num:"02", name:"东亚", en:"East Asia" },
+  { key:"africa", num:"03", name:"非洲", en:"Africa" },
+  { key:"south-america", num:"04", name:"南美洲", en:"South America" },
+  { key:"central-america", num:"05", name:"中美洲", en:"Central America" },
+  { key:"oceania", num:"06", name:"大洋洲", en:"Oceania" },
+  { key:"north-america", num:"07", name:"北美洲", en:"North America" }
+];
