@@ -11,6 +11,7 @@
   :root {
     --bg: #F8EBBD; --bg-2: #DFC5BF; --ink: #457635; --text: #3E3A2E; --muted: #8A7F6B;
     --hairline: rgba(69,118,53,.18); --accent: #6B9136; --sage: #97B365; --butter: #DFD352; --sky: #B1C5C9; --blush: #DFC5BF;
+    --ease: cubic-bezier(.22, 1, .36, 1);
     --display: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
     --serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
     --sans: "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -80,7 +81,7 @@
   body.menu-open .nav__toggle span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
   /* 右上角下拉菜单（玻璃质感 + 弹出动画） */
-  .menu-backdrop { position: fixed; inset: 0; z-index: 54; background: rgba(20,20,20,.24); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity .3s ease; }
+  .menu-backdrop { position: fixed; inset: 0; z-index: 54; background: rgba(20,20,20,.24); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity .3s var(--ease); }
   body.menu-open .menu-backdrop { opacity: 1; pointer-events: auto; }
   .menu {
     position: fixed; top: 72px; right: 24px; z-index: 55;
@@ -113,7 +114,7 @@
   @keyframes charIn { to { opacity: 1; transform: none; } }
   .hero__sub { font-size: 15px; letter-spacing: .16em; color: var(--muted); margin-bottom: 18px; }
   .hero__dek { font-size: 16px; color: var(--text); white-space: nowrap; margin-bottom: 34px; opacity: .92; }
-  .fade { opacity: 0; transform: translateY(16px); animation: fadeIn .9s ease forwards; }
+  .fade { opacity: 0; transform: translateY(16px); animation: fadeIn .9s var(--ease) forwards; }
   @keyframes fadeIn { to { opacity: 1; transform: none; } }
   .cta {
     display: inline-flex; align-items: center; gap: 12px;
@@ -121,7 +122,7 @@
     padding: 17px 38px; border-radius: 40px; color: #F8EBBD;
     background: #457635; border: 1px solid #457635;
     box-shadow: 0 8px 22px rgba(69,118,53,.22);
-    transition: transform .25s, background .25s, box-shadow .25s;
+    transition: transform .25s var(--ease), background .25s var(--ease), box-shadow .25s var(--ease);
   }
   .cta:hover {
     transform: translateY(-2px); background: #6B9136;
@@ -188,11 +189,11 @@
   .fruit-strip__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
   .fruit-strip__title { font-family: var(--display); font-weight: 700; font-size: clamp(24px, 3.4vw, 40px); line-height: 1.1; color: var(--ink); margin-top: 8px; }
   .fruit-strip__nav { display: flex; gap: 10px; flex-shrink: 0; }
-  .strip-arrow { width: 44px; height: 44px; border-radius: 50%; cursor: pointer; border: 1px solid rgba(69,118,53,.35); background: rgba(255,255,255,.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: var(--ink); font-size: 18px; display: flex; align-items: center; justify-content: center; transition: transform .25s, background .25s, border-color .25s, color .25s; }
+  .strip-arrow { width: 44px; height: 44px; border-radius: 50%; cursor: pointer; border: 1px solid rgba(69,118,53,.35); background: rgba(255,255,255,.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: var(--ink); font-size: 18px; display: flex; align-items: center; justify-content: center; transition: transform .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease), color .25s var(--ease); }
   .strip-arrow:hover { background: var(--accent); color: #fff; border-color: var(--accent); transform: translateY(-2px); }
   .fruit-strip__stage { position: relative; z-index: 0; height: 272px; touch-action: pan-y; }
   .fruit-strip__deck { position: relative; height: 100%; }
-  .strip-card { --cw: 200px; position: absolute; left: 50%; top: 0; width: var(--cw); margin-left: calc(var(--cw) / -2); display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 20px; background: #fff; border: 1px solid var(--hairline); box-shadow: 0 14px 36px rgba(0,0,0,.14); transform-origin: center bottom; transition: box-shadow .4s ease; will-change: transform; cursor: grab; touch-action: pan-y; }
+  .strip-card { --cw: 200px; position: absolute; left: 50%; top: 0; width: var(--cw); margin-left: calc(var(--cw) / -2); display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 20px; background: #fff; border: 1px solid var(--hairline); box-shadow: 0 14px 36px rgba(0,0,0,.14); transform-origin: center bottom; transition: box-shadow .4s var(--ease); will-change: transform; cursor: grab; touch-action: pan-y; }
   .strip-card:hover { box-shadow: 0 22px 48px rgba(0,0,0,.18); }
   .fruit-strip__stage.dragging .strip-card { transition: none; cursor: grabbing; }
   .strip-card__swatch { width: 100%; height: 110px; border-radius: 14px; background: var(--c); position: relative; overflow: hidden; }
@@ -204,7 +205,7 @@
   @media (max-width: 860px) { .fruit-strip { padding: 0 20px 9vh; } .strip-card { --cw: 176px; } .fruit-strip__stage { height: 252px; } }
 
   /* 悬浮提示 */
-  .tooltip { position: fixed; z-index: 70; max-width: 280px; padding: 15px 17px; border-radius: 16px; background: linear-gradient(135deg, rgba(255,255,255,.68), rgba(255,255,255,.36)); backdrop-filter: blur(22px) saturate(150%); -webkit-backdrop-filter: blur(22px) saturate(150%); border: 1px solid rgba(255,255,255,.85); box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 14px 34px rgba(120,110,140,.2); opacity: 0; pointer-events: none; transition: opacity .18s; }
+  .tooltip { position: fixed; z-index: 70; max-width: 280px; padding: 15px 17px; border-radius: 16px; background: linear-gradient(135deg, rgba(255,255,255,.68), rgba(255,255,255,.36)); backdrop-filter: blur(22px) saturate(150%); -webkit-backdrop-filter: blur(22px) saturate(150%); border: 1px solid rgba(255,255,255,.85); box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 14px 34px rgba(120,110,140,.2); opacity: 0; pointer-events: none; transition: opacity .18s var(--ease); }
   .tooltip.show { opacity: 1; }
   .tooltip__latin { display: block; font-family: var(--latin); font-style: italic; font-size: 13px; color: var(--muted); }
   .tooltip__name { font-family: var(--display); font-size: 22px; line-height: 1.3; margin: 2px 0 6px; color: var(--ink); }
@@ -268,7 +269,7 @@
       <span class="kicker fade" style="animation-delay:.1s"><span class="script">Exotic Fruit Atlas</span> · 全球奇异水果图鉴</span>
       <h1 class="hero__title" id="heroTitle">果物奇观</h1>
       <p class="hero__dek fade" style="animation-delay:.7s">把散落在地球每个角落的奇异果实，收进一颗会转动的地球。</p>
-      <a class="cta fade" style="animation-delay:.85s" href="#atlas">探索世界图鉴 ↓</a>
+      <a class="cta fade" style="animation-delay:.85s" href="#atlas">探索世界图鉴 <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
 
     <div class="hero__globe-wrap">
