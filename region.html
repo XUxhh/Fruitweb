@@ -22,18 +22,36 @@
 
   .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 60; display: flex; justify-content: space-between; align-items: center; padding: 15px 28px; background: rgba(255,255,255,.72); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--hairline); }
   .nav__brand { font-family: var(--display); font-weight: 600; font-size: 20px; letter-spacing: .06em; color: var(--ink); }
-  .nav__back { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; border: 1px solid rgba(69,118,53,.35); border-radius: 40px; padding: 8px 18px; transition: border-color .3s, color .3s; }
-  .nav__back:hover { border-color: var(--accent); color: var(--accent); }
-  .nav__right { display: flex; align-items: center; gap: 12px; }
-  .nav__select { font-family: var(--sans); font-size: 14px; color: var(--ink); background: rgba(255,255,255,.68); backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%); border: 1px solid rgba(255,255,255,.85); border-radius: 40px; padding: 8px 16px; cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 4px 14px rgba(90,100,120,.12); transition: border-color .3s, box-shadow .3s; }
-  .nav__select:hover { border-color: var(--accent); }
+  /* 右上角汉堡菜单（对齐首页 UI） */
+  .nav__toggle { position: relative; width: 40px; height: 40px; cursor: pointer; background: none; border: none; outline: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+  .nav__toggle span { display: block; width: 24px; height: 2px; background: var(--ink); transition: transform .4s cubic-bezier(.65,.05,.36,1), opacity .3s; }
+  body.menu-open .nav__toggle span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  body.menu-open .nav__toggle span:nth-child(2) { opacity: 0; }
+  body.menu-open .nav__toggle span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+  .menu-backdrop { position: fixed; inset: 0; z-index: 54; background: rgba(20,20,20,.24); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity .3s cubic-bezier(.22,1,.36,1); }
+  body.menu-open .menu-backdrop { opacity: 1; pointer-events: auto; }
+  .menu { position: fixed; top: 72px; right: 24px; z-index: 55; width: min(360px, calc(100vw - 40px)); max-height: calc(100vh - 96px); overflow-y: auto; padding: 18px 20px 16px; border-radius: 22px; background: rgba(255,255,255,.82); backdrop-filter: blur(26px) saturate(140%); -webkit-backdrop-filter: blur(26px) saturate(140%); border: 1px solid rgba(255,255,255,.9); box-shadow: inset 0 1px 0 rgba(255,255,255,.95), 0 30px 80px rgba(0,0,0,.2); opacity: 0; transform: translateY(-10px) scale(.96); transform-origin: top right; pointer-events: none; transition: opacity .28s ease, transform .38s cubic-bezier(.2,.8,.2,1); }
+  body.menu-open .menu { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+  .menu__links { display: flex; flex-direction: column; }
+  .menu__item { border-bottom: 1px solid rgba(0,0,0,.07); }
+  .menu__item:last-child { border-bottom: none; }
+  .menu__link { font-family: var(--serif); font-size: 18px; padding: 12px 4px; display: flex; align-items: baseline; gap: 14px; transition: color .25s; color: var(--ink); }
+  .menu__link:hover { color: var(--accent); }
+  .menu__link i { font-family: var(--latin); font-style: normal; font-size: 12px; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+  .menu__flyout { display: none; padding: 2px 2px 12px 28px; }
+  .menu__item:hover .menu__flyout, .menu__item:focus-within .menu__flyout { display: block; }
+  .menu__fruit { display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 10px; font-family: var(--sans); font-size: 14px; color: var(--text); transition: background .2s, color .2s; }
+  .menu__fruit:hover { background: rgba(107,145,54,.12); color: var(--ink); }
+  .menu__fruit-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c); flex: 0 0 auto; box-shadow: 0 0 0 2px rgba(255,255,255,.9); }
+  .menu__fruit-latin { font-family: var(--latin); font-style: italic; font-size: 11px; color: var(--muted); margin-left: auto; }
 
   .region { max-width: 1120px; margin: 0 auto; padding: 128px 5vw 90px; }
   .region__head { max-width: 720px; margin-bottom: 44px; }
   .kicker { display: inline-block; font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
   .region__name { font-family: var(--display); font-weight: 700; font-size: clamp(48px, 8vw, 96px); line-height: 1; margin: 14px 0 6px; letter-spacing: .02em; color: var(--ink); }
   .region__en { font-family: var(--script); font-size: 34px; color: var(--muted); margin-bottom: 16px; }
-  .region__desc { font-size: 16px; color: var(--muted); max-width: 46ch; }
+  .region__desc { font-size: 16px; color: var(--muted); }
 
   .region__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; }
   .card { position: relative; display: flex; flex-direction: column; gap: 11px; padding: 20px; border-radius: 20px; background: #fff; border: 1px solid var(--hairline); box-shadow: 0 8px 24px rgba(0,0,0,.05); transition: transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s; }
@@ -41,11 +59,20 @@
   .card__swatch { width: 100%; height: 96px; border-radius: 14px; background: var(--c); position: relative; overflow: hidden; }
   .card__swatch::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(0,0,0,.16)); }
   .card__num { position: absolute; top: 12px; right: 14px; font-family: var(--latin); font-style: italic; font-size: 14px; color: rgba(255,255,255,.85); }
-  .card__name { font-family: var(--display); font-weight: 600; font-size: 24px; line-height: 1.2; color: var(--ink); }
+  .card__name { font-family: var(--display); font-weight: 600; font-size: 24px; line-height: 1.2; color: var(--ink); white-space: nowrap; }
   .card__latin { font-family: var(--latin); font-style: italic; font-size: 13px; color: var(--muted); }
   .card__flavor { font-size: 13px; color: var(--muted); line-height: 1.65; }
   .card__stars { font-size: 12px; letter-spacing: .12em; color: var(--accent); }
   .empty { font-family: var(--serif); font-size: 18px; color: var(--muted); padding: 30px 0; }
+
+  /* ---------- 开屏：进入大洲时显示，随后从右下往左上沙化隐去 ---------- */
+  .splash {
+    position: fixed; inset: 0; z-index: 90;
+    background: #FBF6EA;
+  }
+  .splash__fx { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transform: translateY(22px); }
+  .splash__fx.is-in { animation: splashTextIn .85s cubic-bezier(.2,.8,.2,1) forwards; }
+  @keyframes splashTextIn { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
 
   /* ---------- 入场动画 ---------- */
   @keyframes riseIn { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
@@ -62,13 +89,20 @@
 </style>
 </head>
 <body>
+  <div class="splash" id="splash" aria-hidden="true">
+    <canvas class="splash__fx" id="splashFx"></canvas>
+  </div>
+
   <header class="nav">
     <a class="nav__brand" href="index.html">果物奇观</a>
-    <div class="nav__right">
-      <select class="nav__select" id="regionSelect" aria-label="切换大洲"></select>
-      <a class="nav__back" href="index.html#atlas">← 返回图鉴</a>
-    </div>
+    <button class="nav__toggle" id="menuToggle" aria-label="打开菜单" aria-expanded="false"><span></span><span></span><span></span></button>
   </header>
+
+  <div class="menu-backdrop" id="menuBackdrop"></div>
+
+  <div class="menu" id="menu">
+    <nav class="menu__links" id="menuLinks"></nav>
+  </div>
 
   <main class="region" id="region">
     <div class="region__head">
@@ -105,9 +139,30 @@
   nameEl.style.fontFamily = font[0];
   nameEl.style.fontWeight = font[1];
   document.getElementById("r-en").textContent = r.en;
-  const select = document.getElementById("regionSelect");
-  select.innerHTML = '<option value="all">全图鉴</option>' + REGIONS.map(rr => '<option value="' + rr.key + '"' + (rr.key === r.key ? " selected" : "") + '>' + rr.name + '</option>').join("");
-  select.addEventListener("change", () => { location.href = select.value === "all" ? "atlas.html" : "region.html?key=" + select.value; });
+  // 右上角汉堡菜单（对齐首页）：大洲导航 + 悬停预览该大洲水果
+  const menuLinks = document.getElementById("menuLinks");
+  menuLinks.innerHTML =
+    '<div class="menu__item"><a class="menu__link" href="index.html"><i>←</i> 返回首页</a></div>' +
+    '<div class="menu__item"><a class="menu__link" href="atlas.html"><i>✦</i> 全图鉴</a></div>' +
+    REGIONS.map(rr => {
+      const fruits = FRUITS.filter(x => x.region === rr.key);
+      return '<div class="menu__item">' +
+        '<a class="menu__link" href="region.html?key=' + rr.key + '"><i>' + rr.num + '</i> ' + rr.name + '</a>' +
+        '<div class="menu__flyout">' +
+          fruits.map(x => '<a class="menu__fruit" href="fruit.html?id=' + x.id + '"><span class="menu__fruit-dot" style="--c:' + x.color + '"></span><span>' + x.name + '</span><i class="menu__fruit-latin">' + x.latin + '</i></a>').join("") +
+        '</div>' +
+      '</div>';
+    }).join("");
+
+  const toggle = document.getElementById("menuToggle");
+  const backdrop = document.getElementById("menuBackdrop");
+  const setOpen = open => {
+    document.body.classList.toggle("menu-open", open);
+    toggle.setAttribute("aria-expanded", open);
+  };
+  toggle.addEventListener("click", () => setOpen(!document.body.classList.contains("menu-open")));
+  backdrop.addEventListener("click", () => setOpen(false));
+  menuLinks.querySelectorAll("a").forEach(a => a.addEventListener("click", () => setOpen(false)));
   document.getElementById("r-desc").textContent = "本地区收录 " + list.length + " 种小众奇异水果，点击任意卡片进入完整图鉴页。";
 
   const grid = document.getElementById("r-grid");
@@ -124,6 +179,90 @@
     }).join("");
   } else {
     grid.innerHTML = '<p class="empty">该地区暂无收录。</p>';
+  }
+
+  // 开屏：进入大洲时显示（标题为该大洲名称），随后从右下往左上沙化隐去
+  const splash = document.getElementById("splash");
+  if (splash) {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const fx = document.getElementById("splashFx");
+    if (reduced || !fx || !fx.getContext) {
+      splash.remove();
+    } else {
+      const dpr = window.devicePixelRatio || 1;
+      const maxPx = 3 * 1024 * 1024;
+      const s = Math.min(1, Math.sqrt(maxPx / (innerWidth * innerHeight * dpr * dpr)));
+      const W = Math.max(2, Math.round(innerWidth * dpr * s));
+      const H = Math.max(2, Math.round(innerHeight * dpr * s));
+      fx.width = W; fx.height = H;
+      const ctx = fx.getContext("2d");
+
+      ctx.fillStyle = "#FBF6EA";
+      ctx.fillRect(0, 0, W, H);
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      const cx = W / 2;
+      const titleSize = Math.max(68, Math.min(152, innerWidth * 0.13)) * dpr;
+      const kickerSize = 14 * dpr, subSize = 18 * dpr;
+
+      const kickerText = "World Region · 地区图鉴";
+      const subText = r.en + " · 本地区收录 " + list.length + " 种小众奇异水果";
+
+      // 副标题按宽度折行
+      ctx.font = "400 " + subSize + "px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif";
+      const maxLineW = Math.min(W * 0.82, 46 * subSize);
+      const subLines = [];
+      let line = "";
+      for (const ch of subText) {
+        if (ctx.measureText(line + ch).width > maxLineW) { subLines.push(line); line = ch; }
+        else line += ch;
+      }
+      if (line) subLines.push(line);
+
+      const lhK = kickerSize * 1.5, lhT = titleSize, lhS = subSize * 1.7, gap = 14 * dpr;
+      const total = lhK + gap + lhT + gap + lhS * subLines.length;
+      let y = (H - total) / 2 + lhK / 2;
+      ctx.fillStyle = "#6B9136";
+      ctx.font = "500 " + kickerSize + "px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif";
+      if ("letterSpacing" in ctx) ctx.letterSpacing = (kickerSize * 0.24) + "px";
+      ctx.fillText(kickerText, cx, y);
+      if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
+      y += lhK / 2 + gap + lhT / 2;
+      ctx.fillStyle = "#457635";
+      ctx.font = "700 " + titleSize + "px 'Noto Serif SC','Source Han Serif SC','Songti SC','STSong','SimSun',serif";
+      ctx.fillText(r.name, cx, y);
+      y += lhT / 2 + gap + lhS / 2;
+      ctx.fillStyle = "#8A7F6B";
+      ctx.font = "400 " + subSize + "px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif";
+      for (const ln of subLines) { ctx.fillText(ln, cx, y); y += lhS; }
+
+      requestAnimationFrame(() => fx.classList.add("is-in"));
+
+      const img = ctx.getImageData(0, 0, W, H);
+      const sum = new Float32Array(W * H);
+      for (let yy = 0; yy < H; yy++) {
+        for (let xx = 0; xx < W; xx++) {
+          const i = yy * W + xx;
+          sum[i] = Math.random() + ((W - xx) / W + (H - yy) / H) / 2;
+        }
+      }
+
+      const HOLD = 1500, DUR = 1150, t0 = performance.now() + HOLD;
+      function step(now) {
+        const t = Math.min(1, (now - t0) / DUR);
+        const e = 1 - Math.pow(1 - t, 3);
+        const cut = e * 2;
+        for (let i = 0; i < sum.length; i++) {
+          img.data[i * 4 + 3] = sum[i] > cut ? 255 : 0;
+        }
+        ctx.putImageData(img, 0, 0);
+        if (t < 1) requestAnimationFrame(step); else splash.remove();
+      }
+      setTimeout(() => {
+        splash.style.background = "transparent";
+        requestAnimationFrame(step);
+      }, HOLD);
+    }
   }
 </script>
 </body>

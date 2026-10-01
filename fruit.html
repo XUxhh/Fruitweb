@@ -6,66 +6,158 @@
 <title>果物奇观 · 水果图鉴</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500;1,6..72,600&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #F8EBBD; --bg-2: #DFC5BF; --ink: #457635; --text: #3E3A2E; --muted: #8A7F6B;
-    --hairline: rgba(69,118,53,.18); --accent: #6B9136;
-    --display: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
+    --bg: #F8EBBD; --ink: #457635; --text: #3E3A2E; --muted: #6E6453;
+    --hairline: rgba(69,118,53,.22); --accent: #6B9136; --accent-ink: #4A6B26;
+    --paper: #FCF4D9; --c: #C89B3C;
+    --amber: #C8893B; --rust: #A8532A; --sage: #97B365; --butter: #DFD352; --sky: #A9C2C7;
+    --c-deep: color-mix(in srgb, var(--c) 55%, #3A2A14 45%);
+    --c-soft: color-mix(in srgb, var(--c) 24%, var(--paper) 76%);
+    --display: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
     --serif: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
     --sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
-    --latin: "Newsreader", "Libre Bodoni", Georgia, "Times New Roman", serif;
+    --latin: "Newsreader", "Libre Bodoni", Georgia, serif;
+    --hand: "Ma Shan Zheng", "STKaiti", "KaiTi", "楷体", cursive;
+    --ease: cubic-bezier(.22, 1, .36, 1);
+    --spring: cubic-bezier(.34, 1.56, .64, 1);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.8; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-  body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 999; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity: .03; mix-blend-mode: multiply; }
+  html { scroll-behavior: smooth; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.85; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 999; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity: .025; mix-blend-mode: multiply; }
   a { color: inherit; text-decoration: none; }
-
-  .bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; background:
+  .bg { position: fixed; inset: 0; z-index: -1; background:
     radial-gradient(60% 46% at 12% -4%, #DFC5BF 0%, transparent 55%),
     radial-gradient(52% 44% at 100% 104%, #B1C5C9 0%, transparent 60%),
     #F8EBBD; }
+  .kicker { display: inline-block; font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent-ink); font-weight: 500; }
 
-  .glass { position: relative; background: linear-gradient(135deg, rgba(255,255,255,.62), rgba(255,255,255,.26) 45%, rgba(255,255,255,.5)); border: 1px solid rgba(0,0,0,.07); backdrop-filter: blur(24px) saturate(140%); -webkit-backdrop-filter: blur(24px) saturate(140%); border-radius: 26px; box-shadow: inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(0,0,0,.03), 0 12px 36px rgba(0,0,0,.07), 0 3px 10px rgba(0,0,0,.04); }
-  .kicker { display: inline-block; font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
-
-  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 60; display: flex; justify-content: space-between; align-items: center; padding: 15px 28px; background: rgba(255,255,255,.5); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); border-bottom: 1px solid rgba(0,0,0,.10); }
+  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 60; display: flex; justify-content: space-between; align-items: center; padding: 15px 28px; background: rgba(252,244,217,.6); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); border-bottom: 1px solid var(--hairline); }
   .nav__brand { font-family: var(--display); font-size: 20px; letter-spacing: .06em; color: var(--ink); }
   .nav__back { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; border: 1px solid rgba(69,118,53,.35); border-radius: 40px; padding: 8px 18px; transition: border-color .3s, color .3s; }
   .nav__back:hover { border-color: var(--accent); color: var(--accent); }
 
-  .detail { max-width: 1120px; margin: 0 auto; padding: 128px 5vw 90px; }
-  .detail__grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; }
-  .detail__info .kicker { margin-bottom: 14px; }
-  .detail__name { font-family: var(--display); font-weight: 700; font-size: clamp(50px, 8vw, 96px); line-height: 1; letter-spacing: .04em; color: var(--ink); }
-  .detail__latin { font-family: var(--latin); font-style: italic; font-size: 19px; color: var(--muted); margin: 12px 0 24px; }
-  .detail__flavor { font-size: 17px; max-width: 46ch; margin-bottom: 32px; }
-  .detail__fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid rgba(0,0,0,.10); }
-  .detail__field { padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,.10); }
-  .detail__field .label { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-  .detail__field .value { font-size: 16px; margin-top: 4px; }
+  .detail { max-width: 1180px; margin: 0 auto; padding: 100px 5vw 96px; }
+  .crumb { font-size: 13px; color: var(--muted); margin-bottom: 26px; }
+  .crumb a:hover { color: var(--accent-ink); }
+  .crumb .sep { margin: 0 8px; opacity: .5; }
 
-  .detail__media { position: relative; aspect-ratio: 3 / 4; overflow: hidden; background: var(--c); }
-  .detail__media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.55)); }
-  .detail__media .frame { position: absolute; inset: 18px; border: 1px solid rgba(242,239,231,.35); z-index: 1; }
-  .detail__media .num { position: absolute; top: 30px; right: 34px; z-index: 2; font-family: var(--display); font-size: 110px; line-height: 1; color: rgba(255,255,255,.3); }
-  .detail__media .tag { position: absolute; left: 34px; bottom: 34px; z-index: 2; color: #F4F7FB; }
-  .detail__media .tag .en { font-size: 15px; letter-spacing: .16em; text-transform: uppercase; }
+  /* ---------- 首屏：标本区（满屏，只展示图片+名称+基础介绍） ---------- */
+  .hero { min-height: 88vh; display: grid; grid-template-columns: minmax(300px, 520px) 1fr; gap: 64px; align-items: center; padding: 4vh 0 5vh; }
+  .plate { position: relative; aspect-ratio: 4 / 5; background: var(--c); overflow: hidden; box-shadow: 0 34px 80px rgba(120,110,140,.34); }
+  .plate::before { content: ""; position: absolute; inset: 16px; border: 1px solid rgba(252,244,217,.5); z-index: 2; }
+  .plate::after { content: ""; position: absolute; inset: 26px; border: 1px solid rgba(252,244,217,.28); z-index: 2; }
+  .plate__shade { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.52)); }
+  .plate__num { position: absolute; top: 34px; right: 44px; z-index: 3; font-family: var(--display); font-size: 128px; line-height: 1; color: rgba(252,244,217,.3); }
+  .plate__tag { position: absolute; left: 34px; right: 34px; bottom: 34px; z-index: 3; }
+  .plate__tag-en { display: block; font-family: var(--latin); font-style: italic; font-size: 30px; color: #FCF4D9; }
+  .plate__tag-region { display: inline-block; margin-top: 10px; font-size: 13px; letter-spacing: .18em; text-transform: uppercase; color: rgba(252,244,217,.88); border: 1px solid rgba(252,244,217,.5); padding: 5px 14px; border-radius: 20px; }
 
-  .fact { margin-top: 54px; padding: 32px 36px; }
-  .fact .kicker { margin-bottom: 12px; }
-  .fact__text { font-family: var(--display); font-weight: 600; font-size: clamp(21px, 3vw, 30px); line-height: 1.5; color: var(--ink); }
+  .hero__name { font-family: var(--display); font-weight: 900; font-size: clamp(64px, 9vw, 128px); line-height: 1.0; color: var(--ink); margin-top: 16px; letter-spacing: .01em; white-space: nowrap; }
+  .hero__latin { font-family: var(--latin); font-style: italic; font-size: 23px; color: var(--muted); margin-top: 18px; }
+  .hero__latin b { font-style: normal; font-size: 14px; font-family: var(--sans); }
+  .hero__flavor { position: relative; font-family: var(--hand); font-size: clamp(26px, 3.2vw, 36px); line-height: 1.75; color: var(--c-deep); margin-top: 26px; }
+  .hero__flavor::before { content: "“"; display: block; font-family: var(--display); font-size: 58px; line-height: .4; color: var(--c); margin-bottom: 10px; }
+  .hero__flavor .ch { display: inline-block; opacity: 0; animation: chIn .3s var(--ease) forwards; }
+  @keyframes chIn { from { opacity: 0; transform: translateY(.45em); } to { opacity: 1; transform: none; } }
 
-  .pager { margin-top: 54px; display: flex; justify-content: space-between; gap: 20px; border-top: 1px solid rgba(0,0,0,.10); padding-top: 24px; }
-  .pager a { font-family: var(--display); font-size: 20px; color: var(--ink); }
-  .pager a .dir { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 4px; }
-  .pager a:hover { color: var(--accent); }
+  /* 稀有度环形仪表 */
+  .hero__foot { display: flex; align-items: center; gap: 26px; margin-top: 32px; }
+  .rarity { display: flex; align-items: center; gap: 18px; }
+  .rarity__ring { position: relative; width: 92px; height: 92px; flex: 0 0 92px; }
+  .rarity__ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .rarity__track { fill: none; stroke: rgba(69,118,53,.14); stroke-width: 8; }
+  .rarity__bar { fill: none; stroke: var(--c); stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1.3s var(--ease); filter: drop-shadow(0 2px 6px rgba(0,0,0,.15)); }
+  .rarity__center { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .rarity__num { font-family: var(--display); font-size: 28px; font-weight: 700; color: var(--ink); line-height: 1; }
+  .rarity__of { font-size: 13px; color: var(--muted); margin-left: 1px; }
+  .rarity__title { display: block; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--accent-ink); }
+  .rarity__iucn { display: block; font-size: 15px; color: var(--muted); margin-top: 5px; }
+
+  .hero__down { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(69,118,53,.35); color: var(--ink); transition: border-color .3s, color .3s, background .3s, transform .3s; }
+  .hero__down:hover { border-color: var(--accent); color: var(--accent); background: rgba(107,145,54,.08); transform: translateY(2px); }
+  .hero__down svg { width: 22px; height: 22px; animation: bounce 1.8s var(--ease) infinite; }
+  .hero__down path { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ---------- 第二屏：八个方面扇形手风琴 ---------- */
+  .aspects { padding-top: 72px; }
+  .fan-head { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; margin-bottom: 20px; }
+  .fan-head h2 { font-family: var(--display); font-size: 24px; color: var(--ink); }
+  .fan-head .hint { font-size: 12px; color: var(--muted); letter-spacing: .08em; }
+
+  .fan { display: flex; gap: 10px; height: 400px; align-items: stretch; justify-content: center; perspective: 1600px; }
+  .fan__card { position: relative; flex: 0 0 64px; display: flex; overflow: hidden; border-radius: 18px; background: var(--paper); border: 1px solid var(--hairline); box-shadow: 0 8px 24px rgba(120,110,140,.12); transition: flex-basis .55s var(--ease), transform .6s var(--spring), box-shadow .55s, border-color .45s; cursor: pointer; animation: fanIn .75s var(--spring) backwards; }
+  .fan__card.is-active { flex: 0 0 420px; transform: translateY(-10px); box-shadow: 0 30px 66px rgba(120,110,140,.3); border-color: var(--c); }
+  .fan__card.is-active::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, var(--c-soft), var(--c)); z-index: 2; }
+  .fan__tilt { display: flex; width: 100%; height: 100%; transform-origin: center; transition: transform .6s var(--ease); }
+
+  .fan__tab { flex: 0 0 64px; width: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; border: none; background: transparent; cursor: pointer; color: var(--ink); font-family: var(--display); }
+  .fan__tab:hover { background: rgba(107,145,54,.08); }
+  .fan__icon { font-size: 20px; color: var(--accent); transition: color .4s; }
+  .fan__label { writing-mode: vertical-rl; letter-spacing: .14em; font-size: 17px; font-weight: 600; }
+  .fan__card.is-active .fan__tab { color: var(--c); background: transparent; }
+  .fan__card.is-active .fan__icon { color: var(--c); }
+
+  .fan__body { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; opacity: 0; transform: translateX(18px); transition: opacity .4s var(--ease) .1s, transform .5s var(--ease) .05s; overflow-y: auto; padding: 30px 28px 30px 6px; scrollbar-width: thin; }
+  .fan__card.is-active .fan__body { opacity: 1; transform: none; }
+
+  .p-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px; }
+  .p-head .p-en { font-family: var(--latin); font-style: italic; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-ink); }
+  .p-head h3 { font-family: var(--display); font-size: 23px; color: var(--ink); }
+  .p-rows { display: grid; }
+  .p-row { display: flex; gap: 16px; align-items: baseline; padding: 8px 0; border-bottom: 1px dashed var(--hairline); font-size: 14.5px; }
+  .p-row:last-child { border-bottom: none; }
+  .p-row span { flex: 0 0 56px; color: var(--muted); font-size: 12px; }
+  .p-row b { color: var(--ink); font-weight: 500; }
+  .p-row b i { font-family: var(--latin); font-style: italic; }
+  .p-text { font-family: var(--serif); font-size: 15.5px; line-height: 1.85; color: var(--text); }
+  .p-fact { font-family: var(--display); font-weight: 600; font-size: 20px; line-height: 1.6; color: var(--c-deep); }
+  .p-meter { display: flex; gap: 6px; margin: 6px 0 12px; }
+  .p-meter span { width: 38px; height: 8px; border-radius: 4px; background: rgba(69,118,53,.14); }
+  .p-meter span.on { background: linear-gradient(90deg, var(--c-soft), var(--c)); }
+  .p-meta { font-size: 13px; color: var(--muted); }
+  .p-meta b { font-family: var(--latin); font-size: 15px; color: var(--ink); }
+
+  /* ---------- 翻页 ---------- */
+  .pager { margin-top: 46px; display: flex; justify-content: space-between; gap: 20px; }
+  .pager a { font-family: var(--display); font-size: 21px; color: var(--ink); display: block; }
+  .pager a .dir { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 5px; }
+  .pager a:hover { color: var(--accent-ink); }
   .pager .next { text-align: right; }
 
-  @media (max-width: 860px) {
-    .detail { padding: 108px 20px 60px; }
-    .detail__grid { grid-template-columns: 1fr; gap: 36px; }
-    .detail__media { order: -1; aspect-ratio: 4 / 5; }
+  /* ---------- 信息来源 ---------- */
+  .sources { margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--hairline); }
+  .sources__label { display: block; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--accent-ink); font-weight: 500; margin-bottom: 12px; }
+  .sources__links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+  .sources__links a { font-size: 13px; color: var(--muted); transition: color .3s, border-color .3s; border-bottom: 1px solid transparent; }
+  .sources__links a:hover { color: var(--accent-ink); border-bottom-color: var(--c); }
+
+  /* ---------- 动画 ---------- */
+  @keyframes fanIn { from { opacity: 0; transform: translateY(40px) scale(.9); } to { opacity: 1; transform: none; } }
+  @keyframes riseIn { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+  @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+  .hero > * { animation: riseIn .7s var(--ease) backwards; }
+  .hero > *:nth-child(2) { animation-delay: .1s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+    .hero__flavor .ch { animation: none !important; opacity: 1 !important; }
+    html { scroll-behavior: auto; }
+  }
+
+  @media (max-width: 900px) {
+    .detail { padding: 96px 20px 64px; }
+    .hero { grid-template-columns: 1fr; gap: 34px; min-height: auto; }
+    .plate { max-width: 420px; }
+    .aspects { padding-top: 44px; }
+    .fan { height: 440px; }
+    .fan__card { flex: 0 0 50px; }
+    .fan__card.is-active { flex: 0 0 min(76vw, 420px); }
+    .fan__tab { flex: 0 0 50px; width: 50px; }
+    .fan__body { padding: 24px 22px 24px 4px; }
   }
 </style>
 </head>
@@ -74,71 +166,213 @@
 
   <header class="nav">
     <a class="nav__brand" href="index.html">果物奇观</a>
-    <a class="nav__back" href="index.html">← 返回图鉴</a>
+    <a class="nav__back" href="index.html" id="navBack">← 返回</a>
   </header>
 
   <main class="detail" id="detail">
-    <div class="detail__grid">
-      <div class="detail__info">
-        <span class="kicker" id="d-kicker">FRUIT 01 · 东南亚</span>
-        <h1 class="detail__name" id="d-name">尖蜜拉</h1>
-        <p class="detail__latin" id="d-latin">Artocarpus integer</p>
-        <p class="detail__flavor" id="d-flavor"></p>
-        <div class="detail__fields">
-          <div class="detail__field"><div class="label">产地 Origin</div><div class="value" id="d-origin"></div></div>
-          <div class="detail__field"><div class="label">地区 Region</div><div class="value" id="d-region"></div></div>
-          <div class="detail__field"><div class="label">稀有度 Rarity</div><div class="value" id="d-rarity"></div></div>
-          <div class="detail__field"><div class="label">英文名 English</div><div class="value" id="d-english"></div></div>
+    <nav class="crumb" aria-label="面包屑">
+      <a href="index.html">首页</a><span class="sep">›</span>
+      <a href="atlas.html">全图鉴</a><span class="sep">›</span>
+      <span id="d-crumb">水果</span>
+    </nav>
+
+    <!-- 首屏：只展示图片 + 名称 + 基础介绍 -->
+    <section class="hero">
+      <aside class="plate" id="d-media">
+        <span class="plate__shade"></span>
+        <span class="plate__num" id="d-num">01</span>
+        <div class="plate__tag">
+          <span class="plate__tag-en" id="d-en">Cempedak</span>
+          <span class="plate__tag-region" id="d-region-tag"></span>
+        </div>
+      </aside>
+      <div class="hero__info">
+        <span class="kicker" id="d-kicker">SPECIMEN 01 · 东南亚</span>
+        <h1 class="hero__name" id="d-name">尖蜜拉</h1>
+        <p class="hero__latin" id="d-latin"></p>
+        <p class="hero__flavor" id="d-flavor"></p>
+
+        <div class="hero__foot">
+          <div class="rarity">
+            <div class="rarity__ring">
+              <svg viewBox="0 0 84 84" aria-hidden="true">
+                <circle class="rarity__track" cx="42" cy="42" r="36"/>
+                <circle class="rarity__bar" id="rarity-bar" cx="42" cy="42" r="36"/>
+              </svg>
+              <div class="rarity__center">
+                <span class="rarity__num" id="d-rarity-num">4</span><span class="rarity__of">/5</span>
+              </div>
+            </div>
+            <div class="rarity__txt">
+              <span class="rarity__title">稀有度</span>
+              <span class="rarity__iucn" id="d-iucn">LC 无危</span>
+            </div>
+          </div>
+          <a class="hero__down" href="#aspects" aria-label="展开八个方面">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v13M6 12l6 6 6-6"/></svg>
+          </a>
         </div>
       </div>
-      <div class="detail__media glass" id="d-media" style="--c:#C89B3C;">
-        <span class="frame"></span>
-        <span class="num" id="d-num">01</span>
-        <div class="tag"><span class="en" id="d-en">Cempedak</span></div>
-      </div>
-    </div>
+    </section>
 
-    <div class="fact glass">
-      <span class="kicker">冷知识 · Fun Fact</span>
-      <p class="fact__text" id="d-fact"></p>
-    </div>
+    <!-- 第二屏：八个方面 -->
+    <section class="aspects" id="aspects">
+      <div class="fan-head">
+        <h2>一果八面</h2>
+        <span class="hint">点击卡片展开 · 左右滑动切换</span>
+      </div>
+      <div class="fan" id="fan" role="tablist" aria-label="水果的八个方面"></div>
+    </section>
 
     <div class="pager">
       <a href="#" class="prev" id="d-prev"><span class="dir">← 上一颗</span><span id="d-prev-name"></span></a>
       <a href="#" class="next" id="d-next"><span class="dir">下一颗 →</span><span id="d-next-name"></span></a>
     </div>
+
+    <section class="sources" aria-label="信息来源">
+      <span class="sources__label">信息来源</span>
+      <div class="sources__links" id="d-sources"></div>
+    </section>
   </main>
 
 <script src="data/fruits.js"></script>
 <script>
-  function stars(n){ return "★★★★★".slice(0,n) + "☆☆☆☆☆".slice(0,5-n); }
   const params = new URLSearchParams(location.search);
   const id = params.get("id") || FRUITS[0].id;
   const idx = FRUITS.findIndex(f => f.id === id);
   const f = FRUITS[idx] || FRUITS[0];
-  const gi = FRUITS.indexOf(f) + 1;
-  const num = String(gi).padStart(2, "0");
+  const num = String(FRUITS.indexOf(f) + 1).padStart(2, "0");
 
+  document.documentElement.style.setProperty("--c", f.color);
   document.title = f.name + " · 果物奇观";
-  document.getElementById("d-kicker").textContent = "FRUIT " + num + " · " + f.regionName;
+
+  // 首屏基础信息
+  document.getElementById("d-kicker").textContent = "SPECIMEN " + num + " · " + f.regionName;
   document.getElementById("d-name").textContent = f.name;
-  document.getElementById("d-latin").textContent = f.latin;
-  document.getElementById("d-flavor").textContent = f.flavor + "。";
-  document.getElementById("d-origin").textContent = f.origin;
-  document.getElementById("d-region").textContent = f.regionName;
-  document.getElementById("d-rarity").textContent = stars(f.rarity) + "  (" + f.rarity + "/5)";
-  document.getElementById("d-english").textContent = f.english;
-  document.getElementById("d-fact").textContent = f.fact;
+  document.getElementById("d-latin").innerHTML = f.latin + (f.authority ? ' <b>' + f.authority + '</b>' : '');
+  const flavorEl = document.getElementById("d-flavor");
+  flavorEl.innerHTML = [...f.flavor].map((c, i) =>
+    '<span class="ch" style="animation-delay:' + (i * 0.03).toFixed(2) + 's">' + (c === " " ? "&nbsp;" : c) + '</span>'
+  ).join("");
+  document.getElementById("d-crumb").textContent = f.name;
   document.getElementById("d-num").textContent = num;
   document.getElementById("d-en").textContent = f.english;
-  document.getElementById("d-media").style.setProperty("--c", f.color);
+  document.getElementById("d-region-tag").textContent = f.regionName;
 
+  // 稀有度环形仪表
+  const R = 36, CIRC = 2 * Math.PI * R;
+  const bar = document.getElementById("rarity-bar");
+  bar.style.strokeDasharray = CIRC;
+  bar.style.strokeDashoffset = CIRC;
+  document.getElementById("d-rarity-num").textContent = f.rarity;
+  document.getElementById("d-iucn").textContent = f.iucn;
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    bar.style.strokeDashoffset = CIRC * (1 - f.rarity / 5);
+  }));
+
+  // 八个方面内容
+  const row = (k, v) => '<div class="p-row"><span>' + k + '</span><b>' + v + '</b></div>';
+  const head = (en, t) => '<div class="p-head"><span class="p-en">' + en + '</span><h3>' + t + '</h3></div>';
+  const meter = n => { let s = ""; for (let i = 1; i <= 5; i++) s += '<span class="' + (i <= n ? "on" : "") + '"></span>'; return s; };
+
+  const ASPECTS = [
+    { short:"名称", en:"Name", icon:"✦", render: () => head("Name · 名称", f.name) +
+        '<div class="p-rows">' + row("英文名", f.english) + row("学名", '<i>' + f.latin + '</i>' + (f.authority ? " " + f.authority : "")) + row("别名", f.aka || "—") + row("大洲", f.regionName) + '</div>' },
+    { short:"分类", en:"Taxonomy", icon:"✧", render: () => head("Taxonomy · 分类", "科 · 属 · 种") +
+        '<div class="p-rows">' + row("科", f.family) + row("属", f.genus) + row("种", '<i>' + f.latin + '</i>') + '</div>' },
+    { short:"产地", en:"Origin", icon:"◈", render: () => head("Origin · 产地", "产地与分布") +
+        '<div class="p-rows">' + row("原产地", f.origin) + row("分布", f.distribution) + '</div>' },
+    { short:"形态", en:"Morphology", icon:"❋", render: () => head("Morphology · 形态", "形态特征") + '<p class="p-text">' + f.morphology + '</p>' },
+    { short:"风味", en:"Flavor", icon:"❁", render: () => head("Flavor · 风味", "风味口感") + '<p class="p-text">' + f.flavor + '</p>' },
+    { short:"营养", en:"Nutrition", icon:"❖", render: () => head("Nutrition · 营养", "营养与食用") +
+        '<div class="p-rows">' + row("营养", f.nutrition) + row("食用", f.use) + '</div>' },
+    { short:"稀有", en:"Rarity", icon:"✺", render: () => head("Rarity · 稀有", "稀有度与保护") +
+        '<div class="p-meter">' + meter(f.rarity) + '</div><p class="p-meta"><b>' + f.rarity + ' / 5</b> · ' + f.iucn + '</p>' },
+    { short:"冷知", en:"Fun Fact", icon:"✿", render: () => head("Fun Fact · 冷知识", "冷知识") + '<p class="p-fact">' + f.fact + '</p>' }
+  ];
+
+  const fan = document.getElementById("fan");
+  const N = ASPECTS.length, CENTER = (N - 1) / 2;
+  const fanAngle = i => ((i - CENTER) * 5) + "deg";
+
+  ASPECTS.forEach((a, i) => {
+    const card = document.createElement("div");
+    card.className = "fan__card";
+    card.dataset.i = i;
+    card.style.animationDelay = (0.05 + i * 0.06).toFixed(2) + "s";
+    card.innerHTML =
+      '<div class="fan__tilt">' +
+        '<button class="fan__tab" role="tab" id="fan-tab-' + i + '" aria-controls="fan-panel-' + i + '" aria-selected="false" tabindex="' + (i === 0 ? "0" : "-1") + '">' +
+          '<span class="fan__icon">' + a.icon + '</span>' +
+          '<span class="fan__label">' + a.short + '</span>' +
+        '</button>' +
+        '<div class="fan__body" role="tabpanel" id="fan-panel-' + i + '" aria-labelledby="fan-tab-' + i + '">' + a.render() + '</div>' +
+      '</div>';
+    fan.appendChild(card);
+  });
+
+  const cards = [...fan.querySelectorAll(".fan__card")];
+  let active = 0;
+
+  function select(i, focus) {
+    active = i;
+    cards.forEach((c, j) => {
+      c.classList.toggle("is-active", j === i);
+      c.querySelector(".fan__tilt").style.transform = j === i ? "rotateY(0deg)" : "rotateY(" + fanAngle(j) + "deg)";
+      const tab = c.querySelector(".fan__tab");
+      tab.setAttribute("aria-selected", j === i ? "true" : "false");
+      tab.tabIndex = j === i ? 0 : -1;
+      if (j === i && focus) tab.focus();
+    });
+  }
+
+  fan.addEventListener("click", e => {
+    const card = e.target.closest(".fan__card");
+    if (card) select(+card.dataset.i);
+  });
+  fan.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight") { e.preventDefault(); select((active + 1) % N, true); }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); select((active - 1 + N) % N, true); }
+  });
+
+  let tx = 0;
+  fan.addEventListener("touchstart", e => { tx = e.touches[0].clientX; }, { passive: true });
+  fan.addEventListener("touchend", e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 50) select((active + (dx < 0 ? 1 : -1) + N) % N);
+  });
+  fan.addEventListener("wheel", e => {
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+      e.preventDefault();
+      select((active + (e.deltaX > 0 ? 1 : -1) + N) % N);
+    }
+  }, { passive: false });
+
+  select(0);
+
+  // 翻页
   const prev = FRUITS[(idx - 1 + FRUITS.length) % FRUITS.length];
   const next = FRUITS[(idx + 1) % FRUITS.length];
   document.getElementById("d-prev").href = "fruit.html?id=" + prev.id;
   document.getElementById("d-prev-name").textContent = prev.name;
   document.getElementById("d-next").href = "fruit.html?id=" + next.id;
   document.getElementById("d-next-name").textContent = next.name;
+
+  // 信息来源
+  const sourcesEl = document.getElementById("d-sources");
+  if (f.sources && f.sources.length) {
+    sourcesEl.innerHTML = f.sources.map(u => {
+      let label;
+      try { label = new URL(u).hostname.replace(/^www\./, ""); } catch (e) { label = u; }
+      return '<a href="' + u + '" target="_blank" rel="noopener noreferrer">' + label + '</a>';
+    }).join("");
+  } else {
+    sourcesEl.innerHTML = '<span class="p-meta">暂无来源记录</span>';
+  }
+
+  document.getElementById("navBack").addEventListener("click", e => {
+    if (document.referrer && document.referrer.indexOf(location.host) !== -1) { e.preventDefault(); history.back(); }
+  });
 </script>
 </body>
 </html>
