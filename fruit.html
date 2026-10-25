@@ -10,7 +10,7 @@
 <style>
   :root {
     --bg: #F8EBBD; --ink: #457635; --text: #3E3A2E; --muted: #6E6453;
-    --hairline: rgba(69,118,53,.22); --accent: #6B9136; --accent-ink: #4A6B26;
+    --hairline: rgba(69,118,53,.22); --accent: #6B9136; --accent-ink: #4A6B26; --accent2: #D0823C; --faint: #9C927A;
     --paper: #FCF4D9; --c: #C89B3C;
     --amber: #C8893B; --rust: #A8532A; --sage: #97B365; --butter: #DFD352; --sky: #A9C2C7;
     --c-deep: color-mix(in srgb, var(--c) 55%, #3A2A14 45%);
@@ -27,12 +27,12 @@
   html { scroll-behavior: smooth; }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
   body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.85; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-  body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 999; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity: .025; mix-blend-mode: multiply; }
+  body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 999; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cg fill='none' stroke='%234A6B3A' stroke-width='1'%3E%3Cpath d='M120 0 C126 60 114 180 120 240'/%3E%3Cpath d='M120 40 C98 44 80 38 68 24'/%3E%3Cpath d='M120 40 C142 44 160 38 172 24'/%3E%3Cpath d='M120 88 C94 94 72 86 56 68'/%3E%3Cpath d='M120 88 C146 94 168 86 184 68'/%3E%3Cpath d='M120 136 C96 142 76 134 60 118'/%3E%3Cpath d='M120 136 C144 142 164 134 180 118'/%3E%3Cpath d='M120 184 C100 190 84 182 72 168'/%3E%3Cpath d='M120 184 C140 190 156 182 168 168'/%3E%3C/g%3E%3C/svg%3E"); opacity: .04; mix-blend-mode: multiply; }
   a { color: inherit; text-decoration: none; }
   .bg { position: fixed; inset: 0; z-index: -1; background:
     radial-gradient(60% 46% at 12% -4%, #DFC5BF 0%, transparent 55%),
     radial-gradient(52% 44% at 100% 104%, #B1C5C9 0%, transparent 60%),
-    #F8EBBD; }
+    var(--bg); }
   .kicker { display: inline-block; font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent-ink); font-weight: 500; }
 
   .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 60; display: flex; justify-content: space-between; align-items: center; padding: 15px 28px; background: rgba(252,244,217,.6); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); border-bottom: 1px solid var(--hairline); }
@@ -120,6 +120,27 @@
   .p-meter span.on { background: linear-gradient(90deg, var(--c-soft), var(--c)); }
   .p-meta { font-size: 13px; color: var(--muted); }
   .p-meta b { font-family: var(--latin); font-size: 15px; color: var(--ink); }
+
+  /* ---------- 传播纪事：迷你地图 + 会动的虚线 ---------- */
+  .journey { margin-top: 64px; padding-top: 34px; border-top: 1px solid var(--hairline); }
+  .journey__map { border-radius: 18px; border: 1px solid var(--hairline); background: color-mix(in srgb, var(--accent) 26%, #EADCB4); overflow: hidden; box-shadow: 0 8px 24px rgba(120,110,140,.12); }
+  .journey__map svg { display: block; width: 100%; height: auto; }
+  .journey__map .land { fill: #F8EBBD; fill-rule: evenodd; stroke: #C8A578; stroke-width: 1.4; stroke-linejoin: round; }
+  .journey__route { fill: none; stroke: var(--c); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 6 8; animation: journeyDash 1.6s linear infinite; }
+  .journey__dot { fill: var(--accent2); stroke: #fff; stroke-width: 1.6; }
+  .journey__stop { fill: var(--c); stroke: #fff; stroke-width: 1.4; }
+  .journey__num { fill: #fff; font-family: var(--latin); font-size: 12px; font-weight: 700; pointer-events: none; }
+  .journey__stops { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 18px; list-style: none; padding: 0; }
+  .journey__stops li { position: relative; padding: 12px 14px 12px 36px; border: 1px solid var(--hairline); border-radius: 12px; background: var(--paper); }
+  .journey__stops li::before { content: attr(data-n); position: absolute; left: 11px; top: 13px; width: 18px; height: 18px; border-radius: 50%; background: var(--c); color: #fff; font-family: var(--latin); font-size: 11px; line-height: 18px; text-align: center; }
+  .journey__stops .era { display: block; font-family: var(--latin); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-ink); }
+  .journey__stops .place { display: block; font-family: var(--display); font-size: 17px; color: var(--ink); margin-top: 2px; }
+  .journey__stops .note { display: block; font-size: 12.5px; color: var(--muted); margin-top: 4px; line-height: 1.6; }
+  .journey__src { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 12px; }
+  .journey__src .label { letter-spacing: .16em; text-transform: uppercase; font-size: 10.5px; color: var(--accent-ink); }
+  .journey__src a { color: var(--muted); border-bottom: 1px solid transparent; transition: color .3s, border-color .3s; }
+  .journey__src a:hover { color: var(--accent-ink); border-bottom-color: var(--c); }
+  @keyframes journeyDash { to { stroke-dashoffset: -14; } }
 
   /* ---------- 翻页 ---------- */
   .pager { margin-top: 46px; display: flex; justify-content: space-between; gap: 20px; }
@@ -224,6 +245,18 @@
       <div class="fan" id="fan" role="tablist" aria-label="水果的八个方面"></div>
     </section>
 
+    <section class="journey" id="journey" aria-label="传播纪事">
+      <div class="fan-head">
+        <h2>传播纪事</h2>
+        <span class="hint">跨越大陆的旅程 · 虚线为传播路径</span>
+      </div>
+      <div class="journey__map">
+        <svg id="journey-map" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet" role="img" aria-label="传播路径地图"></svg>
+      </div>
+      <ol class="journey__stops" id="journey-stops"></ol>
+      <div class="journey__src" id="journey-src"></div>
+    </section>
+
     <div class="pager">
       <a href="#" class="prev" id="d-prev"><span class="dir">← 上一颗</span><span id="d-prev-name"></span></a>
       <a href="#" class="next" id="d-next"><span class="dir">下一颗 →</span><span id="d-next-name"></span></a>
@@ -235,6 +268,7 @@
     </section>
   </main>
 
+<script src="data/world.js"></script>
 <script src="data/fruits.js"></script>
 <script>
   const params = new URLSearchParams(location.search);
@@ -244,6 +278,8 @@
   const num = String(FRUITS.indexOf(f) + 1).padStart(2, "0");
 
   document.documentElement.style.setProperty("--c", f.color);
+  const fr = REGIONS.find(x => x.key === f.region);
+  applyRegionTheme(document.documentElement, fr && fr.theme);
   document.title = f.name + " · 果物奇观";
 
   // 首屏基础信息
@@ -369,6 +405,155 @@
   } else {
     sourcesEl.innerHTML = '<span class="p-meta">暂无来源记录</span>';
   }
+
+  // 传播纪事：迷你世界地图 + 会动的虚线传播路径
+  const journeyEl = document.getElementById("journey");
+  function renderJourney(stops) {
+    const MAP_W = 1000, MAP_H = 500, LAT_TOP = 90, LAT_BOT = -90;
+    const px = lon => (lon + 180) / 360 * MAP_W;
+    const py = lat => (LAT_TOP - lat) / (LAT_TOP - LAT_BOT) * MAP_H;
+
+    // 展开跨 180° 经线的环：相邻点经度差 >180 就 ±360 归位，得到连续经度
+    const unroll = ring => {
+      const u = [[ring[0][0], ring[0][1]]];
+      for (let i = 1; i < ring.length; i++) {
+        let lon = ring[i][0];
+        while (lon - u[u.length - 1][0] > 180) lon -= 360;
+        while (lon - u[u.length - 1][0] < -180) lon += 360;
+        u.push([lon, ring[i][1]]);
+      }
+      return u;
+    };
+
+    // 把一个环切成若干子环（在 ±180 处切开），返回各子环的 d 字符串
+    const ringPaths = ring => {
+      const u = unroll(ring);
+      const lons = u.map(p => p[0]);
+      const span = Math.max.apply(null, lons) - Math.min.apply(null, lons);
+      if (span > 300) {
+        // 环绕一整圈（南极洲）：沿南极点闭合，避免横贯全图的横线
+        return [u.map((p, i) => (i ? "L" : "M") + px(p[0]).toFixed(2) + " " + py(p[1]).toFixed(2)).join(" ") +
+          " L" + px(u[u.length - 1][0]).toFixed(2) + " " + py(-90).toFixed(2) +
+          " L" + px(u[0][0]).toFixed(2) + " " + py(-90).toFixed(2) + "Z"];
+      }
+      let closeLon = u[0][0];
+      while (closeLon - u[u.length - 1][0] > 180) closeLon -= 360;
+      while (closeLon - u[u.length - 1][0] < -180) closeLon += 360;
+      const c = u.concat([[closeLon, u[0][1]]]);
+      const bands = [];
+      let cur = [], cb = null;
+      for (let k = 0; k < c.length; k++) {
+        const p = c[k];
+        const b = Math.floor((p[0] + 180) / 360);
+        if (cb === null) { cb = b; cur.push(p); continue; }
+        if (b === cb) { cur.push(p); continue; }
+        const boundary = cb * 360 + (b > cb ? 180 : -180);
+        const t = (boundary - cur[cur.length - 1][0]) / (p[0] - cur[cur.length - 1][0]);
+        const lat = cur[cur.length - 1][1] + t * (p[1] - cur[cur.length - 1][1]);
+        cur.push([boundary, lat]);
+        bands.push([cb, cur]);
+        cur = [[boundary, lat]]; cb = b; cur.push(p);
+      }
+      bands.push([cb, cur]);
+      const out = [];
+      for (let bi = 0; bi < bands.length; bi++) {
+        const band = bands[bi];
+        if (band[1].length >= 3) {
+          out.push(band[1].map((p, i) => (i ? "L" : "M") + px(p[0] - band[0] * 360).toFixed(2) + " " + py(p[1]).toFixed(2)).join(" ") + "Z");
+        }
+      }
+      return out;
+    };
+
+    const SVGNS = "http://www.w3.org/2000/svg";
+    const svg = document.getElementById("journey-map");
+
+    // 陆地：完整世界（含南极洲），在 180° 经线处切开，消除横线。
+    // 同一多边形的所有环并入同一条 path，配合 fill-rule:evenodd 正确挖空内环（如里海）。
+    const landD = [];
+    (window.LAND || []).forEach(poly => {
+      const sub = [];
+      poly.forEach(ring => sub.push.apply(sub, ringPaths(ring)));
+      landD.push(sub.join(" "));
+    });
+    svg.innerHTML = landD.map(d => '<path class="land" d="' + d + '"/>').join("");
+
+    const pts = stops.map(s => [px(s.lon), py(s.lat)]);
+    // Catmull-Rom → 三次贝塞尔，让路线如航行般平滑
+    let d = "M" + pts[0][0].toFixed(2) + "," + pts[0][1].toFixed(2);
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+      const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+      const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+      d += " C" + c1[0].toFixed(2) + "," + c1[1].toFixed(2) + " " + c2[0].toFixed(2) + "," + c2[1].toFixed(2) + " " + p2[0].toFixed(2) + "," + p2[1].toFixed(2);
+    }
+
+    const route = document.createElementNS(SVGNS, "path");
+    route.setAttribute("class", "journey__route");
+    route.setAttribute("d", d);
+    svg.appendChild(route);
+
+    stops.forEach((s, i) => {
+      const c = document.createElementNS(SVGNS, "circle");
+      c.setAttribute("class", "journey__stop");
+      c.setAttribute("cx", pts[i][0]);
+      c.setAttribute("cy", pts[i][1]);
+      c.setAttribute("r", i === 0 ? 13 : 11);
+      svg.appendChild(c);
+      const t = document.createElementNS(SVGNS, "text");
+      t.setAttribute("class", "journey__num");
+      t.setAttribute("x", pts[i][0]);
+      t.setAttribute("y", pts[i][1]);
+      t.setAttribute("text-anchor", "middle");
+      t.setAttribute("dominant-baseline", "central");
+      t.textContent = i + 1;
+      svg.appendChild(t);
+    });
+
+    // 沿路线移动的「航行点」
+    const dot = document.createElementNS(SVGNS, "circle");
+    dot.setAttribute("class", "journey__dot");
+    dot.setAttribute("r", 4);
+    dot.setAttribute("cx", pts[0][0]);
+    dot.setAttribute("cy", pts[0][1]);
+    svg.appendChild(dot);
+    const total = route.getTotalLength();
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const p = route.getPointAtLength(total);
+      dot.setAttribute("cx", p.x); dot.setAttribute("cy", p.y);
+    } else {
+      const DURATION = 9000, t0 = performance.now();
+      (function tick(now) {
+        const p = route.getPointAtLength(total * (((now - t0) % DURATION) / DURATION));
+        dot.setAttribute("cx", p.x); dot.setAttribute("cy", p.y);
+        requestAnimationFrame(tick);
+      })(t0);
+    }
+
+    // 停靠点列表
+    document.getElementById("journey-stops").innerHTML = stops.map((s, i) =>
+      '<li data-n="' + (i + 1) + '">' +
+        '<span class="era">' + s.era + '</span>' +
+        '<span class="place">' + s.place + '</span>' +
+        '<span class="note">' + s.note + '</span>' +
+      '</li>'
+    ).join("");
+
+    // 传播纪事来源
+    const srcEl = document.getElementById("journey-src");
+    if (f.journeySources && f.journeySources.length) {
+      srcEl.innerHTML = '<span class="label">来源</span>' + f.journeySources.map(u => {
+        let label;
+        try { label = new URL(u).hostname.replace(/^www\./, ""); } catch (e) { label = u; }
+        return '<a href="' + u + '" target="_blank" rel="noopener noreferrer">' + label + '</a>';
+      }).join("");
+    } else {
+      srcEl.style.display = "none";
+    }
+  }
+
+  if (f.journey && f.journey.length >= 2) renderJourney(f.journey);
+  else journeyEl.style.display = "none";
 
   document.getElementById("navBack").addEventListener("click", e => {
     if (document.referrer && document.referrer.indexOf(location.host) !== -1) { e.preventDefault(); history.back(); }

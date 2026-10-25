@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&family=Great+Vibes&family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&family=ZCOOL+QingKe+HuangYou&family=ZCOOL+XiaoWei&family=Long+Cang&family=Liu+Jian+Mao+Cao&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #F8EBBD; --ink: #457635; --text: #3E3A2E; --muted: #8A7F6B; --hairline: rgba(69,118,53,.18); --accent: #6B9136;
+    --bg: #F8EBBD; --ink: #457635; --text: #3E3A2E; --muted: #8A7F6B; --hairline: rgba(69,118,53,.18); --accent: #6B9136; --accent2: #D0823C; --faint: #9C927A;
     --display: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
     --serif: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
     --sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -17,8 +17,23 @@
     --script: "Great Vibes", "Snell Roundhand", "Segoe Script", cursive;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.75; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  body { background: #EBD5C6; color: var(--text); font-family: var(--sans); line-height: 1.75; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 999; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cg fill='none' stroke='%234A6B3A' stroke-width='1'%3E%3Cpath d='M120 0 C126 60 114 180 120 240'/%3E%3Cpath d='M120 40 C98 44 80 38 68 24'/%3E%3Cpath d='M120 40 C142 44 160 38 172 24'/%3E%3Cpath d='M120 88 C94 94 72 86 56 68'/%3E%3Cpath d='M120 88 C146 94 168 86 184 68'/%3E%3Cpath d='M120 136 C96 142 76 134 60 118'/%3E%3Cpath d='M120 136 C144 142 164 134 180 118'/%3E%3Cpath d='M120 184 C100 190 84 182 72 168'/%3E%3Cpath d='M120 184 C140 190 156 182 168 168'/%3E%3C/g%3E%3C/svg%3E"); opacity: .04; mix-blend-mode: multiply; }
   a { color: inherit; text-decoration: none; }
+
+  /* 整页羊皮纸底图（复古粉调 · 单一大洲地图 + 经纬线网格） */
+  .bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: linear-gradient(180deg, #F0DACB 0%, #E4C8BC 55%, #D9BCB1 100%); }
+  .bg__map { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .bg__map .bg-grid { stroke: rgba(150,105,100,.26); stroke-width: .6; fill: none; }
+  .bg__map .bg-land { fill: #F3E0D2; stroke: #C8998B; stroke-width: 1; stroke-linejoin: round; fill-rule: evenodd; opacity: .82; }
+  .bg__grain {
+    position: absolute; inset: 0; pointer-events: none; opacity: .5; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  }
+  .bg__vignette {
+    position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
+    background: radial-gradient(130% 100% at 50% 28%, transparent 56%, rgba(130,85,75,.30) 100%);
+  }
 
   .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 60; display: flex; justify-content: space-between; align-items: center; padding: 15px 28px; background: rgba(255,255,255,.72); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--hairline); }
   .nav__brand { font-family: var(--display); font-weight: 600; font-size: 20px; letter-spacing: .06em; color: var(--ink); }
@@ -50,19 +65,19 @@
   .region__head { max-width: 720px; margin-bottom: 44px; }
   .kicker { display: inline-block; font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
   .region__name { font-family: var(--display); font-weight: 700; font-size: clamp(48px, 8vw, 96px); line-height: 1; margin: 14px 0 6px; letter-spacing: .02em; color: var(--ink); }
-  .region__en { font-family: var(--script); font-size: 34px; color: var(--muted); margin-bottom: 16px; }
+  .region__en { font-family: var(--script); font-size: 34px; color: var(--faint); margin-bottom: 16px; }
   .region__desc { font-size: 16px; color: var(--muted); }
 
   .region__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; }
-  .card { position: relative; display: flex; flex-direction: column; gap: 11px; padding: 20px; border-radius: 20px; background: #fff; border: 1px solid var(--hairline); box-shadow: 0 8px 24px rgba(0,0,0,.05); transition: transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s; }
-  .card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(0,0,0,.1); }
+  .card { position: relative; display: flex; flex-direction: column; gap: 11px; padding: 20px; border-radius: 20px; background: linear-gradient(160deg, color-mix(in srgb, var(--c) 15%, #fff) 0%, color-mix(in srgb, var(--c) 4%, #fff) 46%, #fff 100%); border: 1px solid var(--hairline); box-shadow: 0 8px 24px rgba(0,0,0,.05); transition: transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s; }
+  .card:hover { transform: translateY(-7px) scale(1.045); box-shadow: 0 26px 56px rgba(0,0,0,.17); z-index: 1; }
   .card__swatch { width: 100%; height: 96px; border-radius: 14px; background: var(--c); position: relative; overflow: hidden; }
   .card__swatch::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(0,0,0,.16)); }
   .card__num { position: absolute; top: 12px; right: 14px; font-family: var(--latin); font-style: italic; font-size: 14px; color: rgba(255,255,255,.85); }
   .card__name { font-family: var(--display); font-weight: 600; font-size: 24px; line-height: 1.2; color: var(--ink); white-space: nowrap; }
   .card__latin { font-family: var(--latin); font-style: italic; font-size: 13px; color: var(--muted); }
   .card__flavor { font-size: 13px; color: var(--muted); line-height: 1.65; }
-  .card__stars { font-size: 12px; letter-spacing: .12em; color: var(--accent); }
+  .card__stars { font-size: 12px; letter-spacing: .12em; color: var(--accent2); }
   .empty { font-family: var(--serif); font-size: 18px; color: var(--muted); padding: 30px 0; }
 
   /* ---------- 开屏：进入大洲时显示，随后从右下往左上沙化隐去 ---------- */
@@ -89,6 +104,15 @@
 </style>
 </head>
 <body>
+  <div class="bg" aria-hidden="true">
+    <svg class="bg__map" id="bgMap" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid slice">
+      <g id="bgGrid" class="bg-grid"></g>
+      <g id="bgLand"></g>
+    </svg>
+    <div class="bg__grain"></div>
+    <div class="bg__vignette"></div>
+  </div>
+
   <div class="splash" id="splash" aria-hidden="true">
     <canvas class="splash__fx" id="splashFx"></canvas>
   </div>
@@ -115,23 +139,26 @@
   </main>
 
 <script src="data/fruits.js"></script>
+<script src="data/world.js"></script>
+<script src="data/audio.js"></script>
 <script>
   function stars(n){ return "★★★★★".slice(0,n) + "☆☆☆☆☆".slice(0,5-n); }
   const params = new URLSearchParams(location.search);
   const key = params.get("key") || "asia-se";
   const r = REGIONS.find(x => x.key === key) || REGIONS[0];
   const list = FRUITS.filter(f => f.region === r.key);
+  applyRegionTheme(document.documentElement, r.theme);
 
   document.title = r.name + " · 果物奇观";
   document.getElementById("r-kicker").textContent = "Region " + r.num;
   const REGION_FONTS = {
-    "asia-se": ['"ZCOOL KuaiLe", "Noto Sans SC", sans-serif', "400"],
-    "asia-east": ['"Ma Shan Zheng", "Noto Serif SC", serif', "400"],
-    "africa": ['"ZCOOL QingKe HuangYou", "Noto Sans SC", sans-serif', "400"],
+    "asia-se": ['"ZCOOL XiaoWei", "Noto Serif SC", serif', "400"],
+    "asia-east": ['"ZCOOL XiaoWei", "Noto Serif SC", serif', "400"],
+    "africa": ['"ZCOOL XiaoWei", "Noto Serif SC", serif', "400"],
     "south-america": ['"ZCOOL XiaoWei", "Noto Serif SC", serif', "400"],
-    "central-america": ['"Long Cang", "Noto Serif SC", serif', "400"],
-    "oceania": ['"Liu Jian Mao Cao", "Noto Serif SC", serif', "400"],
-    "north-america": ['"Noto Sans SC", "PingFang SC", sans-serif', "700"]
+    "central-america": ['"ZCOOL XiaoWei", "Noto Serif SC", serif', "400"],
+    "oceania": ['"ZCOOL XiaoWei", "Noto Serif SC", serif', "400"],
+    "north-america": ['"ZCOOL XiaoWei", "Noto Serif SC", serif', "400"]
   };
   const nameEl = document.getElementById("r-name");
   nameEl.textContent = r.name;
@@ -222,13 +249,13 @@
       const lhK = kickerSize * 1.5, lhT = titleSize, lhS = subSize * 1.7, gap = 14 * dpr;
       const total = lhK + gap + lhT + gap + lhS * subLines.length;
       let y = (H - total) / 2 + lhK / 2;
-      ctx.fillStyle = "#6B9136";
+      ctx.fillStyle = (r.theme ? r.theme.accent : "#6B9136");
       ctx.font = "500 " + kickerSize + "px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif";
       if ("letterSpacing" in ctx) ctx.letterSpacing = (kickerSize * 0.24) + "px";
       ctx.fillText(kickerText, cx, y);
       if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
       y += lhK / 2 + gap + lhT / 2;
-      ctx.fillStyle = "#457635";
+      ctx.fillStyle = (r.theme ? r.theme.ink : "#457635");
       ctx.font = "700 " + titleSize + "px 'Noto Serif SC','Source Han Serif SC','Songti SC','STSong','SimSun',serif";
       ctx.fillText(r.name, cx, y);
       y += lhT / 2 + gap + lhS / 2;
@@ -264,6 +291,103 @@
       }, HOLD);
     }
   }
+
+  // 整页羊皮纸底图：做旧地图（全纬度等距圆柱投影），随后把视角聚焦到当前大洲
+  const REGION_BOUNDS = {
+    "asia-se":       [92, -11, 142, 29],
+    "asia-east":     [73, 18, 145, 54],
+    "africa":        [-18, -35, 52, 37],
+    "south-america": [-82, -56, -34, 12],
+    "central-america": [-118, 7, -77, 33],
+    "oceania":       [110, -48, 180, 2],
+    "north-america": [-170, 14, -50, 72]
+  };
+  function renderBgMap() {
+    const land = document.getElementById("bgLand");
+    const grid = document.getElementById("bgGrid");
+    if (!land || !window.LAND) return;
+    const W = 1000, H = 500, TOP = 90, BOT = -90;
+    const px = lon => (lon + 180) / 360 * W;
+    const py = lat => (TOP - lat) / (TOP - BOT) * H;
+    const unroll = ring => {
+      const u = [[ring[0][0], ring[0][1]]];
+      for (let i = 1; i < ring.length; i++) {
+        let lon = ring[i][0];
+        while (lon - u[u.length - 1][0] > 180) lon -= 360;
+        while (lon - u[u.length - 1][0] < -180) lon += 360;
+        u.push([lon, ring[i][1]]);
+      }
+      return u;
+    };
+    const ringPaths = ring => {
+      const u = unroll(ring);
+      const lons = u.map(p => p[0]);
+      const span = Math.max.apply(null, lons) - Math.min.apply(null, lons);
+      if (span > 300) {
+        return [u.map((p, i) => (i ? "L" : "M") + px(p[0]).toFixed(2) + " " + py(p[1]).toFixed(2)).join(" ") +
+          " L" + px(u[u.length - 1][0]).toFixed(2) + " " + py(-90).toFixed(2) +
+          " L" + px(u[0][0]).toFixed(2) + " " + py(-90).toFixed(2) + "Z"];
+      }
+      let closeLon = u[0][0];
+      while (closeLon - u[u.length - 1][0] > 180) closeLon -= 360;
+      while (closeLon - u[u.length - 1][0] < -180) closeLon += 360;
+      const c = u.concat([[closeLon, u[0][1]]]);
+      const bands = [];
+      let cur = [], cb = null;
+      for (let k = 0; k < c.length; k++) {
+        const p = c[k];
+        const b = Math.floor((p[0] + 180) / 360);
+        if (cb === null) { cb = b; cur.push(p); continue; }
+        if (b === cb) { cur.push(p); continue; }
+        const boundary = cb * 360 + (b > cb ? 180 : -180);
+        const t = (boundary - cur[cur.length - 1][0]) / (p[0] - cur[cur.length - 1][0]);
+        const lat = cur[cur.length - 1][1] + t * (p[1] - cur[cur.length - 1][1]);
+        cur.push([boundary, lat]);
+        bands.push([cb, cur]);
+        cur = [[boundary, lat]]; cb = b; cur.push(p);
+      }
+      bands.push([cb, cur]);
+      const out = [];
+      for (let bi = 0; bi < bands.length; bi++) {
+        const band = bands[bi];
+        if (band[1].length >= 3) {
+          out.push(band[1].map((p, i) => (i ? "L" : "M") + px(p[0] - band[0] * 360).toFixed(2) + " " + py(p[1]).toFixed(2)).join(" ") + "Z");
+        }
+      }
+      return out;
+    };
+    const landD = [];
+    (window.LAND || []).forEach(poly => {
+      const sub = [];
+      poly.forEach(ring => sub.push.apply(sub, ringPaths(ring)));
+      landD.push(sub.join(" "));
+    });
+    land.innerHTML = landD.map(d => '<path class="bg-land" d="' + d + '"/>').join("");
+
+    let g = "";
+    for (let lon = -150; lon <= 150; lon += 30) g += '<line x1="' + px(lon).toFixed(2) + '" y1="0" x2="' + px(lon).toFixed(2) + '" y2="' + H + '"/>';
+    for (let lat = -60; lat <= 60; lat += 30) g += '<line x1="0" y1="' + py(lat).toFixed(2) + '" x2="' + W + '" y2="' + py(lat).toFixed(2) + '"/>';
+    grid.innerHTML = g;
+  }
+  renderBgMap();
+
+  // 聚焦当前大洲：把 viewBox 缩放到该大洲范围，并补足留白到与视口同比例，避免边缘被裁掉
+  (function focusRegion() {
+    const svg = document.getElementById("bgMap");
+    const b = REGION_BOUNDS[r.key] || REGION_BOUNDS["africa"];
+    const W = 1000, H = 500;
+    const px = lon => (lon + 180) / 360 * W;
+    const py = lat => (90 - lat) / 180 * H;
+    const x0 = px(b[0]), x1 = px(b[2]);
+    const y0 = py(b[3]), y1 = py(b[1]); // 上缘为 maxLat，下缘为 minLat
+    const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+    const pad = 0.10;
+    const target = (svg.clientWidth && svg.clientHeight) ? svg.clientWidth / svg.clientHeight : 1.777;
+    let w = (x1 - x0) * (1 + 2 * pad);
+    let h = (y1 - y0) * (1 + 2 * pad);
+    if (w / h < target) w = h * target; else h = w / target;
+    svg.setAttribute("viewBox", (cx - w / 2).toFixed(1) + " " + (cy - h / 2).toFixed(1) + " " + w.toFixed(1) + " " + h.toFixed(1));
+  })();
 </script>
 </body>
 </html>

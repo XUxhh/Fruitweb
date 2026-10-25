@@ -22,23 +22,38 @@
   html { scroll-behavior: smooth; scroll-padding-top: 76px; }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
   body {
-    background: var(--bg); color: var(--text);
+    background: #EBD5C6; color: var(--text);
     font-family: var(--sans); font-weight: 400; line-height: 1.75;
     -webkit-font-smoothing: antialiased; overflow-x: hidden;
     padding-bottom: 42px;
   }
   body::after {
     content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 999;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    opacity: .03; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cg fill='none' stroke='%234A6B3A' stroke-width='1'%3E%3Cpath d='M120 0 C126 60 114 180 120 240'/%3E%3Cpath d='M120 40 C98 44 80 38 68 24'/%3E%3Cpath d='M120 40 C142 44 160 38 172 24'/%3E%3Cpath d='M120 88 C94 94 72 86 56 68'/%3E%3Cpath d='M120 88 C146 94 168 86 184 68'/%3E%3Cpath d='M120 136 C96 142 76 134 60 118'/%3E%3Cpath d='M120 136 C144 142 164 134 180 118'/%3E%3Cpath d='M120 184 C100 190 84 182 72 168'/%3E%3Cpath d='M120 184 C140 190 156 182 168 168'/%3E%3C/g%3E%3C/svg%3E");
+    opacity: .04; mix-blend-mode: multiply;
   }
   a { color: inherit; text-decoration: none; }
 
-  /* 极简底色（白 + 极淡灰晕） */
-  .bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; background:
-    radial-gradient(60% 46% at 12% -4%, #DFC5BF 0%, transparent 55%),
-    radial-gradient(52% 44% at 100% 104%, #B1C5C9 0%, transparent 60%),
-    #F8EBBD; }
+  /* 整页羊皮纸底图（复古粉调 · 做旧世界地图 + 经纬线网格） */
+  .bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: linear-gradient(180deg, #F0DACB 0%, #E4C8BC 55%, #D9BCB1 100%); }
+  .bg__map { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .bg__map .bg-grid { stroke: rgba(150,105,100,.26); stroke-width: .6; fill: none; }
+  .bg__map .bg-land { fill: #F3E0D2; stroke: #C8998B; stroke-width: 1; stroke-linejoin: round; fill-rule: evenodd; opacity: .82; }
+  .bg__map .bg-route { fill: none; stroke: rgba(110,90,75,.5); stroke-width: 1.3; stroke-dasharray: 4 7; stroke-linecap: round; }
+  .bg__map .bg-boat { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { .bg__map .bg-boats { display: none; } }
+  .bg__grain {
+    position: absolute; inset: 0; pointer-events: none; opacity: .5; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  }
+  .bg__vignette {
+    position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
+    background: radial-gradient(130% 100% at 50% 28%, transparent 56%, rgba(130,85,75,.30) 100%);
+  }
+  .bg__fruits { position: absolute; inset: 0; pointer-events: none; }
+  .bg__fruit { position: absolute; pointer-events: none; filter: drop-shadow(0 6px 14px rgba(80,70,50,.25)); }
+  .bg__fruit svg { display: block; }
+  @media (max-width: 700px) { .bg__fruits { opacity: .55; } }
 
   /* ---------- 真实 frosted glass（浅色玻璃） ---------- */
   .glass {
@@ -103,88 +118,132 @@
   .menu__links a:hover { color: var(--accent); }
   .menu__links a i { font-family: var(--latin); font-style: normal; font-size: 12px; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
 
-  /* ---------- Hero（主题 2/3 · 地球 1/3，占满首屏） ---------- */
-  .hero { position: relative; max-width: 1400px; margin: 0 auto; min-height: 100vh; display: grid; grid-template-columns: 1.35fr 1fr; gap: 20px; align-items: center; padding: 104px 4vw 48px; }
-  .hero__content { padding-right: 8px; }
-  .hero__title {
-    font-family: var(--display); font-weight: 700; font-size: clamp(56px, 9vw, 144px);
-    line-height: 1.06; letter-spacing: .02em; white-space: nowrap; margin: 20px 0 12px;
-    color: var(--ink);
+  /* ---------- Hero（大航海时代 · 复古粉调羊皮纸） ---------- */
+  .hero { position: relative; min-height: 100vh; overflow: hidden; }
+
+  .hero__inner {
+    position: relative; z-index: 1; max-width: 1400px; margin: 0 auto;
+    min-height: 100vh; display: grid; grid-template-columns: 1.14fr 1fr; gap: 20px;
+    align-items: center; padding: 112px 4vw 76px;
   }
-  .char { display: inline-block; opacity: 0; transform: translateY(.55em) rotateX(-45deg); transform-origin: bottom; animation: charIn .9s cubic-bezier(.2,.7,.2,1) forwards; }
+  .hero__content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .hero__over {
+    display: inline-flex; align-items: baseline; gap: .55em;
+    font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: #7A6544; font-weight: 500;
+  }
+  .hero__over .script { font-size: 1.65em; color: #6B5B3E; }
+
+  .hero__title {
+    font-family: var(--display); font-weight: 900; font-size: clamp(56px, 7.6vw, 126px);
+    line-height: 1.02; letter-spacing: .04em; white-space: nowrap; color: #3F5A2E; margin-top: 16px;
+    text-shadow:
+      0 1px 0 rgba(255,255,255,.6),
+      0 -1px 1px rgba(0,0,0,.14),
+      0 2px 3px rgba(58,76,44,.30),
+      0 6px 16px rgba(58,76,44,.22);
+  }
+  .char { display: inline-block; opacity: 0; transform: translateY(.55em) rotateX(-45deg); transform-origin: bottom; animation: charIn .5s cubic-bezier(.2,.7,.2,1) forwards; }
   @keyframes charIn { to { opacity: 1; transform: none; } }
-  .hero__sub { font-size: 15px; letter-spacing: .16em; color: var(--muted); margin-bottom: 18px; }
-  .hero__dek { font-size: 16px; color: var(--text); white-space: nowrap; margin-bottom: 34px; opacity: .92; }
+  .hero__dek { font-size: 15px; letter-spacing: .06em; color: #332D20; white-space: nowrap; line-height: 1.75; opacity: 1; margin-top: 14px; }
   .fade { opacity: 0; transform: translateY(16px); animation: fadeIn .9s var(--ease) forwards; }
   @keyframes fadeIn { to { opacity: 1; transform: none; } }
-  .cta {
-    position: relative; overflow: hidden; isolation: isolate;
-    display: inline-flex; align-items: center; gap: 12px;
-    font-size: 13px; letter-spacing: .18em; text-transform: uppercase; font-weight: 500;
-    padding: 17px 38px; border-radius: 40px; color: #F8EBBD;
-    background: #457635; border: 1px solid #457635;
-    box-shadow: 0 8px 22px rgba(69,118,53,.22);
-    transition: transform .25s var(--ease), background .25s var(--ease), box-shadow .25s var(--ease);
-  }
-  .cta::before {
-    content: ""; position: absolute; inset: -1px; z-index: -1; border-radius: inherit;
-    background: linear-gradient(120deg, #6B9136, #457635);
-    transform: translateX(-101%);
-    transition: transform .45s var(--ease);
-  }
-  .cta svg { transition: transform .3s var(--ease); }
-  .cta:hover {
-    transform: translateY(-2px); background: #6B9136;
-    box-shadow: 0 12px 28px rgba(69,118,53,.3);
-  }
-  .cta:hover::before { transform: translateX(0); }
-  .cta:hover svg { transform: translateY(4px); }
 
-  /* 首屏向下滚动提示 */
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none; white-space: nowrap;
+    font-family: var(--serif); font-weight: 600; letter-spacing: .05em; line-height: 1; border-radius: 40px;
+    transition: transform .25s var(--ease), background .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease);
+  }
+  .btn--primary {
+    font-size: 15px; padding: 17px 40px; color: #F8EBBD; background: #C0653F; border: 1px solid #A85532;
+    box-shadow: 0 10px 24px rgba(150,82,50,.32), inset 0 1px 0 rgba(255,255,255,.22);
+  }
+  .btn--primary svg { transition: transform .3s var(--ease); }
+  .btn--primary:hover { transform: translateY(-2px); background: #CE704A; box-shadow: 0 14px 30px rgba(150,82,50,.4), inset 0 1px 0 rgba(255,255,255,.22); }
+  .btn--primary:hover svg { transform: translateY(4px); }
+  /* 探索按钮位于标题正下方居中 */
+  .hero__cta-wrap { margin-top: 26px; }
+
+  /* 首屏向下滚动提示（页面底部居中） */
   .scroll-hint {
-    position: absolute; left: 50%; bottom: 56px; transform: translateX(-50%);
-    display: flex; flex-direction: column; align-items: center; gap: 9px;
-    z-index: 5; pointer-events: none;
+    position: absolute; left: 50%; bottom: 44px; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 5; pointer-events: none;
   }
   .scroll-hint__mouse {
-    width: 26px; height: 40px; border-radius: 14px;
-    border: 2px solid var(--ink); opacity: .5;
-    display: flex; justify-content: center; padding-top: 7px;
+    width: 22px; height: 34px; border-radius: 12px; border: 1.5px solid #8A6E58; opacity: .55;
+    display: flex; justify-content: center; padding-top: 6px;
   }
-  .scroll-hint__dot {
-    width: 3px; height: 7px; border-radius: 2px; background: var(--ink);
-    animation: scrollDot 1.9s var(--ease) infinite;
-  }
+  .scroll-hint__dot { width: 3px; height: 6px; border-radius: 2px; background: #8A6E58; animation: scrollDot 1.9s var(--ease) infinite; }
   @keyframes scrollDot {
     0% { transform: translateY(0); opacity: 0; }
     25% { opacity: 1; }
     75% { opacity: 1; }
-    100% { transform: translateY(13px); opacity: 0; }
+    100% { transform: translateY(12px); opacity: 0; }
   }
-  .scroll-hint__text { font-size: 13px; letter-spacing: .22em; color: var(--muted); }
+  .scroll-hint__text { font-size: 12px; letter-spacing: .26em; color: #8A6E58; }
 
-  /* 右侧：悬浮倾斜地球 + 台座 */
-  .hero__globe-wrap { position: relative; width: 100%; justify-self: center; animation: float 7s ease-in-out infinite; }
-  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-13px); } }
+  /* 右侧：柔和水彩地球（无台座） */
+  .hero__globe-wrap { position: relative; width: 100%; max-width: 470px; justify-self: center; z-index: 2; animation: float 8s ease-in-out infinite; }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
   .hero__globe { position: relative; aspect-ratio: 1 / 1; }
-  .globe-stage { position: absolute; inset: 0; z-index: 1; }
+  .globe-stage { position: absolute; inset: 0; z-index: 1; filter: drop-shadow(0 26px 44px rgba(60,80,70,.32)); }
   #globe { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
   #globe:active { cursor: grabbing; }
-  .beam { position: absolute; left: 0; bottom: 6%; width: 100%; height: 28%; background: linear-gradient(to top, rgba(150,150,150,.38) 0%, rgba(150,150,150,.12) 50%, rgba(150,150,150,0) 100%); clip-path: polygon(22% 0, 78% 0, 56% 100%, 44% 100%); filter: blur(2px); opacity: .5; pointer-events: none; z-index: 0; }
-  .projector { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 32%; height: 13%; z-index: 2; pointer-events: none; filter: drop-shadow(0 10px 18px rgba(110,120,150,.26)); }
-  .projector__glass { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,.6), rgba(232,232,232,.3) 38%, rgba(206,206,206,.26) 62%, rgba(246,246,246,.5)); backdrop-filter: blur(12px) saturate(120%); -webkit-backdrop-filter: blur(12px) saturate(120%); clip-path: polygon(9% 0%, 91% 0%, 95% 18%, 87% 40%, 87% 60%, 95% 82%, 91% 100%, 9% 100%, 5% 82%, 13% 60%, 13% 40%, 5% 18%); }
-  .projector__glass::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, rgba(255,255,255,.5) 0%, rgba(255,255,255,.08) 30%, transparent 48%, rgba(255,255,255,.16) 78%, rgba(255,255,255,.42) 100%); opacity: .6; }
-  .projector__lens { position: absolute; top: -6px; left: 50%; transform: translateX(-50%); width: 42%; height: 13px; border-radius: 50%; background: radial-gradient(ellipse at 50% 42%, #ffffff 0%, #c9c9c9 35%, #4a4a4a 82%, #1a1a1a 100%); box-shadow: 0 0 14px rgba(120,120,120,.5), 0 0 30px rgba(120,120,120,.28); }
-  .globe-hud { margin-top: 8px; text-align: center; }
-  .globe-hud__chip { display: inline-block; padding: 9px 20px 10px; border-radius: 14px; background: linear-gradient(135deg, rgba(255,255,255,.62), rgba(255,255,255,.3)); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); border: 1px solid rgba(255,255,255,.85); box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 8px 24px rgba(120,110,140,.16); cursor: pointer; }
-  .globe-hud__region { font-family: var(--display); font-weight: 600; font-size: 19px; letter-spacing: .02em; color: var(--ink); }
-  .globe-hud__fruits { font-size: 13px; color: var(--muted); margin-top: 2px; white-space: nowrap; }
+  .globe-hud { margin-top: 10px; text-align: center; }
+  .globe-hud__chip { display: inline-block; padding: 8px 18px 9px; border-radius: 16px; background: rgba(255,252,240,.66); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,.82); box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 8px 24px rgba(90,92,66,.18); cursor: pointer; }
+  .globe-hud__region { font-family: var(--display); font-weight: 700; font-size: 18px; letter-spacing: .02em; color: #4A6B26; }
+  .globe-hud__fruits { font-size: 12.5px; color: var(--muted); margin-top: 2px; white-space: nowrap; }
+
+  /* 地球右侧：大洲竖直风琴菜单（紧凑折叠，悬停展开并旋转地球到对应大洲） */
+  .globe-menu {
+    position: absolute; top: 44%; transform: translateY(-50%); left: calc(100% + 16px);
+    width: 88px;
+    display: flex; flex-direction: column; gap: 5px; z-index: 3;
+  }
+  .globe-menu__item {
+    flex: 0 0 auto; min-height: 0; position: relative; overflow: hidden;
+    display: flex; flex-direction: column; justify-content: center; gap: 2px;
+    padding: 7px 11px; border-radius: 10px; cursor: pointer; text-align: left;
+    background: rgba(255,252,240,.74); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,.86);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 4px 12px rgba(90,92,66,.12);
+    transition: background .3s, border-color .3s, box-shadow .3s;
+  }
+  .globe-menu__item:hover, .globe-menu__item:focus-visible {
+    background: rgba(107,145,54,.16);
+    border-color: rgba(107,145,54,.55);
+    box-shadow: 0 8px 20px rgba(0,0,0,.15);
+    outline: none;
+  }
+  .globe-menu__row { display: flex; align-items: center; gap: 7px; }
+  .globe-menu__num {
+    width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; flex: 0 0 auto;
+    font-family: var(--latin); font-style: italic; font-size: 10px; color: #F8EBBD;
+    background: linear-gradient(135deg, #6B9136, #457635);
+  }
+  .globe-menu__name { font-family: var(--display); font-weight: 700; font-size: 12.5px; letter-spacing: .02em; color: var(--ink); white-space: nowrap; }
+  .globe-menu__sub {
+    font-family: var(--latin); font-style: italic; font-size: 10px; letter-spacing: .02em;
+    color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    max-height: 0; opacity: 0; transform: translateY(4px);
+    transition: max-height .35s cubic-bezier(.2,.7,.2,1), opacity .3s ease, transform .3s ease;
+  }
+  .globe-menu__item:hover .globe-menu__sub, .globe-menu__item:focus-visible .globe-menu__sub { max-height: 20px; opacity: 1; transform: none; }
+  @media (max-width: 1500px) { .globe-menu { display: none; } }
+
+  /* 指引箭头标签「奇异水果地图」 */
+  .hero__map-tag {
+    position: absolute; top: 4%; left: -4%; display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--serif); font-size: 13px; letter-spacing: .16em; color: #7A6544;
+    background: rgba(255,251,236,.74); border: 1px solid rgba(122,95,60,.42); border-radius: 20px;
+    padding: 7px 14px; box-shadow: 0 4px 12px rgba(90,80,60,.16); transform: rotate(-4deg); z-index: 3; white-space: nowrap;
+  }
+  .hero__map-tag svg { width: 15px; height: 15px; }
 
   /* ---------- 世界地图 ---------- */
   .map-section { max-width: 1280px; margin: 0 auto; padding: 4vh 5vw 16vh; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
   .map-section__head { margin-bottom: 34px; }
   .map-section__title-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin: 10px 0 8px; }
-  .map-section__title { font-family: var(--display); font-weight: 700; font-size: clamp(32px, 4.6vw, 50px); line-height: 1.1; color: var(--ink); }
+  .map-section__title { font-family: var(--display); font-weight: 900; font-size: clamp(32px, 4.6vw, 50px); line-height: 1.1; color: #3F5A2E; text-shadow: 0 1px 0 rgba(255,255,255,.6), 0 -1px 1px rgba(0,0,0,.14), 0 2px 3px rgba(58,76,44,.28), 0 4px 10px rgba(58,76,44,.2); }
   .map-more {
     flex: 0 0 auto;
     position: relative; overflow: hidden; isolation: isolate;
@@ -210,7 +269,7 @@
   .map-more:hover svg { transform: translateY(4px); }
   .map-section__sub { color: var(--muted); font-size: 14px; }
   .map-card { padding: 20px; }
-  .map-inner { position: relative; aspect-ratio: 8 / 3; }
+  .map-inner { position: relative; aspect-ratio: 12 / 5; }
   .map { display: block; width: 100%; height: 100%; }
   .markers { position: absolute; inset: 0; }
   .marker { position: absolute; transform: translate(-50%, -50%); width: 24px; height: 24px; z-index: 3; transition: opacity .35s; }
@@ -250,14 +309,15 @@
   /* ---------- 水果横向滑动预览 ---------- */
   .fruit-strip { max-width: 1280px; margin: 0 auto; padding: 0 5vw 10vh; }
   .fruit-strip__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
-  .fruit-strip__title { font-family: var(--display); font-weight: 700; font-size: clamp(24px, 3.4vw, 40px); line-height: 1.1; color: var(--ink); margin-top: 8px; }
+  .fruit-strip__title { font-family: var(--display); font-weight: 900; font-size: clamp(24px, 3.4vw, 40px); line-height: 1.1; color: #3F5A2E; margin-top: 8px; text-shadow: 0 1px 0 rgba(255,255,255,.6), 0 -1px 1px rgba(0,0,0,.14), 0 2px 3px rgba(58,76,44,.28), 0 4px 10px rgba(58,76,44,.2); }
   .fruit-strip__nav { display: flex; gap: 10px; flex-shrink: 0; }
   .strip-arrow { width: 44px; height: 44px; border-radius: 50%; cursor: pointer; border: 1px solid rgba(69,118,53,.35); background: rgba(255,255,255,.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: var(--ink); font-size: 18px; display: flex; align-items: center; justify-content: center; transition: transform .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease), color .25s var(--ease); }
   .strip-arrow:hover { background: var(--accent); color: #fff; border-color: var(--accent); transform: translateY(-2px); }
   .fruit-strip__stage { position: relative; z-index: 0; height: 272px; touch-action: pan-y; }
   .fruit-strip__deck { position: relative; height: 100%; }
-  .strip-card { --cw: 200px; position: absolute; left: 50%; top: 0; width: var(--cw); margin-left: calc(var(--cw) / -2); display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 20px; background: #fff; border: 1px solid var(--hairline); box-shadow: 0 14px 36px rgba(0,0,0,.14); transform-origin: center bottom; transition: box-shadow .4s var(--ease); will-change: transform; cursor: grab; touch-action: pan-y; }
-  .strip-card::after {
+  .strip-card { --cw: 200px; position: absolute; left: 50%; top: 0; width: var(--cw); margin-left: calc(var(--cw) / -2); transform-origin: center bottom; will-change: transform; cursor: grab; touch-action: pan-y; }
+  .strip-card__body { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 20px; background: #fff; border: 1px solid var(--hairline); box-shadow: 0 14px 36px rgba(0,0,0,.14); transition: transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s; }
+  .strip-card__body::after {
     content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px;
     background: conic-gradient(from 210deg, #457635, #DFD352, #B1C5C9, #DFC5BF, #457635);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -266,9 +326,10 @@
     mask-composite: exclude;
     opacity: 0; transition: opacity .4s var(--ease); pointer-events: none;
   }
-  .strip-card:hover { box-shadow: 0 22px 48px rgba(0,0,0,.18); }
-  .strip-card:hover::after { opacity: 1; }
-  .fruit-strip__stage.dragging .strip-card { transition: none; cursor: grabbing; }
+  .strip-card:hover .strip-card__body { transform: translateY(-7px) scale(1.045); box-shadow: 0 28px 60px rgba(0,0,0,.20); }
+  .strip-card:hover .strip-card__body::after { opacity: 1; }
+  .fruit-strip__stage.dragging .strip-card { cursor: grabbing; }
+  .fruit-strip__stage.dragging .strip-card__body { transition: none; }
   .strip-card__swatch { width: 100%; height: 110px; border-radius: 14px; background: var(--c); position: relative; overflow: hidden; }
   .strip-card__swatch::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(0,0,0,.16)); }
   .strip-card__num { position: absolute; top: 10px; right: 12px; font-family: var(--latin); font-style: italic; font-size: 14px; color: rgba(255,255,255,.85); }
@@ -309,13 +370,161 @@
 
   @media (max-width: 860px) {
     .nav { padding: 13px 20px; }
-    .hero { grid-template-columns: 1fr; gap: 24px; min-height: auto; padding: 108px 20px 44px; }
-    .hero__globe-wrap { max-width: 460px; }
-    .hero__dek { font-size: 13px; letter-spacing: 0; }
+    .hero__inner { grid-template-columns: 1fr; gap: 18px; min-height: auto; padding: 108px 20px 48px; }
+    .hero__content { align-items: center; }
+    .hero__globe-wrap { max-width: 380px; }
+    .hero__dek { font-size: 13px; letter-spacing: .02em; white-space: normal; }
     .scroll-hint { display: none; }
     .map-section { padding: 8vh 20px; min-height: auto; }
     .map-card { padding: 10px; }
   }
+  /* ---------- 开屏：船票检票 → 羊皮卷从上到下展开 ---------- */
+  .scroll-open {
+    position: fixed; inset: 0; z-index: 9999; overflow: hidden;
+    display: grid; place-items: center;
+  }
+  .scroll-open__sheet {
+    position: absolute; inset: 0; z-index: 1;
+    background:
+      radial-gradient(130% 90% at 25% -10%, rgba(255,255,255,.32), transparent 55%),
+      linear-gradient(180deg, #F0DACB 0%, #E4C8BC 55%, #D9BCB1 100%);
+  }
+  .scroll-open.is-opening .scroll-open__sheet {
+    animation: sheetOpenDown 1.4s cubic-bezier(.7, 0, .2, 1) forwards;
+  }
+  /* 下缘卷起：从上往下滚动时下缘领先，带一点卷筒阴影与高光 */
+  .scroll-open__sheet::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(180deg, transparent 80%, rgba(120,80,55,.38) 100%);
+    border-bottom: 1px solid rgba(255,250,235,.5);
+  }
+  .scroll-open__grain {
+    position: absolute; inset: 0; opacity: .5; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  }
+  .scroll-open__vignette {
+    position: absolute; inset: 0; mix-blend-mode: multiply;
+    background: radial-gradient(130% 100% at 50% 28%, transparent 55%, rgba(130,85,75,.30) 100%);
+  }
+  @keyframes sheetOpenDown {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(102%); }
+  }
+
+  /* ---------- 船票（画面正中 · 主票 + 右侧票根） ---------- */
+  .ticket {
+    --stub-w: clamp(150px, 24vw, 210px);
+    position: relative; z-index: 3;
+    width: min(720px, 92vw);
+    display: flex; align-items: stretch;
+    filter: drop-shadow(0 22px 42px rgba(74,44,30,.34));
+    will-change: transform;
+    animation: ticketIn .8s var(--ease) backwards;
+  }
+  @keyframes ticketIn {
+    from { opacity: 0; transform: scale(.96); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  .ticket__main {
+    flex: 1 1 auto; position: relative;
+    padding: 24px 26px 20px;
+    color: #4E3726;
+    background:
+      radial-gradient(120% 130% at 15% -20%, rgba(255,255,255,.55), transparent 46%),
+      linear-gradient(180deg, #F8EEDC 0%, #EFDFC4 55%, #E7D4B4 100%);
+    border: 1px solid rgba(122,84,54,.42);
+    border-right: 0;
+    border-radius: 10px 0 0 10px;
+  }
+  .ticket__stub {
+    flex: 0 0 var(--stub-w); position: relative;
+    padding: 26px 20px;
+    color: #4E3726;
+    background:
+      linear-gradient(150deg, rgba(255,255,255,.6) 0%, rgba(255,255,255,.12) 46%, rgba(96,62,36,.10) 100%),
+      linear-gradient(180deg, #F5E8D0 0%, #ECD8B8 55%, #E0C9A6 100%);
+    border: 1px solid rgba(122,84,54,.45);
+    border-left: 0;
+    border-radius: 0 12px 12px 0;
+    box-shadow:
+      inset 1px 1px 0 rgba(255,255,255,.65),
+      inset -1px -1px 0 rgba(120,80,50,.22),
+      inset 0 3px 8px rgba(120,80,50,.14);
+    cursor: grab; touch-action: none; user-select: none; will-change: transform;
+  }
+  .ticket__stub.is-dragging { cursor: grabbing; }
+  .ticket.is-hover { transition: transform .16s ease-out; }
+  .ticket::after {
+    content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none;
+    border-radius: 10px 12px 12px 10px;
+    background: radial-gradient(160px circle at var(--mx, 50%) var(--my, 50%), rgba(90,60,35,.20) 0%, rgba(90,60,35,0) 42%, rgba(255,255,255,.28) 58%, rgba(255,255,255,0) 74%);
+    opacity: 0; transition: opacity .25s ease;
+  }
+  .ticket.is-hover::after { opacity: 1; }
+  /* 主票与票根之间的撕线（虚线穿孔） */
+  .ticket__perf {
+    position: absolute; top: 0; bottom: 0; right: var(--stub-w); width: 0;
+    z-index: 2; pointer-events: none;
+    border-left: 2px dashed rgba(122,84,54,.5);
+    transition: opacity .15s;
+  }
+  .ticket.is-torn .ticket__perf { opacity: 0; }
+
+  /* 票面排版 */
+  .ticket__brand { font-family: var(--latin); font-style: italic; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #8A6B4C; }
+  .ticket__title { font-family: var(--display); font-weight: 900; font-size: clamp(30px, 5vw, 44px); line-height: 1.05; letter-spacing: .06em; color: #3B2A1B; margin: 6px 0 2px; }
+  .ticket__sub { font-family: var(--serif); font-size: 12px; letter-spacing: .08em; color: #6E543C; }
+  .ticket__sub em { font-family: var(--latin); font-style: italic; color: #8A6B4C; }
+  .ticket__row { display: flex; gap: 18px; margin-top: 12px; }
+  .ticket__field { flex: 1; min-width: 0; font-family: var(--serif); font-size: 12.5px; line-height: 1.4; color: #4E3726; }
+  .ticket__field span { display: block; font-family: var(--sans); font-size: 10px; letter-spacing: .18em; color: #A1805C; margin-bottom: 1px; }
+  .ticket__seal {
+    position: absolute; right: 18px; bottom: 16px;
+    width: 52px; height: 52px; border-radius: 50%;
+    display: grid; place-items: center;
+    font-family: var(--serif); font-weight: 700; font-size: 15px; color: #A23B2E;
+    border: 2px solid rgba(162,59,46,.65);
+    box-shadow: inset 0 0 0 2px rgba(162,59,46,.22);
+    transform: rotate(-12deg);
+  }
+  .ticket__seal::before { content: ""; position: absolute; inset: 4px; border: 1px dashed rgba(162,59,46,.42); border-radius: 50%; }
+
+  /* 票根排版 */
+  .ticket__stub-tag { font-family: var(--sans); font-size: 12px; letter-spacing: .24em; color: #8A6B4C; text-align: center; text-shadow: -1px -1px 0 rgba(255,255,255,.6), 1px 1px 1px rgba(96,62,36,.28); }
+  .ticket__stub-no { font-family: var(--latin); font-style: italic; font-size: 27px; color: #3B2A1B; text-align: center; margin: 12px 0 10px; text-shadow: -1px -1px 0 rgba(255,255,255,.75), 1px 1px 1px rgba(96,62,36,.35); }
+  .ticket__stub-port { font-family: var(--serif); font-size: 13px; color: #6E543C; text-align: center; text-shadow: 0 1px 0 rgba(255,255,255,.6); }
+  .ticket__stub-code { height: 46px; margin: 14px 2px 0; background: repeating-linear-gradient(90deg, #4E3726 0 2px, transparent 2px 5px, #4E3726 5px 6px, transparent 6px 9px); opacity: .78; border-radius: 3px; box-shadow: inset 0 1px 2px rgba(96,62,36,.25), inset 0 -1px 1px rgba(255,255,255,.5); }
+  .ticket__stub-note {
+    margin-top: 14px;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    font-family: var(--sans); font-size: 12px; letter-spacing: .16em; color: #7A4A2A;
+    text-align: center; transition: opacity .2s;
+    text-shadow: 0 1px 0 rgba(255,255,255,.6);
+  }
+  .ticket__stub-note svg { width: 22px; height: 22px; color: #A23B2E; animation: stubArrow .9s ease-in-out infinite; filter: drop-shadow(0 1px 0 rgba(255,255,255,.5)); }
+  .ticket__stub-note.is-hidden { opacity: 0; }
+  @keyframes stubArrow {
+    0%, 100% { transform: translateY(-2px); opacity: .65; }
+    50% { transform: translateY(3px); opacity: 1; }
+  }
+
+  /* 撕开后的散场动画：主票左飞、票根下落 */
+  .ticket.is-leaving .ticket__main { animation: mainSplit .6s cubic-bezier(.6, 0, .8, 1) forwards; }
+  .ticket.is-leaving .ticket__stub { animation: stubDrop .6s cubic-bezier(.5, 0, .8, 1) forwards; }
+  @keyframes mainSplit { to { transform: translateX(-64px) rotate(-8deg); opacity: 0; } }
+  @keyframes stubDrop { to { transform: translateY(150px) rotate(16deg); opacity: 0; } }
+
+  @media (max-width: 560px) {
+    .ticket { width: 94vw; }
+    .ticket__main { padding: 18px 16px 16px; }
+    .ticket__title { font-size: 28px; }
+    .ticket__row { flex-direction: column; gap: 8px; margin-top: 10px; }
+    .ticket__seal { right: 12px; bottom: 12px; width: 44px; height: 44px; font-size: 13px; }
+  }
+
+  /* 开屏期间暂缓首屏文字入场，卷轴展开后再依次浮现 */
+  body.splash-open .hero__content .fade,
+  body.splash-open .hero__content .char { animation-play-state: paused; }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
     .char, .fade, .reveal { opacity: 1 !important; transform: none !important; }
@@ -323,7 +532,217 @@
 </style>
 </head>
 <body>
-  <div class="bg" aria-hidden="true"></div>
+  <div class="scroll-open" id="scrollOpen">
+    <div class="scroll-open__sheet">
+      <div class="scroll-open__grain"></div>
+      <div class="scroll-open__vignette"></div>
+    </div>
+    <div class="ticket" id="ticket">
+      <div class="ticket__main">
+        <div class="ticket__brand">Royal Botanical Expedition · 皇家植物考察航线</div>
+        <div class="ticket__title">果物奇观</div>
+        <div class="ticket__sub">异域珍果博物图鉴 · <em>Exotic Fruit Atlas</em></div>
+        <div class="ticket__row">
+          <div class="ticket__field"><span>船舷 VESSEL</span>圣·卡特琳娜号</div>
+          <div class="ticket__field"><span>航程 VOYAGE</span>广州 → 好望角 → 里斯本</div>
+        </div>
+        <div class="ticket__row">
+          <div class="ticket__field"><span>乘客 PASSENGER</span>博物学家</div>
+          <div class="ticket__field"><span>舱位 BERTH</span>头等舱 · A-07</div>
+        </div>
+        <div class="ticket__row">
+          <div class="ticket__field"><span>日期 DATE</span>航海日志 MDCCXCII</div>
+        </div>
+        <div class="ticket__seal">检票</div>
+      </div>
+      <div class="ticket__perf"></div>
+      <div class="ticket__stub" id="ticketStub">
+        <div class="ticket__stub-tag">票根 · STUB</div>
+        <div class="ticket__stub-no">No. 0729</div>
+        <div class="ticket__stub-port">港口 · 3 号</div>
+        <div class="ticket__stub-code"></div>
+        <div class="ticket__stub-note" id="scrollHint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16"/><path d="m6 14 6 6 6-6"/></svg>
+          <span>向下划 · 撕开</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.getElementById("scrollOpen");
+      if (!root) return;
+      var ticket = document.getElementById("ticket");
+      var main = ticket.querySelector(".ticket__main");
+      var stub = document.getElementById("ticketStub");
+      var hint = document.getElementById("scrollHint");
+      document.body.classList.add("splash-open");
+
+      function finish() { root.remove(); document.body.classList.remove("splash-open"); }
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) { finish(); return; }
+
+      var THRESHOLD = 80;
+      var dragging = false, torn = false, wasDrag = false, startY = 0, dy = 0;
+      var MAX_TILT = 10, hovering = false;
+
+      function jag(side, teeth) {
+        var pts = [], i, y, x;
+        if (side === "main") {
+          pts.push("0 0", "100% 0");
+          for (i = 1; i <= teeth; i++) {
+            y = (i / teeth) * 100;
+            x = (i % 2 === 1) ? "97.5%" : "100%";
+            pts.push(x + " " + y.toFixed(2) + "%");
+          }
+          pts.push("0 100%");
+        } else {
+          pts.push("0 0");
+          for (i = 1; i <= teeth; i++) {
+            y = (i / teeth) * 100;
+            x = (i % 2 === 1) ? "6%" : "0%";
+            pts.push(x + " " + y.toFixed(2) + "%");
+          }
+          pts.push("100% 100%", "100% 0");
+        }
+        return "polygon(" + pts.join(", ") + ")";
+      }
+
+      function tear() {
+        ticket.classList.add("is-torn");
+        main.style.clipPath = jag("main", 14);
+        main.style.webkitClipPath = main.style.clipPath;
+        stub.style.clipPath = jag("stub", 14);
+        stub.style.webkitClipPath = stub.style.clipPath;
+      }
+
+      function onDown(e) {
+        if (torn) return;
+        dragging = true; wasDrag = false; dy = 0; startY = e.clientY;
+        ticket.classList.remove("is-hover");
+        ticket.style.transition = "";
+        ticket.style.transform = "";
+        try { stub.setPointerCapture(e.pointerId); } catch (err) {}
+        stub.classList.add("is-dragging");
+        hint.classList.add("is-hidden");
+      }
+      function onMove(e) {
+        if (!dragging || torn) return;
+        dy = Math.max(0, e.clientY - startY);
+        if (dy > 6) wasDrag = true;
+        stub.style.transform = "translateY(" + dy + "px) rotate(" + (dy * 0.06) + "deg)";
+        if (dy > 16 && !ticket.classList.contains("is-torn")) tear();
+      }
+      function onUp() {
+        if (!dragging || torn) return;
+        dragging = false;
+        stub.classList.remove("is-dragging");
+        if (dy >= THRESHOLD) { complete(); } else { reset(); }
+      }
+
+      function reset() {
+        stub.style.transition = "transform .4s cubic-bezier(.22,1,.36,1)";
+        stub.style.transform = "";
+        main.style.clipPath = ""; main.style.webkitClipPath = "";
+        stub.style.clipPath = ""; stub.style.webkitClipPath = "";
+        ticket.classList.remove("is-torn");
+        hint.classList.remove("is-hidden");
+        if (hovering) { ticket.style.transition = ""; ticket.classList.add("is-hover"); }
+        setTimeout(function () { stub.style.transition = ""; }, 400);
+      }
+
+      function complete() {
+        torn = true;
+        stub.style.transition = "";
+        stub.style.transform = "";
+        ticket.classList.remove("is-hover");
+        ticket.style.transition = "";
+        ticket.style.transform = "";
+        ticket.classList.add("is-leaving");
+        setTimeout(function () { if (ticket.parentNode) ticket.remove(); }, 650);
+        setTimeout(function () { root.classList.add("is-opening"); }, 420);
+        setTimeout(finish, 1950);
+      }
+
+      function updateHover(e) {
+        var r = ticket.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width;
+        var py = (e.clientY - r.top) / r.height;
+        ticket.style.setProperty("--mx", (px * 100).toFixed(1) + "%");
+        ticket.style.setProperty("--my", (py * 100).toFixed(1) + "%");
+        var rx = (0.5 - py) * MAX_TILT;
+        var ry = (px - 0.5) * MAX_TILT;
+        ticket.style.transform = "perspective(800px) rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg)";
+      }
+      function onEnter(e) {
+        if (torn || e.pointerType === "touch") return;
+        hovering = true;
+        ticket.style.transition = "";
+        ticket.classList.add("is-hover");
+        updateHover(e);
+      }
+      function onHover(e) {
+        if (!hovering || dragging || torn || e.pointerType === "touch") return;
+        updateHover(e);
+      }
+      function onLeave() {
+        if (dragging || torn) return;
+        hovering = false;
+        ticket.classList.remove("is-hover");
+        ticket.style.transition = "transform .5s cubic-bezier(.22,1,.36,1)";
+        ticket.style.transform = "";
+        setTimeout(function () { ticket.style.transition = ""; }, 500);
+      }
+
+      stub.addEventListener("pointerdown", onDown);
+      stub.addEventListener("pointermove", onMove);
+      stub.addEventListener("pointerup", onUp);
+      stub.addEventListener("pointercancel", onUp);
+      stub.addEventListener("click", function () { if (!torn && !wasDrag) complete(); });
+      ticket.addEventListener("pointerenter", onEnter);
+      ticket.addEventListener("pointermove", onHover);
+      ticket.addEventListener("pointerleave", onLeave);
+    })();
+  </script>
+  <div class="bg" aria-hidden="true">
+    <svg class="bg__map" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid slice">
+      <g id="bgGrid" class="bg-grid"></g>
+      <g id="bgLand"></g>
+      <defs>
+        <g id="bgBoat">
+          <path d="M-10.4 4.8 L10.4 4.8 L6.4 10.4 L-6.4 10.4 Z" fill="#A85A32" stroke="#6E3F22" stroke-width="1.2" stroke-linejoin="round"/>
+          <line x1="0" y1="4.8" x2="0" y2="-9.2" stroke="#5A4632" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M1.2 -0.4 L1.2 -8.2 L9.4 -0.4 Z" fill="#FFF3DC" stroke="#C9A26B" stroke-width=".9" stroke-linejoin="round"/>
+          <path d="M-1.2 -0.4 L-1.2 -6.2 L-7.0 -0.4 Z" fill="#F4E0B4" stroke="#C9A26B" stroke-width=".9" stroke-linejoin="round"/>
+          <path d="M-11.2 12.0 Q-8.0 10.2 -4.8 12.0 T1.6 12.0" fill="none" stroke="#5E8CA0" stroke-width="1.4" stroke-linecap="round"/>
+          <path d="M3.6 13.6 Q6.8 11.8 10.0 13.6 T14.8 13.6" fill="none" stroke="#5E8CA0" stroke-width="1.4" stroke-linecap="round"/>
+        </g>
+        <path id="bgRoute1" d="M483 144 C448 168 370 196 296 195"/>
+        <path id="bgRoute2" d="M475 142 C452 190 432 212 432 224 C472 288 522 340 552 346 C604 314 660 258 712 222"/>
+        <path id="bgRoute3" d="M486 146 C442 212 412 256 402 276 C356 342 322 384 308 398 C252 358 182 300 152 262 C400 242 700 206 840 218"/>
+      </defs>
+      <g class="bg-routes">
+        <use href="#bgRoute1" class="bg-route"></use>
+        <use href="#bgRoute2" class="bg-route"></use>
+        <use href="#bgRoute3" class="bg-route"></use>
+      </g>
+      <g class="bg-boats">
+        <g class="bg-boat"><g><use href="#bgBoat"></use><animateTransform attributeName="transform" type="translate" values="0 0;0 -2.8;0 0;0 2.8;0 0" keyTimes="0;.25;.5;.75;1" calcMode="spline" keySplines=".5 0 .5 1;.5 0 .5 1;.5 0 .5 1;.5 0 .5 1" dur="2.8s" repeatCount="indefinite"/></g><animateMotion dur="60s" repeatCount="indefinite"><mpath href="#bgRoute1"/></animateMotion></g>
+        <g class="bg-boat"><g><use href="#bgBoat"></use><animateTransform attributeName="transform" type="translate" values="0 0;0 -2.8;0 0;0 2.8;0 0" keyTimes="0;.25;.5;.75;1" calcMode="spline" keySplines=".5 0 .5 1;.5 0 .5 1;.5 0 .5 1;.5 0 .5 1" dur="3.2s" repeatCount="indefinite"/></g><animateMotion dur="95s" begin="-40s" repeatCount="indefinite"><mpath href="#bgRoute2"/></animateMotion></g>
+        <g class="bg-boat"><g><use href="#bgBoat"></use><animateTransform attributeName="transform" type="translate" values="0 0;0 -2.8;0 0;0 2.8;0 0" keyTimes="0;.25;.5;.75;1" calcMode="spline" keySplines=".5 0 .5 1;.5 0 .5 1;.5 0 .5 1;.5 0 .5 1" dur="3.0s" repeatCount="indefinite"/></g><animateMotion dur="120s" begin="-70s" repeatCount="indefinite"><mpath href="#bgRoute3"/></animateMotion></g>
+      </g>
+    </svg>
+    <div class="bg__fruits" aria-hidden="true">
+      <span class="bg__fruit" style="top:14%;left:4%;width:104px;opacity:.48;transform:rotate(-18deg);"><svg viewBox="0 0 120 140"><path d="M60 12 C90 40 96 84 60 128 C24 84 30 40 60 12 Z" fill="#B8A56A"/><path d="M60 18 C60 56 60 92 60 124" stroke="#8A7448" stroke-width="1.6" fill="none"/><g stroke="#8A7448" stroke-width="1" fill="none" opacity=".8"><path d="M60 44 C46 40 34 30 26 22"/><path d="M60 44 C74 40 86 30 94 22"/><path d="M60 66 C44 64 32 54 24 44"/><path d="M60 66 C76 64 88 54 96 44"/><path d="M60 88 C46 88 34 80 26 68"/><path d="M60 88 C74 88 86 80 94 68"/></g></svg></span>
+      <span class="bg__fruit" style="top:10%;right:7%;width:86px;opacity:.5;transform:rotate(14deg);"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#C25B4A"/><circle cx="50" cy="50" r="38" fill="#E8B49E"/><g stroke="#E79A82" stroke-width="1.3" opacity=".85"><line x1="50" y1="15" x2="50" y2="85"/><line x1="15" y1="50" x2="85" y2="50"/><line x1="25.3" y1="25.3" x2="74.7" y2="74.7"/><line x1="74.7" y1="25.3" x2="25.3" y2="74.7"/></g><ellipse cx="44" cy="44" rx="4" ry="6.5" fill="#6E4430" transform="rotate(40 44 44)"/><ellipse cx="56" cy="56" rx="4" ry="6.5" fill="#6E4430" transform="rotate(40 56 56)"/></svg></span>
+      <span class="bg__fruit" style="top:52%;left:5%;width:76px;opacity:.42;transform:rotate(-10deg);"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#D9A72E"/><circle cx="50" cy="50" r="38" fill="#F2D37B"/><g stroke="#E3B54A" stroke-width="1.3"><line x1="50" y1="15" x2="50" y2="85"/><line x1="15" y1="50" x2="85" y2="50"/><line x1="25.3" y1="25.3" x2="74.7" y2="74.7"/><line x1="74.7" y1="25.3" x2="25.3" y2="74.7"/></g><circle cx="42" cy="42" r="2.4" fill="#C89B2C"/><circle cx="58" cy="58" r="2.4" fill="#C89B2C"/></svg></span>
+      <span class="bg__fruit" style="top:28%;right:4.5%;width:60px;opacity:.42;transform:rotate(16deg);"><svg viewBox="0 0 100 100"><path d="M50 34 C62 46 68 64 50 82 C32 64 38 46 50 34 Z" fill="#C6505A"/><g fill="#E88A8E"><circle cx="42" cy="48" r="2.4"/><circle cx="56" cy="50" r="2.4"/><circle cx="47" cy="60" r="2.4"/><circle cx="58" cy="66" r="2.4"/><circle cx="44" cy="70" r="2.2"/></g><path d="M38 36 C42 26 46 22 50 16 C54 22 58 26 62 36" stroke="#6E5A3A" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg></span>
+      <span class="bg__fruit" style="bottom:15%;right:7%;width:84px;opacity:.45;transform:rotate(-14deg);"><svg viewBox="0 0 100 100"><path d="M50 14 C48 30 36 40 30 52 M50 14 C54 30 64 40 70 52" stroke="#6E5A3A" stroke-width="2.6" fill="none" stroke-linecap="round"/><circle cx="30" cy="64" r="20" fill="#C6535A"/><circle cx="70" cy="64" r="20" fill="#C6535A"/><circle cx="25" cy="58" r="5" fill="#E88A8E"/><circle cx="65" cy="58" r="5" fill="#E88A8E"/></svg></span>
+      <span class="bg__fruit" style="bottom:10%;left:12%;width:72px;opacity:.4;transform:rotate(18deg);"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#7FA03B"/><circle cx="50" cy="50" r="38" fill="#C6DA86"/><g stroke="#A9C45A" stroke-width="1.3"><line x1="50" y1="15" x2="50" y2="85"/><line x1="15" y1="50" x2="85" y2="50"/><line x1="25.3" y1="25.3" x2="74.7" y2="74.7"/><line x1="74.7" y1="25.3" x2="25.3" y2="74.7"/></g><circle cx="42" cy="42" r="2.4" fill="#6E8C30"/><circle cx="58" cy="58" r="2.4" fill="#6E8C30"/></svg></span>
+      <span class="bg__fruit" style="bottom:26%;right:19%;width:70px;opacity:.38;"><svg viewBox="0 0 100 100"><path d="M50 14 C52 24 52 30 46 34" stroke="#6E5A3A" stroke-width="2.6" fill="none" stroke-linecap="round"/><g fill="#8A6BB0"><circle cx="42" cy="40" r="10"/><circle cx="58" cy="40" r="10"/><circle cx="35" cy="54" r="10"/><circle cx="50" cy="56" r="10"/><circle cx="65" cy="54" r="10"/><circle cx="42" cy="68" r="9"/><circle cx="58" cy="68" r="9"/></g><circle cx="37" cy="37" r="3" fill="#A98BCB"/></svg></span>
+    </div>
+    <div class="bg__grain"></div>
+    <div class="bg__vignette"></div>
+  </div>
 
   <header class="nav">
     <a class="nav__brand" href="#top">果物奇观</a>
@@ -347,29 +766,31 @@
   </div>
 
   <section class="hero" id="top">
-    <div class="hero__content">
-      <span class="kicker fade" style="animation-delay:.1s"><span class="script">Exotic Fruit Atlas</span> · 全球奇异水果图鉴</span>
-      <h1 class="hero__title" id="heroTitle">果物奇观</h1>
-      <p class="hero__dek fade" style="animation-delay:.7s">把散落在地球每个角落的奇异果实，收进一颗会转动的地球。</p>
-      <a class="cta fade" style="animation-delay:.85s" href="#atlas">探索世界图鉴 <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <div class="hero__inner">
+      <div class="hero__content">
+        <span class="hero__over fade" style="animation-delay:.05s"><span class="script">Exotic Fruit Atlas</span>· 全球奇异水果图鉴</span>
+        <h1 class="hero__title fade" id="heroTitle" style="animation-delay:.1s;animation-duration:.55s">果物奇观</h1>
+        <p class="hero__dek fade" style="animation-delay:.55s">把散落在地球每个角落的奇异果实，收进一颗会转动的地球。</p>
+        <div class="hero__cta-wrap fade" style="animation-delay:.78s">
+          <a class="btn btn--primary" href="#atlas">探索世界图鉴 <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
+
+      <div class="hero__globe-wrap">
+        <div class="hero__map-tag">拖动试试看吧 <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8H13M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="hero__globe" id="heroGlobe">
+          <div class="globe-stage"><canvas id="globe"></canvas></div>
+          <nav class="globe-menu" id="globeMenu" aria-label="大洲导航"></nav>
+        </div>
+        <div class="globe-hud" id="globeHud" data-region="">
+          <div class="globe-hud__chip">
+            <div class="globe-hud__region" id="globeHudRegion">果物奇观</div>
+            <div class="globe-hud__fruits" id="globeHudFruits">25 种小众奇异水果</div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="hero__globe-wrap">
-      <div class="hero__globe" id="heroGlobe">
-        <div class="beam"></div>
-        <div class="globe-stage"><canvas id="globe"></canvas></div>
-        <div class="projector">
-          <span class="projector__lens"></span>
-          <span class="projector__glass"></span>
-        </div>
-      </div>
-      <div class="globe-hud" id="globeHud" data-region="">
-        <div class="globe-hud__chip">
-          <div class="globe-hud__region" id="globeHudRegion">果物奇观</div>
-          <div class="globe-hud__fruits" id="globeHudFruits">25 种小众奇异水果</div>
-        </div>
-      </div>
-    </div>
     <div class="scroll-hint" aria-hidden="true">
       <span class="scroll-hint__mouse"><span class="scroll-hint__dot"></span></span>
       <span class="scroll-hint__text">向下探索</span>
@@ -388,10 +809,10 @@
     <div class="map-card glass reveal">
       <div class="region-nav" id="regionNav"></div>
       <div class="map-inner">
-        <svg class="map" viewBox="0 0 1000 375" preserveAspectRatio="xMidYMid meet" aria-label="世界地图">
-          <rect width="1000" height="375" fill="#B1C5C9"/>
+        <svg class="map" viewBox="0 0 1000 416.67" preserveAspectRatio="xMidYMid meet" aria-label="世界地图">
+          <rect width="1000" height="416.67" fill="#B1C5C9"/>
           <g id="landLayer" fill="#F8EBBD" fill-rule="evenodd" stroke="#DFC5BF" stroke-width="1.6" stroke-linejoin="round"></g>
-          <line x1="0" y1="208" x2="1000" y2="208" stroke="rgba(69,118,53,.4)" stroke-width="1" stroke-dasharray="3 7"/>
+          <line x1="0" y1="250" x2="1000" y2="250" stroke="rgba(69,118,53,.4)" stroke-width="1" stroke-dasharray="3 7"/>
         </svg>
         <div class="markers" id="markers"></div>
         <div class="map-focus-label" id="mapFocusLabel"></div>
@@ -442,6 +863,7 @@
 
 <script src="data/world.js"></script>
 <script src="data/fruits.js"></script>
+<script src="data/audio.js"></script>
 <script>
   const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -452,22 +874,143 @@
     [...text].forEach((ch, i) => {
       const s = document.createElement("span");
       s.className = "char"; s.textContent = ch;
-      s.style.animationDelay = (0.15 + i * 0.09) + "s";
+      s.style.animationDelay = (0.06 + i * 0.05) + "s";
       el.appendChild(s);
     });
   }
 
-  // 等距圆柱投影（矩形铺满、无左右留白）：裁掉南极洲（-60°S 以下）与北极极地（75°N 以上）。viewBox 0 0 1000 375
-  const MAP_W = 1000, MAP_H = 375, MAP_LAT_TOP = 75, MAP_LAT_BOT = -60;
-  function geoPath(rings) {
-    return rings.map(ring =>
-      ring.map((pt, i) => (i ? "L" : "M") + ((pt[0] + 180) / 360 * MAP_W).toFixed(2) + " " + ((MAP_LAT_TOP - pt[1]) / (MAP_LAT_TOP - MAP_LAT_BOT) * MAP_H).toFixed(2)).join(" ") + "Z"
-    ).join(" ");
+  // 等距圆柱投影（世界地图，裁掉南极洲；同 fruit 页「传播路径」地图的等比比例）。viewBox 0 0 1000 416.67
+  const MAP_W = 1000, MAP_LAT_TOP = 90, MAP_LAT_BOT = -60;
+  const MAP_H = MAP_W * (MAP_LAT_TOP - MAP_LAT_BOT) / 360; // 360°→1000px，150°→约416.67px（保持等比不拉伸）
+  const MAP_PX = lon => (lon + 180) / 360 * MAP_W;
+  const MAP_PY = lat => (MAP_LAT_TOP - lat) / (MAP_LAT_TOP - MAP_LAT_BOT) * MAP_H;
+  // 展开跨 180° 经线的环，得到连续经度（消除横线 / 颜色交叉）
+  function mapUnroll(ring) {
+    const u = [[ring[0][0], ring[0][1]]];
+    for (let i = 1; i < ring.length; i++) {
+      let lon = ring[i][0];
+      while (lon - u[u.length - 1][0] > 180) lon -= 360;
+      while (lon - u[u.length - 1][0] < -180) lon += 360;
+      u.push([lon, ring[i][1]]);
+    }
+    return u;
+  }
+  // 在 ±180° 处切开环为若干子环，返回各子环 d 字符串
+  function mapRingPaths(ring) {
+    const u = mapUnroll(ring);
+    const lons = u.map(p => p[0]);
+    const span = Math.max.apply(null, lons) - Math.min.apply(null, lons);
+    if (span > 300) {
+      return [u.map((p, i) => (i ? "L" : "M") + MAP_PX(p[0]).toFixed(2) + " " + MAP_PY(p[1]).toFixed(2)).join(" ") +
+        " L" + MAP_PX(u[u.length - 1][0]).toFixed(2) + " " + MAP_PY(-90).toFixed(2) +
+        " L" + MAP_PX(u[0][0]).toFixed(2) + " " + MAP_PY(-90).toFixed(2) + "Z"];
+    }
+    let closeLon = u[0][0];
+    while (closeLon - u[u.length - 1][0] > 180) closeLon -= 360;
+    while (closeLon - u[u.length - 1][0] < -180) closeLon += 360;
+    const c = u.concat([[closeLon, u[0][1]]]);
+    const bands = [];
+    let cur = [], cb = null;
+    for (let k = 0; k < c.length; k++) {
+      const p = c[k];
+      const b = Math.floor((p[0] + 180) / 360);
+      if (cb === null) { cb = b; cur.push(p); continue; }
+      if (b === cb) { cur.push(p); continue; }
+      const boundary = cb * 360 + (b > cb ? 180 : -180);
+      const t = (boundary - cur[cur.length - 1][0]) / (p[0] - cur[cur.length - 1][0]);
+      const lat = cur[cur.length - 1][1] + t * (p[1] - cur[cur.length - 1][1]);
+      cur.push([boundary, lat]);
+      bands.push([cb, cur]);
+      cur = [[boundary, lat]]; cb = b; cur.push(p);
+    }
+    bands.push([cb, cur]);
+    const out = [];
+    for (let bi = 0; bi < bands.length; bi++) {
+      const band = bands[bi];
+      if (band[1].length >= 3) {
+        out.push(band[1].map((p, i) => (i ? "L" : "M") + MAP_PX(p[0] - band[0] * 360).toFixed(2) + " " + MAP_PY(p[1]).toFixed(2)).join(" ") + "Z");
+      }
+    }
+    return out;
   }
   function renderWorldMap() {
     const layer = document.getElementById("landLayer");
     if (!layer || !window.LAND) return;
-    layer.innerHTML = window.LAND.map(poly => '<path d="' + geoPath(poly) + '"/>').join("");
+    const d = [];
+    window.LAND.forEach(poly => {
+      const sub = [];
+      poly.forEach(ring => sub.push.apply(sub, mapRingPaths(ring)));
+      d.push(sub.join(" "));
+    });
+    layer.innerHTML = d.map(s => '<path d="' + s + '"/>').join("");
+  }
+  // 整页羊皮纸底图：做旧世界地图 + 经纬线网格（全纬度等距圆柱投影，处理 180° 跨线消除横线）
+  function renderBgMap() {
+    const land = document.getElementById("bgLand");
+    const grid = document.getElementById("bgGrid");
+    if (!land || !window.LAND) return;
+    const W = 1000, H = 500, TOP = 90, BOT = -90;
+    const px = lon => (lon + 180) / 360 * W;
+    const py = lat => (TOP - lat) / (TOP - BOT) * H;
+    const unroll = ring => {
+      const u = [[ring[0][0], ring[0][1]]];
+      for (let i = 1; i < ring.length; i++) {
+        let lon = ring[i][0];
+        while (lon - u[u.length - 1][0] > 180) lon -= 360;
+        while (lon - u[u.length - 1][0] < -180) lon += 360;
+        u.push([lon, ring[i][1]]);
+      }
+      return u;
+    };
+    const ringPaths = ring => {
+      const u = unroll(ring);
+      const lons = u.map(p => p[0]);
+      const span = Math.max.apply(null, lons) - Math.min.apply(null, lons);
+      if (span > 300) {
+        return [u.map((p, i) => (i ? "L" : "M") + px(p[0]).toFixed(2) + " " + py(p[1]).toFixed(2)).join(" ") +
+          " L" + px(u[u.length - 1][0]).toFixed(2) + " " + py(-90).toFixed(2) +
+          " L" + px(u[0][0]).toFixed(2) + " " + py(-90).toFixed(2) + "Z"];
+      }
+      let closeLon = u[0][0];
+      while (closeLon - u[u.length - 1][0] > 180) closeLon -= 360;
+      while (closeLon - u[u.length - 1][0] < -180) closeLon += 360;
+      const c = u.concat([[closeLon, u[0][1]]]);
+      const bands = [];
+      let cur = [], cb = null;
+      for (let k = 0; k < c.length; k++) {
+        const p = c[k];
+        const b = Math.floor((p[0] + 180) / 360);
+        if (cb === null) { cb = b; cur.push(p); continue; }
+        if (b === cb) { cur.push(p); continue; }
+        const boundary = cb * 360 + (b > cb ? 180 : -180);
+        const t = (boundary - cur[cur.length - 1][0]) / (p[0] - cur[cur.length - 1][0]);
+        const lat = cur[cur.length - 1][1] + t * (p[1] - cur[cur.length - 1][1]);
+        cur.push([boundary, lat]);
+        bands.push([cb, cur]);
+        cur = [[boundary, lat]]; cb = b; cur.push(p);
+      }
+      bands.push([cb, cur]);
+      const out = [];
+      for (let bi = 0; bi < bands.length; bi++) {
+        const band = bands[bi];
+        if (band[1].length >= 3) {
+          out.push(band[1].map((p, i) => (i ? "L" : "M") + px(p[0] - band[0] * 360).toFixed(2) + " " + py(p[1]).toFixed(2)).join(" ") + "Z");
+        }
+      }
+      return out;
+    };
+    const landD = [];
+    (window.LAND || []).forEach(poly => {
+      const sub = [];
+      poly.forEach(ring => sub.push.apply(sub, ringPaths(ring)));
+      landD.push(sub.join(" "));
+    });
+    land.innerHTML = landD.map(d => '<path class="bg-land" d="' + d + '"/>').join("");
+
+    let g = "";
+    for (let lon = -150; lon <= 150; lon += 30) g += '<line x1="' + px(lon).toFixed(2) + '" y1="0" x2="' + px(lon).toFixed(2) + '" y2="' + H + '"/>';
+    for (let lat = -60; lat <= 60; lat += 30) g += '<line x1="0" y1="' + py(lat).toFixed(2) + '" x2="' + W + '" y2="' + py(lat).toFixed(2) + '"/>';
+    grid.innerHTML = g;
   }
   function renderMap() {
     const wrap = document.getElementById("markers");
@@ -573,10 +1116,12 @@
       el.style.setProperty("--c", f.color);
       const n = String(i + 1).padStart(2, "0");
       el.innerHTML =
-        '<div class="strip-card__swatch"><span class="strip-card__num">' + n + '</span></div>' +
-        '<div class="strip-card__name">' + f.name + '</div>' +
-        '<div class="strip-card__latin">' + f.latin + '</div>' +
-        '<div class="strip-card__region">' + f.regionName + '</div>';
+        '<div class="strip-card__body">' +
+          '<div class="strip-card__swatch"><span class="strip-card__num">' + n + '</span></div>' +
+          '<div class="strip-card__name">' + f.name + '</div>' +
+          '<div class="strip-card__latin">' + f.latin + '</div>' +
+          '<div class="strip-card__region">' + f.regionName + '</div>' +
+        '</div>';
       deck.appendChild(el);
       return el;
     });
@@ -736,6 +1281,7 @@
     let rotX = 23.44 * Math.PI / 180;      // 俯仰（垂直拖动，初始为黄赤交角）
     let auto = REDUCED ? 0 : 0.13;
     let dragging = false, lastX = 0, lastY = 0, idle = 0, lastRegionKey = "";
+    let focusTarget = null;                 // 悬停大洲菜单时：目标旋转角（rotY/rotX）
 
     const fruits = FRUITS.map(f => {
       const lon = (f.x / 100) * 360 - 180;
@@ -748,12 +1294,61 @@
       });
     });
 
-    // 真实大陆轮廓（Natural Earth 110m）：经纬度顶点 → 单位球面三维坐标
+    // 拆分跨 180° 经线的环（避免球面上错误连线产生分割线），返回若干 [lon,lat] 子环
+    function splitRingLonLat(ring) {
+      const unroll = r => {
+        const u = [[r[0][0], r[0][1]]];
+        for (let i = 1; i < r.length; i++) {
+          let lon = r[i][0];
+          while (lon - u[u.length - 1][0] > 180) lon -= 360;
+          while (lon - u[u.length - 1][0] < -180) lon += 360;
+          u.push([lon, r[i][1]]);
+        }
+        return u;
+      };
+      const u = unroll(ring);
+      const lons = u.map(p => p[0]);
+      const span = Math.max.apply(null, lons) - Math.min.apply(null, lons);
+      if (span > 300) {
+        // 南极洲：沿南极点闭合
+        const closed = u.map(p => [p[0], p[1]]);
+        closed.push([closed[closed.length - 1][0], -90]);
+        closed.push([closed[0][0], -90]);
+        return [closed];
+      }
+      let closeLon = u[0][0];
+      while (closeLon - u[u.length - 1][0] > 180) closeLon -= 360;
+      while (closeLon - u[u.length - 1][0] < -180) closeLon += 360;
+      const c = u.concat([[closeLon, u[0][1]]]);
+      const bands = [];
+      let cur = [], cb = null;
+      for (let k = 0; k < c.length; k++) {
+        const p = c[k];
+        const b = Math.floor((p[0] + 180) / 360);
+        if (cb === null) { cb = b; cur.push(p); continue; }
+        if (b === cb) { cur.push(p); continue; }
+        const boundary = cb * 360 + (b > cb ? 180 : -180);
+        const t = (boundary - cur[cur.length - 1][0]) / (p[0] - cur[cur.length - 1][0]);
+        const lat = cur[cur.length - 1][1] + t * (p[1] - cur[cur.length - 1][1]);
+        cur.push([boundary, lat]);
+        bands.push(cur);
+        cur = [[boundary, lat]]; cb = b; cur.push(p);
+      }
+      bands.push(cur);
+      return bands.filter(b => b.length >= 3);
+    }
+
+    // 真实大陆轮廓（Natural Earth 110m）：拆分跨线环 → 经纬度顶点 → 单位球面三维坐标
     const land3d = (window.LAND || []).map(poly => {
-      const rings = poly.map(ring => ring.map(pt => {
-        const lr = pt[0] * Math.PI / 180, fr = pt[1] * Math.PI / 180;
-        return { x: Math.cos(fr) * Math.sin(lr), y: -Math.sin(fr), z: Math.cos(fr) * Math.cos(lr) };
-      }));
+      const rings = [];
+      poly.forEach(ring => {
+        splitRingLonLat(ring).forEach(sub => {
+          rings.push(sub.map(pt => {
+            const lr = pt[0] * Math.PI / 180, fr = pt[1] * Math.PI / 180;
+            return { x: Math.cos(fr) * Math.sin(lr), y: -Math.sin(fr), z: Math.cos(fr) * Math.cos(lr) };
+          }));
+        });
+      });
       return { rings };
     });
 
@@ -767,6 +1362,36 @@
       const m = Math.sqrt(c.x*c.x + c.y*c.y + c.z*c.z) || 1;
       centroids[r.key] = { key: r.key, name: r.name, num: r.num, x: c.x/m, y: c.y/m, z: c.z/m };
     });
+
+    // 右侧大洲菜单：悬停旋转地球到对应大洲（rotY=-lon，rotX=-lat）
+    const menuEl = document.getElementById("globeMenu");
+    if (menuEl) {
+      menuEl.innerHTML = REGIONS.map(r => {
+        const c = centroids[r.key];
+        if (!c) return "";
+        const count = FRUITS.filter(f => f.region === r.key).length;
+        return '<button class="globe-menu__item" type="button" data-key="' + r.key + '">' +
+          '<span class="globe-menu__row">' +
+            '<span class="globe-menu__num">' + r.num + '</span>' +
+            '<span class="globe-menu__name">' + r.name + '</span>' +
+          '</span>' +
+          '<span class="globe-menu__sub">' + r.en + ' · ' + count + ' 种</span>' +
+          '</button>';
+      }).join("");
+      const focusRegion = key => {
+        const c = centroids[key];
+        if (!c) return;
+        if (Math.sqrt(c.x*c.x + c.y*c.y + c.z*c.z) < 0.001) return;
+        focusTarget = { rotY: -Math.atan2(c.x, c.z), rotX: Math.asin(c.y) };
+      };
+      const unfocusRegion = () => { focusTarget = null; };
+      menuEl.querySelectorAll(".globe-menu__item").forEach(btn => {
+        btn.addEventListener("mouseenter", () => focusRegion(btn.dataset.key));
+        btn.addEventListener("mouseleave", unfocusRegion);
+        btn.addEventListener("focus", () => focusRegion(btn.dataset.key));
+        btn.addEventListener("blur", unfocusRegion);
+      });
+    }
 
     // 绕 Y（自转）→ 绕 X（俯仰）；rotY/rotX 每帧变化，缓存三角值避免逐点重复计算
     let _c = Math.cos(rotY), _s = Math.sin(rotY);
@@ -808,19 +1433,19 @@
       _c = Math.cos(rotY); _s = Math.sin(rotY);
       _cx = Math.cos(rotX); _sx = Math.sin(rotX);
 
-      // 外围柔光
+      // 外围柔光（温润暖光）
       g = ctx.createRadialGradient(cx, cy, R * 0.2, cx, cy, R * 1.1);
-      g.addColorStop(0, "rgba(120,120,120,0.18)");
+      g.addColorStop(0, "rgba(200,190,150,0.20)");
       g.addColorStop(1, "rgba(0,0,0,0)");
       ctx.fillStyle = g;
       ctx.beginPath(); ctx.arc(cx, cy, R * 1.5, 0, Math.PI * 2); ctx.fill();
 
-      // 球体基底（海洋·受光·左上亮）
+      // 球体基底（蓝绿海洋·受光·左上亮）
       g = ctx.createRadialGradient(cx - R*0.4, cy - R*0.45, R*0.08, cx, cy, R*1.05);
-      g.addColorStop(0, "rgba(177,197,201,0.97)");
-      g.addColorStop(0.35, "rgba(143,169,175,0.98)");
-      g.addColorStop(0.78, "rgba(95,126,133,0.99)");
-      g.addColorStop(1, "rgba(58,82,88,1)");
+      g.addColorStop(0, "rgba(172,208,201,0.97)");
+      g.addColorStop(0.35, "rgba(126,180,171,0.98)");
+      g.addColorStop(0.78, "rgba(78,132,123,0.99)");
+      g.addColorStop(1, "rgba(47,88,81,1)");
       ctx.fillStyle = g;
       ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
 
@@ -851,21 +1476,14 @@
           landPath.closePath();
         });
       });
-      // 用球面渐变整体着色陆地（受光面亮、边缘暗），消除整块平涂色块
-      ctx.save();
-      ctx.clip(landPath, "evenodd");
+      // 陆地：直接以路径整体填充（去掉海岸线描边，避免日期变更线拆缝在球面浮现穿模线条）
       g = ctx.createRadialGradient(cx - R*0.4, cy - R*0.45, R*0.08, cx, cy, R*1.05);
-      g.addColorStop(0, "rgb(250,240,202)");
-      g.addColorStop(0.42, "rgb(244,228,190)");
-      g.addColorStop(0.78, "rgb(223,197,191)");
-      g.addColorStop(1, "rgb(196,158,150)");
+      g.addColorStop(0, "rgb(216,232,184)");
+      g.addColorStop(0.42, "rgb(199,219,161)");
+      g.addColorStop(0.78, "rgb(170,199,140)");
+      g.addColorStop(1, "rgb(142,172,118)");
       ctx.fillStyle = g;
-      ctx.fillRect(cx - R, cy - R, R * 2, R * 2);
-      ctx.restore();
-      // 海岸线
-      ctx.strokeStyle = "rgba(255,252,244,0.28)";
-      ctx.lineWidth = 0.6 * DPR;
-      ctx.stroke(landPath);
+      ctx.fill(landPath, "evenodd");
 
       // 判定当前朝向的大洲
       let best = null, bestZ = 0.04;
@@ -885,18 +1503,22 @@
           const l = 0.3 + 0.7 * lum(p);
           const rad = (2.2 + 2.8 * facing) * DPR;
 
-          g = ctx.createRadialGradient(sx, sy, 0, sx, sy, rad*3);
-          g.addColorStop(0, f.color);
-          g.addColorStop(1, "rgba(0,0,0,0)");
-          ctx.globalAlpha = 0.5 * facing * l;
+          // 细小白色定位光点（柔和光晕 + 极淡果色描边）
+          g = ctx.createRadialGradient(sx, sy, 0, sx, sy, rad*3.2);
+          g.addColorStop(0, "rgba(255,255,255,.95)");
+          g.addColorStop(0.4, "rgba(255,255,255,.35)");
+          g.addColorStop(1, "rgba(255,255,255,0)");
+          ctx.globalAlpha = 0.72 * facing * l;
           ctx.fillStyle = g;
-          ctx.beginPath(); ctx.arc(sx, sy, rad*3, 0, Math.PI*2); ctx.fill();
+          ctx.beginPath(); ctx.arc(sx, sy, rad*3.2, 0, Math.PI*2); ctx.fill();
 
-          ctx.globalAlpha = (0.3 + 0.7 * facing) * (0.4 + 0.6 * l);
+          ctx.globalAlpha = 0.9 * facing * l;
           ctx.fillStyle = "#fff";
-          ctx.beginPath(); ctx.arc(sx, sy, rad*0.42, 0, Math.PI*2); ctx.fill();
-          ctx.fillStyle = f.color;
-          ctx.beginPath(); ctx.arc(sx, sy, rad, 0, Math.PI*2); ctx.fill();
+          ctx.beginPath(); ctx.arc(sx, sy, rad*0.5, 0, Math.PI*2); ctx.fill();
+          ctx.globalAlpha = 0.5 * facing;
+          ctx.strokeStyle = f.color;
+          ctx.lineWidth = 1.2 * DPR;
+          ctx.beginPath(); ctx.arc(sx, sy, rad*0.95, 0, Math.PI*2); ctx.stroke();
 
           if (facing > 0.55) {
             ctx.globalAlpha = (facing - 0.55) / 0.45;
@@ -929,21 +1551,12 @@
 
       ctx.restore();
 
-      // 高光（镜面反射感）
+      // 高光（温润柔和光影）
       g = ctx.createRadialGradient(cx - R*0.42, cy - R*0.48, 0, cx - R*0.42, cy - R*0.48, R*0.55);
-      g.addColorStop(0, "rgba(255,255,255,0.18)");
+      g.addColorStop(0, "rgba(255,255,255,0.16)");
       g.addColorStop(1, "rgba(255,255,255,0)");
       ctx.fillStyle = g;
       ctx.beginPath(); ctx.arc(cx - R*0.42, cy - R*0.48, R*0.55, 0, Math.PI*2); ctx.fill();
-
-      // 全息辉光边缘（四周可见的光环）
-      g = ctx.createRadialGradient(cx, cy, R - 2*DPR, cx, cy, R + 5*DPR);
-      g.addColorStop(0, "rgba(150,150,150,0)");
-      g.addColorStop(0.45, "rgba(150,150,150,0.65)");
-      g.addColorStop(0.75, "rgba(150,150,150,0.2)");
-      g.addColorStop(1, "rgba(150,150,150,0)");
-      ctx.fillStyle = g;
-      ctx.beginPath(); ctx.arc(cx, cy, R + 5*DPR, 0, Math.PI*2); ctx.fill();
 
       // 更新 HUD
       const key = best ? best.key : "";
@@ -961,10 +1574,28 @@
       }
     }
 
+    // 计算到目标角度（rotY 无界，取最短弧路径；rotX 有界，直接差）
+    function angDelta(from, to) {
+      let d = (to - from) % (Math.PI * 2);
+      if (d > Math.PI) d -= Math.PI * 2;
+      if (d < -Math.PI) d += Math.PI * 2;
+      return d;
+    }
+
     let last = performance.now();
     function loop(now) {
       const dt = Math.min(0.05, (now - last) / 1000); last = now;
-      if (dragging) { idle = 0; } else { idle += dt; if (auto && idle > 0.15) rotY += auto * dt; }
+      if (dragging) {
+        idle = 0;
+      } else if (focusTarget) {
+        idle = 0;
+        const k = 1 - Math.pow(0.015, dt);
+        rotY += angDelta(rotY, focusTarget.rotY) * k;
+        rotX += (focusTarget.rotX - rotX) * k;
+      } else {
+        idle += dt;
+        if (auto && idle > 0.15) rotY += auto * dt;
+      }
       draw();
       requestAnimationFrame(loop);
     }
@@ -994,6 +1625,7 @@
   }
 
   if (!REDUCED) splitTitle();
+  renderBgMap();
   renderWorldMap();
   renderMap();
   renderRegionNav();
