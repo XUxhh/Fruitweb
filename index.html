@@ -417,10 +417,13 @@
     position: relative; z-index: 3;
     width: min(720px, 92vw);
     display: flex; align-items: stretch;
-    filter: drop-shadow(0 22px 42px rgba(74,44,30,.34));
+    border-radius: 10px 12px 12px 10px;
+    box-shadow: 0 22px 42px rgba(74,44,30,.30);
     will-change: transform;
+    overflow: hidden;
     animation: ticketIn .8s var(--ease) backwards;
   }
+  .ticket.is-leaving { overflow: visible; }
   @keyframes ticketIn {
     from { opacity: 0; transform: scale(.96); }
     to   { opacity: 1; transform: scale(1); }
@@ -450,14 +453,16 @@
       inset 1px 1px 0 rgba(255,255,255,.65),
       inset -1px -1px 0 rgba(120,80,50,.22),
       inset 0 3px 8px rgba(120,80,50,.14);
-    cursor: grab; touch-action: none; user-select: none; will-change: transform;
+    cursor: grab; touch-action: none; user-select: none;
   }
   .ticket__stub.is-dragging { cursor: grabbing; }
   .ticket.is-hover { transition: transform .16s ease-out; }
   .ticket::after {
-    content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none;
-    border-radius: 10px 12px 12px 10px;
-    background: radial-gradient(160px circle at var(--mx, 50%) var(--my, 50%), rgba(90,60,35,.20) 0%, rgba(90,60,35,0) 42%, rgba(255,255,255,.28) 58%, rgba(255,255,255,0) 74%);
+    content: ""; position: absolute; left: 0; top: 0; pointer-events: none;
+    width: 240px; height: 240px; margin: -120px 0 0 -120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(90,60,35,.20) 0%, rgba(90,60,35,0) 40%, rgba(255,255,255,.24) 58%, rgba(255,255,255,0) 72%);
+    transform: translate(var(--mx, 0px), var(--my, 0px));
     opacity: 0; transition: opacity .25s ease;
   }
   .ticket.is-hover::after { opacity: 1; }
@@ -663,22 +668,33 @@
         setTimeout(finish, 1950);
       }
 
-      function updateHover(e) {
-        var r = ticket.getBoundingClientRect();
-        var px = (e.clientX - r.left) / r.width;
-        var py = (e.clientY - r.top) / r.height;
-        ticket.style.setProperty("--mx", (px * 100).toFixed(1) + "%");
-        ticket.style.setProperty("--my", (py * 100).toFixed(1) + "%");
+      var hoverRect = null, hoverX = 0, hoverY = 0, hoverQueued = false;
+      function applyHover() {
+        hoverQueued = false;
+        if (!hovering || !hoverRect) return;
+        var px = (hoverX - hoverRect.left) / hoverRect.width;
+        var py = (hoverY - hoverRect.top) / hoverRect.height;
+        ticket.style.setProperty("--mx", (hoverX - hoverRect.left).toFixed(1) + "px");
+        ticket.style.setProperty("--my", (hoverY - hoverRect.top).toFixed(1) + "px");
         var rx = (0.5 - py) * MAX_TILT;
         var ry = (px - 0.5) * MAX_TILT;
         ticket.style.transform = "perspective(800px) rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg)";
       }
+      function queueHover() {
+        if (!hoverQueued) { hoverQueued = true; requestAnimationFrame(applyHover); }
+      }
+      function updateHover(e) {
+        hoverX = e.clientX; hoverY = e.clientY;
+        queueHover();
+      }
       function onEnter(e) {
         if (torn || e.pointerType === "touch") return;
         hovering = true;
+        hoverRect = ticket.getBoundingClientRect();
         ticket.style.transition = "";
         ticket.classList.add("is-hover");
-        updateHover(e);
+        hoverX = e.clientX; hoverY = e.clientY;
+        queueHover();
       }
       function onHover(e) {
         if (!hovering || dragging || torn || e.pointerType === "touch") return;
@@ -687,6 +703,7 @@
       function onLeave() {
         if (dragging || torn) return;
         hovering = false;
+        hoverRect = null;
         ticket.classList.remove("is-hover");
         ticket.style.transition = "transform .5s cubic-bezier(.22,1,.36,1)";
         ticket.style.transform = "";
