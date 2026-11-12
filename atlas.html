@@ -9,8 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&family=Great+Vibes&family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&family=ZCOOL+QingKe+HuangYou&family=ZCOOL+XiaoWei&family=Long+Cang&family=Liu+Jian+Mao+Cao&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #F8EBBD; --bg-2: #DFC5BF; --ink: #457635; --text: #3E3A2E; --muted: #8A7F6B;
-    --hairline: rgba(69,118,53,.18); --accent: #6B9136; --accent2: #D0823C; --faint: #9C927A;
+    --bg: #F8EBBD; --bg-2: #DFC5BF; --ink: #224433; --text: #3E3A2E; --muted: #8A7F6B;
+    --hairline: rgba(34,68,51,.18); --accent: #2F6B4B; --accent2: #D0823C; --faint: #9C927A;
     --display: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
     --serif: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
     --sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -19,7 +19,7 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #EBD5C6; color: var(--text); font-family: var(--sans); line-height: 1.75; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-  body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 999; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cg fill='none' stroke='%234A6B3A' stroke-width='1'%3E%3Cpath d='M120 0 C126 60 114 180 120 240'/%3E%3Cpath d='M120 40 C98 44 80 38 68 24'/%3E%3Cpath d='M120 40 C142 44 160 38 172 24'/%3E%3Cpath d='M120 88 C94 94 72 86 56 68'/%3E%3Cpath d='M120 88 C146 94 168 86 184 68'/%3E%3Cpath d='M120 136 C96 142 76 134 60 118'/%3E%3Cpath d='M120 136 C144 142 164 134 180 118'/%3E%3Cpath d='M120 184 C100 190 84 182 72 168'/%3E%3Cpath d='M120 184 C140 190 156 182 168 168'/%3E%3C/g%3E%3C/svg%3E"); opacity: .04; mix-blend-mode: multiply; }
+  body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 999; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cg fill='none' stroke='%23224433' stroke-width='1'%3E%3Cpath d='M120 0 C126 60 114 180 120 240'/%3E%3Cpath d='M120 40 C98 44 80 38 68 24'/%3E%3Cpath d='M120 40 C142 44 160 38 172 24'/%3E%3Cpath d='M120 88 C94 94 72 86 56 68'/%3E%3Cpath d='M120 88 C146 94 168 86 184 68'/%3E%3Cpath d='M120 136 C96 142 76 134 60 118'/%3E%3Cpath d='M120 136 C144 142 164 134 180 118'/%3E%3Cpath d='M120 184 C100 190 84 182 72 168'/%3E%3Cpath d='M120 184 C140 190 156 182 168 168'/%3E%3C/g%3E%3C/svg%3E"); opacity: .04; mix-blend-mode: multiply; }
   a { color: inherit; text-decoration: none; }
 
   /* 整页羊皮纸底图（复古粉调 · 做旧世界地图 + 经纬线网格） */
@@ -62,7 +62,7 @@
   .menu__fruit-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c); flex: 0 0 auto; box-shadow: 0 0 0 2px rgba(255,255,255,.9); }
   .menu__fruit-latin { font-family: var(--latin); font-style: italic; font-size: 11px; color: var(--muted); margin-left: auto; }
 
-  .atlas { max-width: 1120px; margin: 0 auto; padding: 128px 5vw 90px; }
+  .atlas { max-width: 1120px; margin: 0 auto; padding: 128px 196px 90px 5vw; }
   .atlas__head { max-width: 720px; margin-bottom: 56px; }
   .kicker { display: inline-block; font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
   .atlas__title { font-family: var(--display); font-weight: 700; font-size: clamp(48px, 8vw, 96px); line-height: 1; margin: 14px 0 10px; color: var(--ink); }
@@ -95,6 +95,53 @@
   .card__flavor { font-size: 13px; color: var(--muted); line-height: 1.65; }
   .card__stars { font-size: 12px; letter-spacing: .12em; color: var(--accent2); }
 
+  /* ---------- 大洲标签（最右侧悬浮 · 液态玻璃 · 点击切换 · 选中放大） ---------- */
+  .tabs {
+    position: fixed; right: 22px; top: 50%; transform: translateY(-50%);
+    z-index: 50;
+    display: flex; flex-direction: column; gap: 9px;
+    width: 148px;
+  }
+  .tab {
+    position: relative;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 13px 12px; border-radius: 22px;
+    cursor: pointer; --accent: var(--ink);
+    font-family: var(--serif); color: var(--text);
+    border: 1px solid rgba(255,255,255,.64);
+    background: linear-gradient(165deg, rgba(255,255,255,.62), rgba(255,255,255,.28) 58%, rgba(255,255,255,.15));
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.6),
+      inset 0 -1px 0 rgba(255,255,255,.12),
+      0 6px 18px rgba(30,42,34,.14);
+    transition: transform .42s cubic-bezier(.22,1,.36,1), background .42s, color .42s, border-color .42s, box-shadow .42s;
+  }
+  .tab::after {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background:
+      radial-gradient(130% 68% at 50% -14%, rgba(255,255,255,.5), rgba(255,255,255,0) 56%),
+      radial-gradient(150% 100% at 50% 122%, rgba(255,255,255,.16), rgba(255,255,255,0) 60%);
+    opacity: 0; transition: opacity .42s;
+  }
+  .tab:hover { transform: scale(1.06); }
+  .tab.is-active {
+    transform: scale(1.12);
+    background: linear-gradient(165deg, rgba(255,255,255,.88), rgba(255,255,255,.42) 60%, rgba(255,255,255,.30));
+    border-color: color-mix(in srgb, var(--accent) 52%, rgba(255,255,255,.6));
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.92),
+      inset 0 -1px 0 rgba(255,255,255,.28),
+      0 16px 36px rgba(30,42,34,.24);
+    color: var(--accent);
+  }
+  .tab.is-active::after { opacity: 1; }
+  .tab__num { font-family: var(--latin); font-style: italic; font-size: 11px; letter-spacing: .1em; color: var(--muted); }
+  .tab__name { font-family: var(--serif); font-weight: 700; font-size: 16px; letter-spacing: .05em; }
+  .tab__en { font-family: var(--latin); font-style: italic; font-size: 10px; color: var(--muted); opacity: .85; }
+  .region-block.is-filtered { display: none; }
+
   /* ---------- 入场动画 ---------- */
   @keyframes riseIn { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
   .atlas__head > * { animation: riseIn .7s cubic-bezier(.2,.8,.2,1) backwards; }
@@ -105,7 +152,23 @@
   .region-block.is-visible { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) { .atlas__head > *, .region-block { animation: none; transition: none; opacity: 1; transform: none; } }
 
-  @media (max-width: 860px) { .atlas { padding: 108px 20px 60px; } .region__grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 860px) {
+    .atlas { padding: 108px 20px 60px; }
+    .tabs {
+      position: sticky; top: 78px; z-index: 50;
+      right: auto; transform: none;
+      flex-direction: row; gap: 8px;
+      width: 100%; padding: 5px 2px;
+      max-height: none; overflow-y: visible;
+      overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab { flex: 0 0 auto; flex-direction: row; gap: 7px; padding: 9px 15px; border-radius: 999px; }
+    .tab.is-active { transform: scale(1.06); }
+    .tab__num, .tab__en { display: none; }
+    .tab__name { font-size: 14px; }
+    .region__grid { grid-template-columns: 1fr 1fr; }
+  }
   @media (max-width: 560px) { .region__grid { grid-template-columns: 1fr; } .region-block__count { margin-left: 0; } .nav { flex-wrap: wrap; gap: 10px; } }
 </style>
 </head>
@@ -138,8 +201,9 @@
     <div class="atlas__head">
       <span class="kicker">Complete Atlas · 世界全图鉴</span>
       <h1 class="atlas__title">全图鉴</h1>
-      <p class="atlas__sub">下滑翻看七个大洲的全部小众奇异水果，点击任意卡片进入完整图鉴页。</p>
+      <p class="atlas__sub">点选大洲标签切换水果，点击任意卡片进入完整图鉴页。</p>
     </div>
+    <div class="tabs" id="tabs" role="tablist" aria-label="选择大洲"></div>
     <div id="atlasBody"></div>
   </main>
 
@@ -189,6 +253,42 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); } });
   }, { threshold: 0.08, rootMargin: "0px 0px -40px 0px" });
   document.querySelectorAll(".region-block").forEach(el => io.observe(el));
+
+  // 大洲标签：吸顶 + 点击切换显示对应大洲的水果
+  const tabs = document.getElementById("tabs");
+  tabs.innerHTML =
+    '<button class="tab is-active" data-key="all" role="tab" aria-selected="true">' +
+      '<span class="tab__name">全部</span><span class="tab__en">All</span>' +
+    '</button>' +
+    REGIONS.map(r =>
+      '<button class="tab" data-key="' + r.key + '" role="tab" aria-selected="false" style="--accent:' + r.theme.accent + '">' +
+        '<span class="tab__num">' + r.num + '</span>' +
+        '<span class="tab__name">' + r.name + '</span>' +
+        '<span class="tab__en">' + r.en + '</span>' +
+      '</button>'
+    ).join("");
+
+  function selectRegion(key) {
+    tabs.querySelectorAll(".tab").forEach(t => {
+      const on = t.dataset.key === key;
+      t.classList.toggle("is-active", on);
+      t.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    document.querySelectorAll(".region-block").forEach(block => {
+      const show = key === "all" || block.id === key;
+      block.classList.toggle("is-filtered", !show);
+      if (show) block.classList.add("is-visible");
+    });
+    const target = key === "all" ? document.getElementById("atlasBody") : document.getElementById(key);
+    if (target) {
+      const y = target.getBoundingClientRect().top + window.scrollY - 150;
+      window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+    }
+  }
+  tabs.addEventListener("click", e => {
+    const t = e.target.closest(".tab");
+    if (t) selectRegion(t.dataset.key);
+  });
 
   // 右上角汉堡菜单（对齐首页）：大洲导航 + 悬停预览该大洲水果
   const menuLinks = document.getElementById("menuLinks");
@@ -244,7 +344,7 @@
       const kickerSize = 14 * dpr, subSize = 18 * dpr;
       // 副标题按宽度折行
       ctx.font = "400 " + subSize + "px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif";
-      const subText = "下滑翻看七个大洲的全部小众奇异水果，点击任意卡片进入完整图鉴页。";
+      const subText = "点选大洲标签切换水果，点击任意卡片进入完整图鉴页。";
       const maxLineW = Math.min(W * 0.82, 46 * subSize);
       const subLines = [];
       let line = "";
@@ -257,13 +357,13 @@
       const lhK = kickerSize * 1.5, lhT = titleSize, lhS = subSize * 1.7, gap = 14 * dpr;
       const total = lhK + gap + lhT + gap + lhS * subLines.length;
       let y = (H - total) / 2 + lhK / 2;
-      ctx.fillStyle = "#6B9136";
+      ctx.fillStyle = "#2F6B4B";
       ctx.font = "500 " + kickerSize + "px 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif";
       if ("letterSpacing" in ctx) ctx.letterSpacing = (kickerSize * 0.24) + "px";
       ctx.fillText("Complete Atlas · 世界全图鉴", cx, y);
       if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
       y += lhK / 2 + gap + lhT / 2;
-      ctx.fillStyle = "#457635";
+      ctx.fillStyle = "#224433";
       ctx.font = "700 " + titleSize + "px 'Noto Serif SC','Source Han Serif SC','Songti SC','STSong','SimSun',serif";
       ctx.fillText("全图鉴", cx, y);
       y += lhT / 2 + gap + lhS / 2;
